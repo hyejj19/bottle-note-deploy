@@ -1,0 +1,5 @@
+build/*
+public/*
+/cypress
+/node_modules
+.eslintrc.js
