@@ -5,7 +5,7 @@ import Logo from 'public/Logo_2.png';
 
 export default function Navbar() {
   return (
-    <nav className="flex justify-between p-5">
+    <nav className="flex justify-between p-5 fixed w-full bottom-0">
       <Link className="flex flex-col items-center space-y-1" href="/">
         <Image
           className="rounded-full border"

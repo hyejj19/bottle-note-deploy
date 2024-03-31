@@ -3,6 +3,7 @@
 import React from 'react';
 import SearchBar from '@/components/SearchBar';
 import PostCard from '@/components/PostCard';
+import Navbar from './components/Navbar';
 
 export default function Home() {
   const handleSearch = (value: string) => {
@@ -64,6 +65,7 @@ export default function Home() {
       <div>
         <h1 className="font-bold text-2xl">CATEGORY</h1>
       </div>
+      <Navbar />
     </div>
   );
 }
