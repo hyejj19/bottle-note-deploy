@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import img from '../../public/dummy-img1.jpeg';
+import img from 'public/dummy-img1.jpeg';
 
 type Props = {
   data: {
