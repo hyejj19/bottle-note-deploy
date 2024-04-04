@@ -24,6 +24,11 @@ export default function SearchBar({ handleSearch }: Props) {
         onChange={(e) => {
           setSearchText(e.target.value);
         }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleOnClick();
+          }
+        }}
       />
       <button
         className="px-2 w-10 absolute top-0 right-1 h-full"
