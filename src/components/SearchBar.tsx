@@ -15,10 +15,10 @@ export default function SearchBar({ handleSearch }: Props) {
   };
 
   return (
-    <div className="space-x-1 flex relative">
+    <div className="relative">
       <input
         type="text"
-        className="w-full bg-bgGray rounded-lg h-10 pl-4 pr-12 outline-none text-main placeholder-main"
+        className="w-full bg-bgGray rounded-lg h-10 pl-4 pr-12 drop-shadow-[0_3px_3px_rgba(0,0,0,0.30)] outline-none text-main placeholder-main"
         placeholder="어떤 술을 찾고 계신가요?"
         value={searchText}
         onChange={(e) => {
