@@ -48,8 +48,15 @@ export default function Home() {
   ];
 
   return (
-    <div className="space-y-5">
-      <SearchBar handleSearch={handleSearch} />
+    <div className="space-y-5 relative">
+      <div className="space-y-4 bg-sub p-5">
+        <p className="text-2xl text-bgGray">
+          Journey Note for
+          <br />
+          find my bottle
+        </p>
+        <SearchBar handleSearch={handleSearch} />
+      </div>
       <div>
         <h1 className="font-bold text-2xl">WEEKLY TOP5</h1>
         <div className="whitespace-nowrap overflow-x-auto flex space-x-1">
@@ -65,7 +72,11 @@ export default function Home() {
       <div>
         <h1 className="font-bold text-2xl">CATEGORY</h1>
       </div>
-      <Navbar />
+      <div className="fixed bottom-0 w-full max-w-[400px]">
+        <Navbar />
+      </div>
     </div>
   );
 }
+
+// fixed bottom-0
