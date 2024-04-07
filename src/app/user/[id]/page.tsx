@@ -1,13 +1,5 @@
 import React from 'react';
 
-// NOTE: 공통 스타일 정할 것
-// 1. 폰트컬러 전체 적용 ~ 컨벤션?
-// 2. semantic 태그 사용하기
-// 3. 컴포넌트화의 기준 - 공용이 아닌 페이지별 컴포넌트는 어떻게 관리할 것인가?
-// 4. figma 작업 devmode 없이 어떻게 ??
-// 5. px 단위 없애자 - 사이즈 theme에 추가 정의하자
-// 6. sub 대신 sub_coral 로 피그마와 맞출까여?
-
 export default function User() {
   return (
     <main className="bg-red w-full h-full text-fontBlack">
