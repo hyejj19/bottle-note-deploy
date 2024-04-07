@@ -10,6 +10,7 @@ const ListItem = () => {
         <article className="flex justify-between items-center">
           <h2 className="whitespace-pre text-[15px] leading-[15px] font-bold line">{`GLENDRONACH\nORIGINAL 12YEAR`}</h2>
           <div className="flex flex-col">
+            {/* rating이 null 혹은 0인 경우 invisible */}
             <Star />
             <span className="text-[0.625rem] justify-self-end row-start-2 text-right">
               (16)
