@@ -31,11 +31,6 @@ const config: Config = {
         burgundy: '#581D17',
       },
     },
-    colors: {
-      main: '#EF9A6E',
-      sub: '#E58157',
-      bgGray: '#E6E6DD',
-    },
   },
   plugins: [],
 };
