@@ -1,82 +1,63 @@
 'use client';
 
 import React from 'react';
-import SearchBar from '@/components/SearchBar';
-import PostCard from '@/components/PostCard';
 import Navbar from '@/components/Navbar';
+import CategoryTitle from '@/components/CategoryTitle';
+import HorizontalScroll from '@/components/HorizontalScroll';
+import Header from '@/app/(primary)/_components/Header';
 
 export default function Home() {
-  const handleSearch = (value: string) => {
-    console.log('Search', value);
-  };
-
   const weeklyData: {
     name: string;
-    rating: string;
+    rating: number;
     category: string;
+    url: string;
   }[] = [
     {
       name: 'Johnnie Walker Blue Label',
-      rating: '3.5',
-      category: 'WHISKY',
+      rating: 3.5, // 서버에서 어떤 형태로 줄건지 확인 필요
+      category: 'WHISKY', // 어떤 값으로 카테고리가 오는지 확인 필요
+      url: '/detail/1', // server에서 data를 받은 후 가공 필요
     },
     {
       name: 'Monkey Shoulder',
-      rating: '4',
+      rating: 4,
       category: 'WHISKY',
+      url: '/detail/1',
     },
     {
       name: 'Royal Salute',
-      rating: '4.1',
+      rating: 4.1,
       category: 'WHISKY',
+      url: '/detail/1',
     },
     {
       name: 'The Glenlivet 18years',
-      rating: '3.5',
+      rating: 3.5,
       category: 'WHISKY',
+      url: '/detail/1',
     },
     {
       name: 'Chivas Regal 18years',
-      rating: '3.5',
+      rating: 3.5,
       category: 'WHISKY',
-    },
-    {
-      name: 'The Macallan 12years',
-      rating: '3.5',
-      category: 'WHISKY',
+      url: '/detail/1',
     },
   ];
 
   return (
-    <div className="space-y-5 relative">
-      <div className="space-y-4 bg-sub p-5">
-        <p className="text-2xl text-bgGray">
-          Journey Note for
-          <br />
-          find my bottle
-        </p>
-        <SearchBar handleSearch={handleSearch} />
-      </div>
-      <div>
-        <h1 className="font-bold text-2xl">WEEKLY TOP5</h1>
-        <div className="whitespace-nowrap overflow-x-auto flex space-x-1">
-          {weeklyData.map((item) => {
-            return (
-              <div key={item.name} className="flex-shrink-0">
-                <PostCard data={item} />
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div>
-        <h1 className="font-bold text-2xl">CATEGORY</h1>
-      </div>
-      <div className="fixed bottom-0 w-full max-w-[400px]">
-        <Navbar />
-      </div>
+    <div className="space-y-1 relative">
+      <Header />
+      <section className="px-[1.9rem] pb-16">
+        <article className="py-2 space-y-3">
+          <CategoryTitle subTitle="주간 HOT5" />
+          <HorizontalScroll data={weeklyData} />
+        </article>
+        <article className="py-2 space-y-3">
+          <CategoryTitle subTitle="카테고리" />
+        </article>
+      </section>
+      <Navbar />
     </div>
   );
 }
-
-// fixed bottom-0
