@@ -28,6 +28,7 @@ const config: Config = {
         bgGray: '#E6E6DD',
         mainBlack: '#101010',
         mainGray: '#666666',
+        subGray: '#F6F6F6',
         burgundy: '#581D17',
       },
     },
