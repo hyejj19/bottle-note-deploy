@@ -5,8 +5,10 @@ import Navbar from '@/components/Navbar';
 import CategoryTitle from '@/components/CategoryTitle';
 import HorizontalScroll from '@/components/HorizontalScroll';
 import Header from '@/app/(primary)/_components/Header';
+import CategoryList from './_components/CategoryList';
 
 export default function Home() {
+  //  whisky_id, eng_name, rating, category
   const weeklyData: {
     name: string;
     rating: number;
@@ -15,8 +17,8 @@ export default function Home() {
   }[] = [
     {
       name: 'Johnnie Walker Blue Label',
-      rating: 3.5, // 서버에서 어떤 형태로 줄건지 확인 필요
-      category: 'WHISKY', // 어떤 값으로 카테고리가 오는지 확인 필요
+      rating: 3.5,
+      category: 'WHISKY',
       url: '/detail/1', // server에서 data를 받은 후 가공 필요
     },
     {
@@ -48,13 +50,14 @@ export default function Home() {
   return (
     <div className="space-y-1 relative">
       <Header />
-      <section className="px-[1.9rem] pb-16">
+      <section className="px-5 pb-20">
         <article className="py-2 space-y-3">
           <CategoryTitle subTitle="주간 HOT5" />
           <HorizontalScroll data={weeklyData} />
         </article>
         <article className="py-2 space-y-3">
           <CategoryTitle subTitle="카테고리" />
+          <CategoryList />
         </article>
       </section>
       <Navbar />
