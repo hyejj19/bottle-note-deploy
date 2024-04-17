@@ -56,11 +56,13 @@ function CategoryList() {
   ];
   return (
     <div className="space-y-3">
-      <div className="h-20">
-        <LinkButton
-          data={{ engName: 'ALL', korName: '전체', linkSrc: '/search/all' }}
-        />
-      </div>
+      <LinkButton
+        data={{
+          engName: 'ALL',
+          korName: '전체',
+          linkSrc: '/search/all',
+        }}
+      />
       <div className="grid grid-cols-2 gap-3">
         {linkData.map((data) => (
           <LinkButton key={data.engName} data={data} />
