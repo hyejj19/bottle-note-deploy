@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-type Props = {
+interface Props {
   type?: 'Link' | 'Search';
   handleSearch: (value: string) => void;
-};
+}
 
 export default function SearchBar({ type = 'Search', handleSearch }: Props) {
   const [searchText, setSearchText] = useState<string>('');

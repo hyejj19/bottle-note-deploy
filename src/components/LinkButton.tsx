@@ -1,17 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
+import { LinkData } from '@/types/LinkButton';
 
-type Props = {
-  data: {
-    listType?: 'Full' | 'Half';
-    engName: string;
-    korName: string;
-    linkSrc: string;
-    imgSrc?: StaticImageData;
-    icon?: boolean;
-  };
-};
+interface Props {
+  data: LinkData;
+}
 
 function LinkButton({
   data: { listType = 'Full', engName, korName, imgSrc, linkSrc, icon = false },

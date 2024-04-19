@@ -1,8 +1,8 @@
 import React from 'react';
 
-type Props = {
+interface Props {
   subTitle: string;
-};
+}
 
 function CategoryTitle({ subTitle }: Props) {
   return (

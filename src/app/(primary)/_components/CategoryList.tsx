@@ -1,16 +1,10 @@
 import React from 'react';
-import { StaticImageData } from 'next/image';
+import { LinkData } from '@/types/LinkButton';
 import LinkButton from '@/components/LinkButton';
 import whiskeyImg from 'public/category_whisky1.png';
 
 function CategoryList() {
-  const linkData: {
-    listType?: 'Full' | 'Half';
-    engName: string;
-    korName: string;
-    linkSrc: string;
-    imgSrc?: StaticImageData;
-  }[] = [
+  const linkData: LinkData[] = [
     {
       engName: 'Single malt',
       korName: '싱글몰트',

@@ -5,45 +5,55 @@ import Navbar from '@/components/Navbar';
 import CategoryTitle from '@/components/CategoryTitle';
 import HorizontalScroll from '@/components/HorizontalScroll';
 import Header from '@/app/(primary)/_components/Header';
+import { Alcohol } from '@/types/Alcohol';
 import CategoryList from './_components/CategoryList';
 
 export default function Home() {
-  //  whisky_id, eng_name, rating, category
-  const weeklyData: {
-    name: string;
-    rating: number;
-    category: string;
-    url: string;
-  }[] = [
+  const weeklyData: Alcohol[] = [
     {
-      name: 'Johnnie Walker Blue Label',
+      whisky_id: 1,
+      kor_name: '조니 워커 블루 라벨',
+      eng_name: 'Johnnie Walker Blue Label',
       rating: 3.5,
-      category: 'WHISKY',
-      url: '/detail/1', // server에서 data를 받은 후 가공 필요
+      category: 'Single malt',
+      image_path: '',
+      path: '/detail/1', // server에서 data를 받은 후 가공 필요
     },
     {
-      name: 'Monkey Shoulder',
-      rating: 4,
-      category: 'WHISKY',
-      url: '/detail/1',
-    },
-    {
-      name: 'Royal Salute',
-      rating: 4.1,
-      category: 'WHISKY',
-      url: '/detail/1',
-    },
-    {
-      name: 'The Glenlivet 18years',
+      whisky_id: 2,
+      kor_name: '조니 워커 블루 라벨',
+      eng_name: 'Johnnie Walker Blue Label',
       rating: 3.5,
-      category: 'WHISKY',
-      url: '/detail/1',
+      category: 'Single malt',
+      image_path: '',
+      path: '/detail/1', // server에서 data를 받은 후 가공 필요
     },
     {
-      name: 'Chivas Regal 18years',
+      whisky_id: 3,
+      kor_name: '조니 워커 블루 라벨',
+      eng_name: 'Johnnie Walker Blue Label',
       rating: 3.5,
-      category: 'WHISKY',
-      url: '/detail/1',
+      category: 'Single malt',
+      image_path: '',
+      path: '/detail/1', // server에서 data를 받은 후 가공 필요
+    },
+    {
+      whisky_id: 4,
+      kor_name: '조니 워커 블루 라벨',
+      eng_name: 'Johnnie Walker Blue Label',
+      rating: 3.5,
+      category: 'Single malt',
+      image_path: '',
+      path: '/detail/1', // server에서 data를 받은 후 가공 필요
+    },
+    {
+      whisky_id: 5,
+      kor_name: '조니 워커 블루 라벨',
+      eng_name: 'Johnnie Walker Blue Label',
+      rating: 3.5,
+      category: 'Single malt',
+      image_path: '',
+      path: '/detail/1', // server에서 data를 받은 후 가공 필요
     },
   ];
 
