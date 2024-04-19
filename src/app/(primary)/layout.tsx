@@ -1,3 +1,5 @@
+import Navbar from '@/components/Navbar';
+
 export default function Layout({
   children,
 }: Readonly<{
@@ -5,7 +7,10 @@ export default function Layout({
 }>) {
   return (
     <div className="bg-white flex flex-col w-full mx-auto max-w-[375px] min-h-screen">
-      <main className="flex-1 overflow-y-auto">{children}</main>
+      <main className="flex-1 overflow-y-auto">
+        {children}
+        <Navbar />
+      </main>
     </div>
   );
 }

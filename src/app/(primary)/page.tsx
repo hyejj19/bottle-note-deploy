@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Navbar from '@/components/Navbar';
 import CategoryTitle from '@/components/CategoryTitle';
 import HorizontalScroll from '@/components/HorizontalScroll';
 import Header from '@/app/(primary)/_components/Header';
@@ -70,7 +69,6 @@ export default function Home() {
           <CategoryList />
         </article>
       </section>
-      <Navbar />
     </div>
   );
 }

@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export interface NavItem {
   name: string;
@@ -9,12 +12,14 @@ export interface NavItem {
 }
 
 function Navbar() {
+  const pathname = usePathname();
   const navItems: NavItem[] = [
     { name: '홈', link: '/', icon: '/home.svg' },
     { name: '검색', link: '/search', icon: '/search.svg' },
     { name: '별점', link: '/rating', icon: '/star.svg' },
-    { name: '마이', link: '/user', icon: '/user.svg' },
+    { name: '마이', link: '/user/1', icon: '/user.svg' }, // 추후 수정 필요 with pathname
   ];
+
   return (
     <nav className="fixed bottom-2 left-0 right-0 mx-auto w-full max-w-[400px] px-4 z-50">
       {/* 정확한 사이즈 확인 후 수정 필요 */}
@@ -22,14 +27,22 @@ function Navbar() {
         {navItems.map((menu: NavItem, index: number) => (
           <React.Fragment key={menu.link}>
             <Link
-              className="flex flex-col items-center space-y-1"
+              className={`flex flex-col items-center space-y-1 ${
+                (menu.link === '/' && pathname === '/') ||
+                (menu.link === '/search' && pathname === '/search') ||
+                (menu.link === '/rating' && pathname === '/rating') ||
+                (menu.link.startsWith('/user/') &&
+                  pathname.startsWith('/user/'))
+                  ? ''
+                  : 'opacity-40'
+              }`}
               href={menu.link}
             >
               <Image src={menu.icon} alt={menu.name} width={23} height={23} />
               <span className="text-xs text-subCoral">{menu.name}</span>
             </Link>
             {index !== navItems.length - 1 && (
-              <span className="border-[0.01rem] border-subCoral" />
+              <span className="border-[0.01rem] border-subCoral opacity-40" />
             )}
           </React.Fragment>
         ))}
