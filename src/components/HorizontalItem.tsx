@@ -16,7 +16,7 @@ export default function HorizontalItem({ data }: Props) {
       <div className="w-[10.4rem] h-64 bg-bgGray border-t-[1px] border-b-[1px] border-subCoral">
         {/* API 연동 후 이미지 주소 변경 필요 */}
         <Image src={whiskey} alt="img" height={250} />
-        <div className="px-2 pt-2 space-y-2 border-t-[1px] border-subCoral">
+        <div className="px-2 pt-[0.625rem] space-y-2 border-t-[1px] border-subCoral">
           <div
             className="text-[0.9375rem] h-[2.35rem] font-semibold whitespace-normal text-mainDarkGray"
             style={{ lineHeight: 1.2 }}
