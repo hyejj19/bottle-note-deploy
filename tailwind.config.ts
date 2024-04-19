@@ -27,6 +27,7 @@ const config: Config = {
         subCoral: '#E58157',
         bgGray: '#E6E6DD',
         mainBlack: '#101010',
+        mainDarkGray: '#252525',
         mainGray: '#666666',
         subGray: '#F6F6F6',
         burgundy: '#581D17',
