@@ -1,9 +1,9 @@
 import Image from 'next/image';
 
-type Props = {
+interface Props {
   size?: number;
   rating: number;
-};
+}
 
 const Star = ({ size = 18, rating }: Props) => {
   return (

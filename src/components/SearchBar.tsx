@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-type Props = {
+interface Props {
   type?: 'Link' | 'Search';
   handleSearch: (value: string) => void;
-};
+}
 
 export default function SearchBar({ type = 'Search', handleSearch }: Props) {
   const [searchText, setSearchText] = useState<string>('');
@@ -20,8 +20,8 @@ export default function SearchBar({ type = 'Search', handleSearch }: Props) {
     <div className="relative">
       {type === 'Link' ? (
         <Link href="/search" className="relative">
-          <div className="w-full flex items-center bg-bgGray rounded-lg h-10 pl-4 pr-12 drop-shadow-[0_3px_3px_rgba(0,0,0,0.30)] hover:pointer">
-            <p className="absolute t-0 text-mainGray">
+          <div className="w-full flex items-center bg-white rounded-lg h-10 pl-4 pr-12 drop-shadow-[0_3px_3px_rgba(0,0,0,0.30)] hover:pointer">
+            <p className="absolute t-0 text-mainCoral text-base">
               어떤 술을 찾고 계신가요?
             </p>
             <div className="w-6 absolute right-3 hover:pointer">
@@ -38,7 +38,7 @@ export default function SearchBar({ type = 'Search', handleSearch }: Props) {
         <>
           <input
             type="text"
-            className="w-full bg-bgGray rounded-lg h-10 pl-4 pr-12 drop-shadow-[0_3px_3px_rgba(0,0,0,0.30)] outline-none text-mainCoral placeholder-mainGray"
+            className="w-full bg-white rounded-lg h-10 pl-4 pr-12 drop-shadow-[0_3px_3px_rgba(0,0,0,0.30)] outline-none text-mainCoral placeholder-mainCoral text-base"
             placeholder="어떤 술을 찾고 계신가요?"
             value={searchText}
             onChange={(e) => {
