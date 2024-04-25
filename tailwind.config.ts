@@ -8,6 +8,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontSize: {
+        xxs: ['10px', { lineHeight: '16px' }],
+      },
+      lineHeight: {
+        sm: '14px',
+      },
       spacing: {
         '1.5': '0.375rem', // 6px
         '2.5': '0.625rem', // 10px
@@ -24,7 +30,7 @@ const config: Config = {
       },
       colors: {
         mainCoral: '#EF9A6E',
-        subCoral: '#E58157',
+        subCoral: '#E58257',
         bgGray: '#E6E6DD',
         mainBlack: '#101010',
         mainDarkGray: '#252525',
