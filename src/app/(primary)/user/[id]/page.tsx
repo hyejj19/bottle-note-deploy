@@ -1,75 +1,85 @@
 import React from 'react';
-import ListItem from './_components/ListItem';
+import Image from 'next/image';
+import Navbar from '@/components/Navbar';
+import ListManager from '@/components/ListManager';
+import ListItem from '@/components/ListItem';
+import UserInfo from './_components/UserInfo';
+import HistoryOverview from './_components/HistoryOverview';
+import Logo from 'public/Logo_2.svg';
+import Menu from 'public/Menu_Sub_Coral.svg';
 
-// TODO: mock데이터 생성 및 연결
+// NOTE: 해당 data 에 좋아요 여부, 리뷰 여부 포함되어야 함.
+
+// TODO:
+// 1. 유저 데이터 가져오는 api 연동
+// 2. 활동 내역 가져오는 api 연동
+// 3. 기타 버튼 액션과 관련된 api 연동
 export default function User() {
+  const MOCK_LIST_ITEM = [
+    {
+      whisky_id: 1,
+      kor_name: '글렌피딕',
+      eng_name: 'glen fi',
+      rating: 3.5,
+      category: 'single molt',
+      image_path: 'https://i.imgur.com/ALxdcpJ.jpeg',
+    },
+    {
+      whisky_id: 2,
+      kor_name: '글렌피딕',
+      eng_name: 'glen fi',
+      rating: 3.5,
+      category: 'single molt',
+      image_path: 'https://i.imgur.com/ALxdcpJ.jpeg',
+    },
+    {
+      whisky_id: 3,
+      kor_name: '글렌피딕',
+      eng_name: 'glen fi',
+      rating: 3.5,
+      category: 'single molt',
+      image_path: 'https://i.imgur.com/ALxdcpJ.jpeg',
+    },
+    {
+      whisky_id: 4,
+      kor_name: '글렌피딕',
+      eng_name: 'glen fi',
+      rating: 3.5,
+      category: 'single molt',
+      image_path: 'https://i.imgur.com/ALxdcpJ.jpeg',
+    },
+  ];
+
   return (
-    <main className="w-full h-full text-mainBlack">
-      <section className="bg-bgGray p-7.5 pb-11.5">
+    <main className="w-full h-full text-mainBlack mb-24">
+      <section className="bg-bgGray p-7.5 pb-7">
         <article className="flex justify-between pb-6">
-          <div>Bottle Note</div>
-          <button>Menu btn</button>
+          <button>
+            <Image src={Logo} alt="보틀노트" />
+          </button>
+          <button>
+            <Image src={Menu} alt="메뉴 열기" />
+          </button>
         </article>
 
-        <section className="flex space-x-5.25 py-8.75 border-b border-t border-subCoral">
-          <div className="w-24 h-24 flex justify-center items-center border border-subCoral rounded-full">
-            프로필 이미지
-          </div>
-          <article className="space-y-2.5">
-            <h1 className="text-3xl font-bold">김보틀</h1>
-            <div className="flex flex-col">
-              <p className="text-sm">
-                <strong>FOLLOWER </strong>
-                <span>323</span>
-              </p>
-              <p className="text-sm">
-                <strong>FOLLOWING </strong>
-                <span>12</span>
-              </p>
-            </div>
-
-            <div className="space-x-1 text-sm">
-              <button className="bg-subCoral px-2.5 py-1 rounded-md text-white">
-                팔로잉
-              </button>
-              <button className="bg-white border border-subCoral px-2.5 py-1 rounded-md text-subCoral">
-                프로필 수정
-              </button>
-              <button className="bg-white border border-subCoral px-2.5 py-1 rounded-md text-subCoral">
-                공유
-              </button>
-            </div>
-          </article>
-        </section>
-
-        <article className="flex justify-center pt-2.75 divide-x divide-subCoral divide-opacity-30 text-fontBurgundy">
-          <p className="flex flex-col items-center px-8.5">
-            <span className="text-[2.125rem] font-bold text-[#DF762A]">53</span>
-            <span className="text-sm">별점</span>
-          </p>
-          <p className="flex flex-col items-center px-8.5">
-            <span className="text-[2.125rem] font-bold text-[#DF762A]">12</span>
-            <span className="text-sm">리뷰</span>
-          </p>
-          <p className="flex flex-col items-center px-8.5">
-            <span className="text-[2.125rem] font-bold text-[#DF762A]">6</span>
-            <span className="text-sm">찜하기</span>
-          </p>
-        </article>
+        <UserInfo
+          profileImgSrc={null}
+          follower={323}
+          following={12}
+          isFollowing
+        />
+        <HistoryOverview rates={52} reviews={12} likes={14} />
       </section>
 
-      <section className="px-7.5 pt-9">
-        <article className="flex justify-between text-mainGray text-sm pb-3.25 border-mainBlack border-b">
-          <div>총 52개</div>
-          <div>최근에 담은 순 (sort)</div>
-        </article>
-
+      <section className="px-5 pt-9">
+        <ListManager />
         <section>
-          {[1, 2, 3].map((item) => (
-            <ListItem key={item} />
+          {MOCK_LIST_ITEM.map((item) => (
+            <ListItem key={item.whisky_id} data={item} />
           ))}
         </section>
       </section>
+      <Navbar />
     </main>
   );
 }
