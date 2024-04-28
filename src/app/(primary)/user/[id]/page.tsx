@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import Navbar from '@/components/Navbar';
+// import Navbar from '@/components/Navbar';
 import ListManager from '@/components/ListManager';
 import ListItem from '@/components/ListItem';
 import UserInfo from './_components/UserInfo';
@@ -79,7 +79,7 @@ export default function User() {
           ))}
         </section>
       </section>
-      <Navbar />
+      {/* <Navbar /> */}
     </main>
   );
 }

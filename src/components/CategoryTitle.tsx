@@ -6,8 +6,8 @@ interface Props {
 
 function CategoryTitle({ subTitle }: Props) {
   return (
-    <div className="border-b-[0.1rem] border-subCoral">
-      <div className="w-40 bg-bgGray text-center rounded-tl-lg rounded-tr-lg py-1">
+    <div className="border-b-[0.09rem] border-subCoral">
+      <div className="w-40 bg-bgGray text-center rounded-tl-lg rounded-tr-lg py-[0.38rem]">
         <p className="text-[0.940rem] font-semibold text-subCoral">
           {subTitle}
         </p>
