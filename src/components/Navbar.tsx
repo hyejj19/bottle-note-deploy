@@ -11,7 +11,7 @@ export interface NavItem {
   icon: string;
 }
 
-function Navbar() {
+function Navbar({ maxWidth }: { maxWidth: string }) {
   const pathname = usePathname();
   const navItems: NavItem[] = [
     { name: '홈', link: '/', icon: '/home.svg' },
@@ -21,9 +21,10 @@ function Navbar() {
   ];
 
   return (
-    <nav className="fixed bottom-2 left-0 right-0 mx-auto w-full max-w-[400px] px-4 z-50">
-      {/* 정확한 사이즈 확인 후 수정 필요 */}
-      <section className="h-[4.4rem] flex justify-between bg-subGray py-4 px-9 rounded-[0.8rem] drop-shadow-[0_3px_3px_rgba(0,0,0,0.30)]">
+    <nav
+      className={`fixed bottom-2 left-0 right-0 mx-auto w-full max-w-[${maxWidth}] px-4 z-50`}
+    >
+      <section className="h-[4.4rem] flex justify-between bg-subGray py-3 px-9 rounded-[0.8rem] drop-shadow-[0_3px_3px_rgba(0,0,0,0.30)]">
         {navItems.map((menu: NavItem, index: number) => (
           <React.Fragment key={menu.link}>
             <Link
@@ -38,8 +39,10 @@ function Navbar() {
               }`}
               href={menu.link}
             >
-              <Image src={menu.icon} alt={menu.name} width={23} height={23} />
-              <span className="text-xs text-subCoral">{menu.name}</span>
+              <div className="flex flex-col items-center space-y-1">
+                <Image src={menu.icon} alt={menu.name} width={30} height={30} />
+                <span className="text-[10px] text-subCoral">{menu.name}</span>
+              </div>
             </Link>
             {index !== navItems.length - 1 && (
               <span className="border-[0.01rem] border-subCoral opacity-40" />

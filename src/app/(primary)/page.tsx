@@ -20,8 +20,8 @@ export default function Home() {
     },
     {
       whisky_id: 2,
-      kor_name: '조니워커 블루라벨',
-      eng_name: 'Johnnie Walker Blue Label',
+      kor_name: '옐로우로즈 프리미엄 아메리칸 길이 테스트입니다!!!',
+      eng_name: 'Yellow Rose Premium American',
       rating: 3.5,
       category: 'Single malt',
       image_path: '',
@@ -60,11 +60,11 @@ export default function Home() {
     <div className="space-y-1 relative">
       <Header />
       <section className="px-5 pb-20">
-        <article className="py-2 space-y-4">
+        <article className="py-2 pt-10 space-y-3">
           <CategoryTitle subTitle="위클리 HOT 5" />
           <HorizontalScroll data={weeklyData} />
         </article>
-        <article className="py-2 space-y-4">
+        <article className="py-2 pt-10 space-y-3">
           <CategoryTitle subTitle="카테고리" />
           <CategoryList />
         </article>

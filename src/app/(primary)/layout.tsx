@@ -1,3 +1,5 @@
+'use client';
+
 import Navbar from '@/components/Navbar';
 
 export default function Layout({
@@ -7,8 +9,9 @@ export default function Layout({
 }>) {
   return (
     <div className="bg-white flex flex-col w-full mx-auto max-w-[430px] min-h-screen">
-      <main className="flex-1 overflow-y-auto">{children}
-        <Navbar />
+      <main className="flex-1 overflow-y-auto">
+        {children}
+        <Navbar maxWidth="430px" />
       </main>
     </div>
   );
