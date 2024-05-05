@@ -13,7 +13,13 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'static.whiskybase.com',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.whiskybase.com'',
         port: '',
         pathname: '/**',
       },
