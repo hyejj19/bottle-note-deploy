@@ -1,70 +1,58 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CategoryTitle from '@/components/CategoryTitle';
 import HorizontalScroll from '@/components/HorizontalScroll';
 import Header from '@/app/(primary)/_components/Header';
-import { Alcohol } from '@/types/Alcohol';
+import { AlcoholAPI, Alcohol } from '@/types/Alcohol';
 import CategoryList from './_components/CategoryList';
 
 export default function Home() {
-  const weeklyData: Alcohol[] = [
-    {
-      whisky_id: 1,
-      kor_name: '조니워커 블루라벨',
-      eng_name: 'Johnnie Walker Blue Label',
-      rating: 3.5,
-      category: 'Single malt',
-      image_path: '',
-      path: '/detail/1', // server에서 data를 받은 후 가공 필요
-    },
-    {
-      whisky_id: 2,
-      kor_name: '옐로우로즈 프리미엄 아메리칸 길이 테스트입니다!!!',
-      eng_name: 'Yellow Rose Premium American',
-      rating: 3.5,
-      category: 'Single malt',
-      image_path: '',
-      path: '/detail/1', // server에서 data를 받은 후 가공 필요
-    },
-    {
-      whisky_id: 3,
-      kor_name: '조니워커 블루라벨',
-      eng_name: 'Johnnie Walker Blue Label',
-      rating: 3.5,
-      category: 'Single malt',
-      image_path: '',
-      path: '/detail/1', // server에서 data를 받은 후 가공 필요
-    },
-    {
-      whisky_id: 4,
-      kor_name: '조니워커 블루라벨',
-      eng_name: 'Johnnie Walker Blue Label',
-      rating: 3.5,
-      category: 'Single malt',
-      image_path: '',
-      path: '/detail/1', // server에서 data를 받은 후 가공 필요
-    },
-    {
-      whisky_id: 5,
-      kor_name: '조니워커 블루라벨',
-      eng_name: 'Johnnie Walker Blue Label',
-      rating: 3.5,
-      category: 'Single malt',
-      image_path: '',
-      path: '/detail/1', // server에서 data를 받은 후 가공 필요
-    },
-  ];
+  const [weeklyData, setWeeklyData] = useState<[] | Alcohol[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/popular/week`,
+        );
+        if (response.ok) {
+          const result = await response.json();
+          if (result.data.totalCount !== 0) {
+            const formattedData = result.data?.alcohols.map(
+              (alcohol: AlcoholAPI) => ({
+                whiskyId: alcohol.whiskyId,
+                korName: alcohol.korName,
+                engName: alcohol.engName,
+                rating: alcohol.rating,
+                engCategory: alcohol.engCategory,
+                imageUrl: alcohol.imageUrl,
+                path: `/search/${alcohol.whiskyId}`,
+              }),
+            );
+            setWeeklyData(formattedData);
+          }
+        } else {
+          throw new Error('Failed to fetch data');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="space-y-1 relative">
       <Header />
       <section className="px-5 pb-20">
-        <article className="py-2 pt-10 space-y-3">
+        <article className="py-2 pt-5 space-y-3">
           <CategoryTitle subTitle="위클리 HOT 5" />
-          <HorizontalScroll data={weeklyData} />
+          {weeklyData.length !== 0 && <HorizontalScroll data={weeklyData} />}
+          {/* 없을 경우의 화면을 넣어줘야하나? */}
         </article>
-        <article className="py-2 pt-10 space-y-3">
+        <article className="py-2 pt-5 space-y-3">
           <CategoryTitle subTitle="카테고리" />
           <CategoryList />
         </article>

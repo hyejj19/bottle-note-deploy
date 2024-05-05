@@ -4,13 +4,10 @@ export interface AlcoholAPI {
   korName: string;
   engName: string;
   rating: number;
-  category: string;
+  engCategory: string;
+  korCategory: string;
   imageUrl: string;
 }
 export interface Alcohol extends AlcoholAPI {
   path: string;
 }
-
-// 변경 예정
-// kor_category: 싱글몰트;
-// eng_category: single - molt;
