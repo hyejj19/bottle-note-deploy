@@ -6,8 +6,6 @@ export interface AlcoholAPI {
   rating: number;
   category: string;
   imageUrl: string;
-  kor_category?: string; // 추후 수정하기
-  eng_category?: string; // 추후 수정하기
 }
 export interface Alcohol extends AlcoholAPI {
   path: string;
