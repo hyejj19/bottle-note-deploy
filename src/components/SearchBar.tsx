@@ -21,7 +21,7 @@ export default function SearchBar({ type = 'Search', handleSearch }: Props) {
       {type === 'Link' ? (
         <Link href="/search" className="relative">
           <div className="w-full flex items-center bg-white rounded-lg h-10 pl-4 pr-12 hover:pointer">
-            <p className="absolute t-0 text-mainCoral text-base font-medium">
+            <p className="absolute t-0 text-mainCoral text-[0.938rem] font-medium">
               찾으시는 술이 있으신가요?
             </p>
             <div className="w-6 absolute right-3 hover:pointer">
