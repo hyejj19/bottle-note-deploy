@@ -25,11 +25,7 @@ export default function Header() {
           scrollPosition > 0 ? 'opacity-0 delay-150' : 'opacity-100'
         }`}
       >
-        <p className="text-2xl text-bgGray">
-          Journey Note for
-          <br />
-          find my bottle
-        </p>
+        <p className="text-2xl text-bgGray">Bottle Note</p>
       </div>
       <div
         className={`transition-all duration-500 ease-in-out ${
