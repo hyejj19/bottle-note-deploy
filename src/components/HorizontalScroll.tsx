@@ -11,7 +11,7 @@ export default function HorizontalScroll({ data }: Props) {
     <div className="whitespace-nowrap overflow-x-auto flex space-x-2">
       {data.map((item) => {
         return (
-          <div key={item.whisky_id} className="flex-shrink-0">
+          <div key={item.whiskyId} className="flex-shrink-0">
             <HorizontalItem data={item} />
           </div>
         );

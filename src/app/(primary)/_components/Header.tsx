@@ -19,17 +19,13 @@ export default function Header() {
   };
 
   return (
-    <div className="py-[2rem] px-5 space-y-4 bg-subCoral">
+    <div className="py-[1.3rem] px-5 space-y-4 bg-subCoral">
       <div
         className={`transition-opacity duration-500 ease-in-out ${
           scrollPosition > 0 ? 'opacity-0 delay-150' : 'opacity-100'
         }`}
       >
-        <p className="text-2xl text-bgGray">
-          Journey Note for
-          <br />
-          find my bottle
-        </p>
+        <p className="text-2xl text-bgGray">Bottle Note</p>
       </div>
       <div
         className={`transition-all duration-500 ease-in-out ${

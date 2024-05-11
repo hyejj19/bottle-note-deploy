@@ -17,6 +17,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'static.whiskybase.com'',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   omains: WHITE_LIST,
