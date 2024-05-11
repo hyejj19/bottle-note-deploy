@@ -1,6 +1,6 @@
 export const CATEGORY_MENUS = {
   All: { kor: '전체', eng: 'All', link: 'all' },
-  SingleMalt: { kor: '싱글몰트', eng: 'Single malt', link: 'SingleMalt' },
+  SingleMalt: { kor: '싱글몰트', eng: 'Single malt', link: 'singleMalt' },
   BlendedMalt: {
     kor: '블렌디드 몰트',
     eng: 'Blended malt',
