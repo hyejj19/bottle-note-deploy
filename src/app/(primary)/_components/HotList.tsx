@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { AlcoholAPI, Alcohol } from '@/types/Alcohol';
-import HorizontalScroll from '@/components/HorizontalScroll';
+import HorizontalItem from '@/components/HorizontalItem';
 
 function HotList() {
   const [weeklyData, setWeeklyData] = useState<[] | Alcohol[]>([]);
@@ -40,7 +40,19 @@ function HotList() {
     fetchData();
   }, []);
   return (
-    <>{weeklyData.length !== 0 && <HorizontalScroll data={weeklyData} />}</>
+    <>
+      {weeklyData.length !== 0 && (
+        <div className="whitespace-nowrap overflow-x-auto flex space-x-2">
+          {weeklyData.map((item) => {
+            return (
+              <div key={item.whiskyId} className="flex-shrink-0">
+                <HorizontalItem data={item} />
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </>
   );
 }
 
