@@ -7,7 +7,7 @@ import whiskeyImg from 'public/dummy-img1.jpeg';
 import { truncStr } from '@/utils/truncStr';
 import BackHeader from '@/app/(primary)/_components/BackHeader';
 import Label from '@/app/(primary)/_components/Label';
-import FlavorTag from '../../_components/FlavorTag';
+import FlavorTag from '../../../_components/FlavorTag';
 
 type Details = {
   title: string;

@@ -24,7 +24,7 @@ function HotList() {
                 rating: alcohol.rating,
                 engCategory: alcohol.engCategory,
                 imageUrl: alcohol.imageUrl,
-                path: `/search/${alcohol.whiskyId}`,
+                path: `/search/${alcohol.engCategory}/${alcohol.whiskyId}`,
               }),
             );
             setWeeklyData(formattedData);
