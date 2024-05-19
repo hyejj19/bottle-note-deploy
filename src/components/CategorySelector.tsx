@@ -1,30 +1,31 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import React, { useEffect, useRef } from 'react';
 import { CATEGORY_MENUS } from '@/constants/common';
 import CategoryTitle from './CategoryTitle';
 
-function CategorySelector() {
-  const router = useRouter();
-  // FIXME: 상수에 공백 없애야 함
-  const currentCategory = usePathname().split('/')[2]?.replace('%20', ' ');
+interface Props {
+  selectedCategory: string;
+  handleCategory: (value: string) => void;
+}
 
-  const [categories, setCategories] = useState<
-    {
-      kor: string;
-      eng: string;
-    }[]
-  >([]);
+function CategorySelector({ selectedCategory, handleCategory }: Props) {
+  const categories = Object.values(CATEGORY_MENUS).map((category) => ({
+    kor: category.kor,
+    eng: category.eng,
+  }));
+
+  const selectedRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const filterCategory = Object.values(CATEGORY_MENUS).map((category) => ({
-      kor: category.kor,
-      eng: category.eng,
-    }));
-
-    setCategories(filterCategory);
-  }, []);
+    if (selectedRef.current) {
+      selectedRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'start',
+      });
+    }
+  }, [selectedCategory]);
 
   return (
     <section className="space-y-4">
@@ -34,8 +35,9 @@ function CategorySelector() {
           return (
             <button
               key={category.eng}
-              className={`${currentCategory === category.eng ? 'btn-selected' : 'btn-default'} px-2.5 py-1`}
-              onClick={() => router.push(`/search/${category.eng}`)}
+              className={`${selectedCategory === category.eng ? 'btn-selected' : 'btn-default'} px-2.5 py-1`}
+              onClick={() => handleCategory(category.eng)}
+              ref={category.eng === selectedCategory ? selectedRef : null}
             >
               <span className="text-sm font-light">{category.kor}</span>
             </button>
