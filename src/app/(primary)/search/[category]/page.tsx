@@ -13,6 +13,13 @@ export default function Category() {
     router.push(`/search/${value}`);
   };
 
+  const SORT_OPTIONS = ['인기도순', '별점순', '찜하기순', '댓글순'];
+  const FILTER_OPTIONS = [
+    '국가/전체',
+    '스코틀랜드/로우랜드',
+    '스코틀랜드/하이랜드',
+  ]; // TODO: 국가 정보 조회하여 불러와야됌
+
   return (
     <>
       <CategorySelector
@@ -22,7 +29,12 @@ export default function Category() {
 
       <section>
         <List>
-          <List.Manager displayValue="인기순" />
+          <List.Manager
+            total={52}
+            sortOptions={SORT_OPTIONS}
+            hanldeSortOption={(value) => console.log(value)}
+            filterOptions={FILTER_OPTIONS}
+          />
           {MOCK_LIST_ITEM.map((item: any) => (
             <List.Item key={item.whiskyId} data={item} />
           ))}

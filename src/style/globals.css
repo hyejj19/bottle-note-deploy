@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 @layer components {
-  .btn-default {
+  .label-default {
     @apply bg-white text-subCoral border border-subCoral rounded-md;
   }
 
-  .btn-selected {
+  .label-selected {
     @apply bg-subCoral text-white border border-subCoral rounded-md;
   }
 }

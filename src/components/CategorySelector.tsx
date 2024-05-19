@@ -35,7 +35,7 @@ function CategorySelector({ selectedCategory, handleCategory }: Props) {
           return (
             <button
               key={category.eng}
-              className={`${selectedCategory === category.eng ? 'btn-selected' : 'btn-default'} px-2.5 py-1`}
+              className={`${selectedCategory === category.eng ? 'label-selected' : 'label-default'} px-2.5 py-1`}
               onClick={() => handleCategory(category.eng)}
               ref={category.eng === selectedCategory ? selectedRef : null}
             >
