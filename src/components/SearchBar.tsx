@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import EnterIcon from 'public/search.svg';
 
 interface Props {
   type?: 'Link' | 'Search';
@@ -38,7 +39,7 @@ export default function SearchBar({ type = 'Search', handleSearch }: Props) {
         <>
           <input
             type="text"
-            className="w-full bg-white rounded-lg h-10 pl-4 pr-12 drop-shadow-[0_3px_3px_rgba(0,0,0,0.30)] outline-none text-mainCoral placeholder-mainCoral text-base"
+            className="w-full bg-white rounded-lg h-10 pl-4 pr-12 outline-none text-mainCoral placeholder-mainCoral text-base"
             placeholder="어떤 술을 찾고 계신가요?"
             value={searchText}
             onChange={(e) => {
@@ -54,12 +55,7 @@ export default function SearchBar({ type = 'Search', handleSearch }: Props) {
             className="px-2 w-10 absolute top-0 right-1 h-full"
             onClick={handleOnClick}
           >
-            <Image
-              src="search.svg"
-              width={80}
-              height={80}
-              alt="search button"
-            />
+            <Image src={EnterIcon} alt="search button" />
           </button>
         </>
       )}
