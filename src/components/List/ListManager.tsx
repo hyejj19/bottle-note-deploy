@@ -1,11 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import ArrowDownIcon from 'public/Arrow-Down_Sub_Coral.svg';
 import DescendingIcon from 'public/Descending_Sub_Coral.svg';
-import BackDrop from '../BackDrop';
 import OptionDropdown from '../OptionDropdown';
-import { useState } from 'react';
 
 interface Props {
   total: number;
