@@ -37,6 +37,7 @@ const config: Config = {
         mainGray: '#666666',
         subGray: '#F6F6F6',
         burgundy: '#581D17',
+        sectionWhite: '#F7F7F7',
       },
     },
   },
