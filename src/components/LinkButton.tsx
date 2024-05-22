@@ -30,12 +30,12 @@ function LinkButton({
       >
         <div className={`${icon && 'flex justify-between'} text-white h-10`}>
           <div>
-            <p className="font-semibold text-sm">{korName}</p>
-            <p className="text-xs font-light leading-5">{engName}</p>
+            <p className="text-[16px] font-bold leading-5">{engName}</p>
+            <p className="font-bold text-sm">{korName}</p>
           </div>
           {icon && (
             <Image
-              src="arrowRight.svg"
+              src="/arrowRight.svg"
               alt="arrowIcon"
               width={23}
               height={23}
