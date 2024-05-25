@@ -224,11 +224,11 @@ function SearchCategory() {
           )}
         </section>
       </div>
-      <div className="h-4 bg-sectionWhite" />
-      {/* 혜정님 합성 컴포넌트 적용되면 같이 적용하기 */}
-      <section className="mx-5 py-5 space-y-4">
-        {data?.reviews && data.reviews.totalReviewCount !== 0 && (
-          <>
+      {data?.reviews && data.reviews.totalReviewCount !== 0 && (
+        <>
+          <div className="h-4 bg-sectionWhite" />
+          {/* 혜정님 합성 컴포넌트 적용되면 같이 적용하기 */}
+          <section className="mx-5 py-5 space-y-4">
             <p className="text-xs text-mainGray">
               총 {data?.reviews?.totalReviewCount}개
             </p>
@@ -253,19 +253,19 @@ function SearchCategory() {
                   <div className="border-b border-mainGray/30" />
                 </React.Fragment>
               ))}
-          </>
-        )}
-      </section>
-      <section className="mx-5 mb-5">
-        <LinkButton
-          data={{
-            engName: 'MORE COMMENTS',
-            korName: '리뷰 더 보기',
-            icon: true,
-            linkSrc: `/search/${data?.alcohols?.engCategory}/${data?.alcohols?.alcoholId}/reviews`,
-          }}
-        />
-      </section>
+          </section>
+          <section className="mx-5 mb-5">
+            <LinkButton
+              data={{
+                engName: 'MORE COMMENTS',
+                korName: '리뷰 더 보기',
+                icon: true,
+                linkSrc: `/search/${data?.alcohols?.engCategory}/${data?.alcohols?.alcoholId}/reviews`,
+              }}
+            />
+          </section>
+        </>
+      )}
     </div>
   );
 }
