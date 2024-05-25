@@ -8,8 +8,8 @@ import OptionDropdown from '../OptionDropdown';
 
 interface Props {
   total: number;
-  sortOptions: string[];
-  hanldeSortOption: (value: string) => void;
+  sortOptions?: string[];
+  hanldeSortOption?: (value: string) => void;
   filterOptions?: string[];
 }
 
@@ -29,28 +29,30 @@ const ListManager = ({
     <>
       <article className="flex justify-between items-center text-mainGray text-sm pb-3.25 border-mainBlack border-b">
         <span className="text-xs text-mainGray">{`총 ${total}개`}</span>
-        <div className="flex gap-1.5 ">
-          <button>
-            <Image src={DescendingIcon} alt="내림차순" />
-          </button>
-          <button
-            className="label-default flex items-center gap-1 px-2.5 py-1 rounded-md text-xxs"
-            onClick={handleOptionsShow}
-          >
-            <span>{sortOptions[0]}</span>
-            <Image src={ArrowDownIcon} alt="정렬" />
-          </button>
-
-          {filterOptions && (
+        {sortOptions && (
+          <div className="flex gap-1.5 ">
+            <button>
+              <Image src={DescendingIcon} alt="내림차순" />
+            </button>
             <button
               className="label-default flex items-center gap-1 px-2.5 py-1 rounded-md text-xxs"
               onClick={handleOptionsShow}
             >
-              <span>{filterOptions[0]}</span>
-              <Image src={ArrowDownIcon} alt="필터" />
+              <span>{sortOptions[0]}</span>
+              <Image src={ArrowDownIcon} alt="정렬" />
             </button>
-          )}
-        </div>
+
+            {filterOptions && (
+              <button
+                className="label-default flex items-center gap-1 px-2.5 py-1 rounded-md text-xxs"
+                onClick={handleOptionsShow}
+              >
+                <span>{filterOptions[0]}</span>
+                <Image src={ArrowDownIcon} alt="필터" />
+              </button>
+            )}
+          </div>
+        )}
       </article>
 
       {isOptonShow && <OptionDropdown handleClose={handleOptionsShow} />}

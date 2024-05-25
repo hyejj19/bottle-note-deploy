@@ -1,7 +1,6 @@
 import React from 'react';
-import ListManager from '@/components/List/ListManager';
-import ListItem from '@/components/List/ListItem';
 import { MOCK_LIST_ITEM } from 'mock/alcohol';
+import List from '@/components/List/List';
 import UserInfo from './_components/UserInfo';
 import HistoryOverview from './_components/HistoryOverview';
 import SidebarHeader from './_components/SidebarHeader';
@@ -27,13 +26,12 @@ export default function User() {
       </section>
 
       <section className="px-5 pt-9">
-        {/* TODO: 합성 컴포넌트를 만든 후 적용 */}
-        <ListManager displayValue="최근에 담은 순" />
-        <section>
+        <List>
+          <List.Manager total={33} />
           {MOCK_LIST_ITEM.map((item) => (
-            <ListItem key={item.alcoholId} data={item} />
+            <List.Item key={item.alcoholId} data={item} />
           ))}
-        </section>
+        </List>
       </section>
     </main>
   );

@@ -1,5 +1,3 @@
-'use client';
-
 import ListItem from './ListItem';
 import ListManager from './ListManager';
 
