@@ -31,7 +31,7 @@ export default function User() {
         <ListManager displayValue="최근에 담은 순" />
         <section>
           {MOCK_LIST_ITEM.map((item) => (
-            <ListItem key={item.whiskyId} data={item} />
+            <ListItem key={item.alcoholId} data={item} />
           ))}
         </section>
       </section>

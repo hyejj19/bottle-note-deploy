@@ -28,7 +28,7 @@ export default function Search() {
         <CategoryTitle subTitle="위클리 HOT 5" />
         <List>
           {MOCK_LIST_ITEM.map((item: any) => (
-            <List.Item key={item.whiskyId} data={item} />
+            <List.Item key={item.alcoholId} data={item} />
           ))}
         </List>
       </section>

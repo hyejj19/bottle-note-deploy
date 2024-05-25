@@ -36,7 +36,7 @@ export default function Category() {
             filterOptions={FILTER_OPTIONS}
           />
           {MOCK_LIST_ITEM.map((item: any) => (
-            <List.Item key={item.whiskyId} data={item} />
+            <List.Item key={item.alcoholId} data={item} />
           ))}
         </List>
       </section>
