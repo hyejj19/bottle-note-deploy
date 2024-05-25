@@ -8,7 +8,7 @@ export const MOCK_LIST_ITEM: AlcoholAPI[] = [
     rating: 3.5,
     korCategory: '싱글 몰트',
     engCategory: 'single molt',
-    imageUrl: 'https://i.imgur.com/TE2nmYV.png',
+    imageUrl: 'https://i.imgur.com/Bdh6kRH.jpeg',
   },
   {
     whiskyId: 2,
@@ -17,7 +17,7 @@ export const MOCK_LIST_ITEM: AlcoholAPI[] = [
     rating: 4.5,
     korCategory: '싱글 몰트',
     engCategory: 'single molt',
-    imageUrl: 'https://i.imgur.com/TE2nmYV.png',
+    imageUrl: 'https://i.imgur.com/Bdh6kRH.jpeg',
   },
   {
     whiskyId: 3,
@@ -26,7 +26,7 @@ export const MOCK_LIST_ITEM: AlcoholAPI[] = [
     rating: 4.0,
     korCategory: '싱글 몰트',
     engCategory: 'single molt',
-    imageUrl: 'https://i.imgur.com/TE2nmYV.png',
+    imageUrl: 'https://i.imgur.com/Bdh6kRH.jpeg',
   },
   {
     whiskyId: 4,
@@ -35,7 +35,7 @@ export const MOCK_LIST_ITEM: AlcoholAPI[] = [
     rating: 3.5,
     korCategory: '싱글 몰트',
     engCategory: 'single molt',
-    imageUrl: 'https://i.imgur.com/TE2nmYV.png',
+    imageUrl: 'https://i.imgur.com/Bdh6kRH.jpeg',
   },
   {
     whiskyId: 5,
@@ -44,6 +44,6 @@ export const MOCK_LIST_ITEM: AlcoholAPI[] = [
     rating: 4.5,
     korCategory: '싱글 몰트',
     engCategory: 'single molt',
-    imageUrl: 'https://i.imgur.com/TE2nmYV.png',
+    imageUrl: 'https://i.imgur.com/Bdh6kRH.jpeg',
   },
 ];

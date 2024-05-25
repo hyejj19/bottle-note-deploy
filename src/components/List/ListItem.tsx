@@ -36,8 +36,8 @@ const ListItem = ({ data }: Props) => {
   } = data;
 
   return (
-    <article className="flex items-center space-x-4 text-mainBlack border-mainBlack border-b h-[90px]">
-      <div className="relative w-[89px] h-[89px]">
+    <article className="flex items-center space-x-4 text-mainBlack border-mainBlack border-b h-[90px] ">
+      <div className="w-[89px] h-[89px] relative">
         <Image src={imageUrl} alt="위스키 이미지" fill objectFit="cover" />
       </div>
 
