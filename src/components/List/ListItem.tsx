@@ -8,7 +8,7 @@ import Review from '@/app/(primary)/user/[id]/_components/ReviewBtn';
 
 interface Props {
   data: {
-    whiskyId: number;
+    alcoholId: number;
     korName: string;
     engName: string;
     rating: number;
