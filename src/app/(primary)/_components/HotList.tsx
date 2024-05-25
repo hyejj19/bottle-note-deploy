@@ -18,13 +18,13 @@ function HotList() {
           if (result.data.totalCount !== 0) {
             const formattedData = result.data?.alcohols.map(
               (alcohol: AlcoholAPI) => ({
-                whiskyId: alcohol.whiskyId,
+                alcoholId: alcohol.alcoholId,
                 korName: alcohol.korName,
                 engName: alcohol.engName,
                 rating: alcohol.rating,
                 engCategory: alcohol.engCategory,
                 imageUrl: alcohol.imageUrl,
-                path: `/search/${alcohol.engCategory}/${alcohol.whiskyId}`,
+                path: `/search/${alcohol.engCategory}/${alcohol.alcoholId}`,
               }),
             );
             setWeeklyData(formattedData);
@@ -45,7 +45,7 @@ function HotList() {
         <div className="whitespace-nowrap overflow-x-auto flex space-x-2">
           {weeklyData.map((item) => {
             return (
-              <div key={item.whiskyId} className="flex-shrink-0">
+              <div key={item.alcoholId} className="flex-shrink-0">
                 <HorizontalItem data={item} />
               </div>
             );

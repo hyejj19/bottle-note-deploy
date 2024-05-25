@@ -1,6 +1,7 @@
+import { Review } from '@/types/Review';
 // category는 정확히 정해지면 타입 지정하기
 export interface AlcoholAPI {
-  whiskyId: number;
+  alcoholId: number;
   korName: string;
   engName: string;
   rating: number;
@@ -10,4 +11,42 @@ export interface AlcoholAPI {
 }
 export interface Alcohol extends AlcoholAPI {
   path: string;
+}
+
+export interface AlcoholDetails {
+  alcohols: {
+    // rating한 user count는?
+    alcoholId: number;
+    alcoholUrlImg: string;
+    korName: string;
+    engName: string;
+    korCategory: string;
+    engCategory: string;
+    korRegion: string;
+    engRegion: string;
+    cask: string;
+    avg: string;
+    korDistillery: string;
+    engDistillery: string;
+    rating: number;
+    totalRatingsCount: number;
+    totalRatings: number;
+    myRating: number;
+    isPicked: boolean;
+    tags: string[];
+  };
+  friendsInfo: {
+    followerCount: number;
+    friends: {
+      user_image_url: string;
+      userId: number;
+      nickName: string;
+      rating: number;
+    }[];
+  };
+  reviews: {
+    totalReviewCount: number;
+    bestReviewInfos: Review[];
+    recentReviewInfos: Review[];
+  };
 }
