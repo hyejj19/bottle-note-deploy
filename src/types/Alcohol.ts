@@ -10,7 +10,7 @@ export interface AlcoholAPI {
   imageUrl: string;
 }
 export interface Alcohol extends AlcoholAPI {
-  path: string;
+  path: string | { pathname: string; query?: any };
 }
 
 export interface AlcoholDetails {
