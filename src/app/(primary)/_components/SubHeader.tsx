@@ -51,7 +51,7 @@ interface SubHeaderMainProps {
 function SubHeaderMain({ children, bgColor }: SubHeaderMainProps) {
   return (
     <div
-      className={`${bgColor} flex justify-between relative py-[1.3rem] px-5`}
+      className={`${bgColor} flex justify-between items-center relative py-8 px-5`}
     >
       {children}
     </div>

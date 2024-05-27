@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import Star from '@/components/Star';
@@ -20,7 +20,8 @@ type Details = {
 
 function SearchCategory() {
   const router = useRouter();
-  const alcoholId = usePathname().split('/').pop();
+  const params = useParams();
+  const alcoholId = params?.id;
   const [data, setData] = useState<AlcoholDetails | null>(null);
   const [details, setDetails] = useState<Details[]>([]);
 
@@ -68,7 +69,7 @@ function SearchCategory() {
   }, []);
 
   return (
-    <div className="pb-20">
+    <div>
       <div className="relative">
         {data?.alcohols?.alcoholUrlImg && (
           <div
@@ -100,7 +101,7 @@ function SearchCategory() {
             />
           </SubHeader.Right>
         </SubHeader>
-        <section className="relative z-10 flex px-5 py-6 space-x-5">
+        <section className="relative z-10 flex px-5 pb-6 space-x-5">
           <div className="rounded-lg flex-2 bg-white p-4 h-56">
             <article className="relative h-48 w-28">
               {data?.alcohols?.alcoholUrlImg && (
@@ -224,11 +225,11 @@ function SearchCategory() {
           )}
         </section>
       </div>
-      <div className="h-4 bg-sectionWhite" />
-      {/* 혜정님 합성 컴포넌트 적용되면 같이 적용하기 */}
-      <section className="mx-5 py-5 space-y-4">
-        {data?.reviews && data.reviews.totalReviewCount !== 0 && (
-          <>
+      {data?.reviews && data.reviews.totalReviewCount !== 0 && (
+        <>
+          <div className="h-4 bg-sectionWhite" />
+          {/* 혜정님 합성 컴포넌트 적용되면 같이 적용하기 */}
+          <section className="mx-5 py-5 space-y-4">
             <p className="text-xs text-mainGray">
               총 {data?.reviews?.totalReviewCount}개
             </p>
@@ -253,19 +254,25 @@ function SearchCategory() {
                   <div className="border-b border-mainGray/30" />
                 </React.Fragment>
               ))}
-          </>
-        )}
-      </section>
-      <section className="mx-5 mb-5">
-        <LinkButton
-          data={{
-            engName: 'MORE COMMENTS',
-            korName: '리뷰 더 보기',
-            icon: true,
-            linkSrc: `/search/${data?.alcohols?.engCategory}/${data?.alcohols?.alcoholId}/reviews`,
-          }}
-        />
-      </section>
+          </section>
+          <section className="mx-5 mb-5">
+            {/* 쿼리 파람 확인해서 추가하기 */}
+            <LinkButton
+              data={{
+                engName: 'MORE COMMENTS',
+                korName: '리뷰 더 보기',
+                icon: true,
+                linkSrc: {
+                  pathname: `/search/${data?.alcohols?.engCategory}/${data?.alcohols?.alcoholId}/reviews`,
+                  query: {
+                    name: data?.alcohols?.korName,
+                  },
+                },
+              }}
+            />
+          </section>
+        </>
+      )}
     </div>
   );
 }
