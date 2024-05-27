@@ -10,6 +10,7 @@ import Review from '@/app/(primary)/search/[category]/[id]/_components/Review';
 import Link from 'next/link';
 import EmptyView from '@/app/(primary)/_components/EmptyView';
 import { truncStr } from '@/utils/truncStr';
+import ReviewLayout from '../layout';
 
 const SORT_OPTIONS = ['인기도순', '별점순', '병 가격 순', '잔 가격 순'];
 
@@ -70,13 +71,13 @@ function Reviews() {
       <section className="p-8 space-y-9">
         <div className="flex gap-3 relative">
           <button
-            className={`py-2 ${activeTab === 'tab1' ? 'text-subCoral border-subCoral' : 'text-subCoral/50 border-subCoral/50'} border-b w-full font-bold text-base text-center leading-[17.2px]`}
+            className={`py-2 ${activeTab === 'tab1' ? 'tab-selected' : 'tab-default'} w-full font-bold text-[0.938rem] text-center leading-[17.2px]`}
             onClick={() => handleTabClick('tab1')}
           >
             모든 리뷰
           </button>
           <button
-            className={`py-2 ${activeTab === 'tab2' ? 'text-subCoral border-subCoral' : 'text-subCoral/50 border-subCoral/50'} border-b w-full font-bold text-base text-center leading-[17.2px]`}
+            className={`py-2 ${activeTab === 'tab2' ? 'tab-selected' : 'tab-default'} w-full font-bold text-[0.938rem] text-center leading-[17.2px]`}
             onClick={() => handleTabClick('tab2')}
           >
             내가 작성한 리뷰
@@ -134,3 +135,5 @@ function Reviews() {
 }
 
 export default Reviews;
+
+Reviews.getLayout = (page: any) => <ReviewLayout>{page}</ReviewLayout>;

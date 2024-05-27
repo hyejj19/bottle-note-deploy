@@ -10,6 +10,14 @@
   .label-selected {
     @apply bg-subCoral text-white border border-subCoral rounded-md;
   }
+
+  .tab-default {
+    @apply text-subCoral/50 border-subCoral/50 border-b;
+  }
+
+  .tab-selected {
+    @apply text-subCoral border-subCoral border-b;
+  }
 }
 
 @layer utilities {
