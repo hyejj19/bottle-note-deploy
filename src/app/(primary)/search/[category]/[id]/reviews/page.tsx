@@ -58,7 +58,7 @@ function Reviews() {
           }}
         >
           <Image
-            src="/arrowLeftCoral.svg"
+            src="/icon/arrow-left-subcoral.svg"
             alt="arrowIcon"
             width={23}
             height={23}
