@@ -11,7 +11,7 @@ import Star from '@/components/Star';
 import { numberWithCommas } from '@/utils/formatNum';
 import { formatDate } from '@/utils/formatDate';
 import Toggle from '@/app/(primary)/_components/Toggle';
-import ReportModal from './ReportModal';
+import ReportModal from '@/app/(primary)/_components/ReportModal';
 
 interface Props {
   isBest?: boolean;
@@ -67,14 +67,14 @@ function Review({ data, isBest = false, isMine = false }: Props) {
               <Label
                 name="베스트"
                 icon="/thumbUpWhite.svg"
-                style="bg-mainCoral text-white px-2 py-[0.1rem] border-mainCoral rounded"
+                style="bg-mainCoral text-white px-2 py-[0.1rem] text-xxs border-mainCoral rounded"
               />
             )}
             {isMine && (
               <Label
                 name="나의 코멘트"
                 icon="/user.svg"
-                style="border-mainCoral text-mainCoral px-2 py-[0.1rem] rounded"
+                style="border-mainCoral text-mainCoral px-2 py-[0.1rem] text-xxs rounded"
               />
             )}
           </div>

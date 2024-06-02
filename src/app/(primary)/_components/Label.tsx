@@ -10,11 +10,11 @@ interface Props {
 function Label({
   name,
   icon,
-  style = 'border-white px-2.5 py-1 rounded-md',
+  style = 'border-white px-2.5 py-1 rounded-md text-xxs',
 }: Props) {
   return (
     <div>
-      <div className={`border text-xxs inline-block ${style}`}>
+      <div className={`border inline-block ${style}`}>
         <div className="flex items-center">
           {icon && (
             <Image
