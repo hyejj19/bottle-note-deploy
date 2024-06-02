@@ -5,6 +5,7 @@ import Star from '@/components/Star';
 import { truncStr } from '@/utils/truncStr';
 import LikeBtn from '@/app/(primary)/user/[id]/_components/LikeBtn'; // 위치이동!
 import Review from '@/app/(primary)/user/[id]/_components/ReviewBtn';
+import { addNewLine } from '@/utils/addNewLine';
 
 interface Props {
   data: {
@@ -22,7 +23,6 @@ interface Props {
   };
 }
 
-// TODO: Props 적용
 const ListItem = ({ data }: Props) => {
   const {
     korCategory,
@@ -36,15 +36,15 @@ const ListItem = ({ data }: Props) => {
   } = data;
 
   return (
-    <article className="flex items-center space-x-4 text-mainBlack border-mainBlack border-b h-[90px] ">
-      <div className="w-[89px] h-[89px] relative">
+    <article className="flex items-center space-x-2 text-mainBlack border-mainBlack border-b h-[90px]">
+      <div className="w-[89px] h-[89px] relative flex shrink-0">
         <Image src={imageUrl} alt="위스키 이미지" fill objectFit="cover" />
       </div>
 
-      <section className="flex-1 space-y-1.">
+      <section className="flex-1 space-y-1">
         <article className="flex justify-between items-center ">
           <h2 className="whitespace-pre text-sm leading-sm font-bold line">
-            {korName}
+            {addNewLine(korName)}
           </h2>
           <div className="flex flex-col">
             {/* rating이 null 혹은 0인 경우 invisible */}
