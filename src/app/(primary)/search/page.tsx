@@ -6,6 +6,7 @@ import CategorySelector from '@/components/CategorySelector';
 import CategoryTitle from '@/components/CategoryTitle';
 import List from '@/components/List/List';
 import { Alcohol } from '@/types/Alcohol';
+import { AlcoholsApi } from '@/app/api/AlcholsApi';
 
 export default function Search() {
   const router = useRouter();
@@ -18,10 +19,9 @@ export default function Search() {
 
   useEffect(() => {
     (async () => {
-      const result = await fetch('/api/alcohols?popular');
-      const data: Alcohol[] = await result.json();
+      const result = await AlcoholsApi.getPopular();
 
-      setPopulars(data);
+      setPopulars(result);
     })();
   }, []);
 

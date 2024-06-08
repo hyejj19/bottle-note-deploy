@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import CategorySelector from '@/components/CategorySelector';
 import List from '@/components/List/List';
 import { Alcohol } from '@/types/Alcohol';
+import { AlcoholsApi } from '@/app/api/AlcholsApi';
 
 export default function Rating() {
   const router = useRouter();
@@ -19,10 +20,9 @@ export default function Rating() {
   // TODO: 공통 훅으로 빼기
   useEffect(() => {
     (async () => {
-      const result = await fetch('/api/alcohols?popular');
-      const data: Alcohol[] = await result.json();
+      const result = await AlcoholsApi.getPopular();
 
-      setPopulars(data);
+      setPopulars(result);
     })();
   }, []);
 
@@ -34,10 +34,9 @@ export default function Rating() {
 
   useEffect(() => {
     (async () => {
-      const result = await fetch('/api/alcohols?region');
-      const regions = await result.json();
+      const result = await AlcoholsApi.getRegion();
 
-      setFilterOptions(regions);
+      setFilterOptions(result);
     })();
   }, []);
 
