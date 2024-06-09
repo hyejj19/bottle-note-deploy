@@ -146,7 +146,13 @@ function SearchCategory() {
                   </div>
                   <div className="border-[0.5px] border-white" />
                   <div className="flex space-x-3">
-                    <div className="text-xs flex">
+                    <div
+                      className="text-xs flex"
+                      onClick={() => {
+                        router.push('/review/register');
+                        console.log('!!!');
+                      }}
+                    >
                       <Image
                         className="mr-1"
                         src="/icon/edit-outlined-white.svg"
