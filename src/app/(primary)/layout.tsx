@@ -10,12 +10,7 @@ export default function Layout({
 }>) {
   const pathname = usePathname();
 
-  const hideNavbarPaths = [
-    /^\/search\/Single\sMalt\/\d+$/,
-    /^\/search\/Single\sMalt\/\d+\/reviews$/,
-    /^\/review\/\d+\/register$/,
-    /^\/review\/\d+\/modify$/,
-  ];
+  const hideNavbarPaths = [/^\/review\/register$/, /^\/review\/modify$/];
 
   const shouldHideNavbar = hideNavbarPaths.some((pattern) =>
     pattern.test(pathname),
@@ -25,7 +20,8 @@ export default function Layout({
     <div className="bg-white flex flex-col w-full mx-auto max-w-[430px] min-h-screen">
       <main className="flex-1 overflow-y-auto">
         {children}
-        {shouldHideNavbar && <Navbar maxWidth="430px" />}
+        {/* 임시 방편 수정 */}
+        {!shouldHideNavbar && <Navbar maxWidth="430px" />}
       </main>
     </div>
   );
