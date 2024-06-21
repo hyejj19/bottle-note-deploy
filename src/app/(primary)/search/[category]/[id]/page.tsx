@@ -14,6 +14,7 @@ import { AlcoholDetails } from '@/types/Alcohol';
 import LinkButton from '@/components/LinkButton';
 import NavLayout from '@/app/(primary)/_components/NavLayout';
 import StarRating from '@/components/StarRaiting';
+import EmptyView from '@/app/(primary)/_components/EmptyView';
 
 type Details = {
   title: string;
@@ -244,7 +245,7 @@ function SearchCategory() {
         </section>
       </div>
       {/* 없을 때 화면 넣기 */}
-      {data?.reviews && data.reviews.totalReviewCount !== 0 && (
+      {data?.reviews && data.reviews.totalReviewCount !== 0 ? (
         <>
           <div className="h-4 bg-sectionWhite" />
           {/* 혜정님 합성 컴포넌트 적용되면 같이 적용하기 */}
@@ -289,6 +290,13 @@ function SearchCategory() {
                 },
               }}
             />
+          </section>
+        </>
+      ) : (
+        <>
+          <div className="h-4 bg-sectionWhite" />
+          <section className="py-5">
+            <EmptyView text="아직 리뷰가 없어요!" />
           </section>
         </>
       )}
