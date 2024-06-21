@@ -27,7 +27,7 @@ export default function notFound() {
       </SubHeader>
       <div className="h-screen flex flex-col justify-center items-center gap-5">
         <Image
-          src="/empty_bottle.svg"
+          src="/icon/logo-subcoral.svg"
           alt="bottle_logo"
           width={73}
           height={125}

@@ -8,7 +8,12 @@ interface Props {
 function EmptyView({ text = '검색 결과가 없어요!' }: Props) {
   return (
     <div className="h-72 flex flex-col justify-center items-center gap-5">
-      <Image src="/empty_bottle.svg" alt="bottle_logo" width={50} height={60} />
+      <Image
+        src="/icon/logo-subcoral.svg"
+        alt="bottle_logo"
+        width={50}
+        height={60}
+      />
       <p className="text-mainGray">{text}</p>
     </div>
   );
