@@ -27,7 +27,7 @@ function ReviewForm() {
   return (
     <section className="px-5 pt-9 pb-20">
       <article className="grid place-items-center space-y-2 pb-3">
-        <p className="text-xxs text-mainDarkGray">
+        <p className="text-10 text-mainDarkGray">
           이 술에 대한 평가를 남겨보세요.
         </p>
         {/* 추후 로직 확인 후 수정 필요 */}
@@ -39,9 +39,9 @@ function ReviewForm() {
       <article>
         <textarea
           placeholder="이 위스키에 대한 리뷰를 작성해보세요. (최대 1,000자)"
-          className="text-xxs w-full h-48"
+          className="text-10 w-full h-48"
         />
-        <div className="text-xxs text-mainGray flex justify-between items-center">
+        <div className="text-10 text-mainGray flex justify-between items-center">
           <Toggle />
           <div>(0/1000)</div>
         </div>
@@ -55,7 +55,7 @@ function ReviewForm() {
             width={20}
             height={20}
           />
-          <p className="text-xxs text-mainDarkGray font-bold">
+          <p className="text-10 text-mainDarkGray font-bold">
             가격 <span className="text-mainGray font-normal">(선택)</span>
           </p>
         </div>
@@ -63,7 +63,7 @@ function ReviewForm() {
           <div className="flex items-center space-x-3">
             <label
               htmlFor="glass"
-              className="flex items-center text-mainDarkGray text-xxs"
+              className="flex items-center text-mainDarkGray text-10"
             >
               <input
                 type="radio"
@@ -76,7 +76,7 @@ function ReviewForm() {
             </label>
             <label
               htmlFor="bottle"
-              className="flex items-center text-mainDarkGray text-xxs"
+              className="flex items-center text-mainDarkGray text-10"
             >
               <input
                 type="radio"
@@ -89,11 +89,11 @@ function ReviewForm() {
             </label>
           </div>
           <div className="border-b border-subCoral py-2 flex items-center">
-            <p className="text-subCoral text-xxs font-semibold w-8">1병에</p>
+            <p className="text-subCoral text-10 font-semibold w-8">1병에</p>
             <input
               type="number"
               placeholder="얼마에 마셨는지 기록해보세요!"
-              className="text-xxs font-[#BFBFBF] w-full text-mainDarkGray text-right"
+              className="text-10 font-[#BFBFBF] w-full text-mainDarkGray text-right"
             />
             <Image
               src="/icon/won-subcoral.svg"
@@ -113,13 +113,13 @@ function ReviewForm() {
             width={20}
             height={20}
           />
-          <p className="text-xxs text-mainDarkGray font-bold">
+          <p className="text-10 text-mainDarkGray font-bold">
             이 술을 마셨을 때, 좋았던 장소가 있나요?{' '}
             <span className="text-mainGray font-normal">(선택)</span>
           </p>
         </div>
         <div className="flex items-center">
-          <p className="text-mainGray font-normal text-xxs">변경</p>
+          <p className="text-mainGray font-normal text-10">변경</p>
           <Image
             src="/icon/arrow-right-subcoral.svg"
             alt="rightIcon"
@@ -137,13 +137,13 @@ function ReviewForm() {
             width={20}
             height={20}
           />
-          <p className="text-xxs text-mainDarkGray font-bold">
+          <p className="text-10 text-mainDarkGray font-bold">
             이미지 추가{' '}
             <span className="text-mainGray font-normal">(선택·최대 5장)</span>
           </p>
         </div>
         <div className="flex items-center">
-          <p className="text-mainGray font-normal text-xxs">이미지 수정</p>
+          <p className="text-mainGray font-normal text-10">이미지 수정</p>
           <Image
             src="/icon/arrow-right-subcoral.svg"
             alt="rightIcon"
@@ -162,14 +162,14 @@ function ReviewForm() {
               width={20}
               height={20}
             />
-            <p className="text-xxs text-mainDarkGray font-bold">
+            <p className="text-10 text-mainDarkGray font-bold">
               FLAVOR TAG 입력하기{' '}
               <span className="text-mainGray font-normal">(선택)</span>
             </p>
-            <p className="text-xxs text-mainDarkGray">총 8개 선택</p>
+            <p className="text-10 text-mainDarkGray">총 8개 선택</p>
           </div>
           <div className="flex items-center">
-            <p className="text-mainGray font-normal text-xxs">수정</p>
+            <p className="text-mainGray font-normal text-10">수정</p>
             <Link href="/review/register/flavorTag">
               <Image
                 src="/icon/arrow-right-subcoral.svg"
@@ -186,7 +186,7 @@ function ReviewForm() {
               <Label
                 name={tag}
                 style={
-                  'border-subCoral text-subCoral px-2 py-0.5 rounded-md text-xs'
+                  'border-subCoral text-subCoral px-2 py-0.5 rounded-md text-13'
                 }
               />
             </React.Fragment>

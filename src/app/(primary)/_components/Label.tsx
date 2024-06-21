@@ -5,12 +5,16 @@ interface Props {
   name: string;
   style?: string;
   icon?: string;
+  iconHeight?: number;
+  iconWidth?: number;
 }
 
 function Label({
   name,
   icon,
-  style = 'border-white px-2.5 py-1 rounded-md text-xxs',
+  iconHeight = 10,
+  iconWidth = 10,
+  style = 'border-white px-2.5 py-1 rounded-md text-10',
 }: Props) {
   return (
     <div>
@@ -20,9 +24,9 @@ function Label({
             <Image
               className="mr-1"
               src={icon}
-              width={14}
-              height={14}
-              alt="best"
+              width={iconWidth}
+              height={iconHeight}
+              alt={name}
             />
           )}
           {name}

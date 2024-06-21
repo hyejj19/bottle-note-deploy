@@ -122,12 +122,15 @@ function SearchCategory() {
             {data?.alcohols && (
               <>
                 <div className="space-y-1">
-                  <Label name={data.alcohols.korCategory} />
-                  <h1 className="text-xl font-semibold whitespace-normal break-words">
+                  <Label
+                    name={data.alcohols.korCategory}
+                    style={'border-white px-2 py-[0.15rem] rounded-md text-10'}
+                  />
+                  <h1 className="text-20 font-semibold whitespace-normal break-words">
                     {data.alcohols.korName &&
                       truncStr(data.alcohols.korName, 27)}
                   </h1>
-                  <p className="text-xs whitespace-normal break-words">
+                  <p className="text-13 whitespace-normal break-words">
                     {data.alcohols.engName &&
                       truncStr(data.alcohols.engName.toUpperCase(), 45)}
                   </p>
@@ -138,18 +141,18 @@ function SearchCategory() {
                       <Star
                         rating={data.alcohols.rating}
                         size={27}
-                        style={'text-white text-[27px] font-bold'}
+                        style={'text-white text-27 font-bold'}
                         color="white"
                       />
                     )}
-                    <div className="text-xs mb-1">
+                    <div className="text-9 mb-1">
                       (유저평가 {data.alcohols.totalRatingsCount})
                     </div>
                   </div>
                   <div className="border-[0.5px] border-white" />
                   <div className="flex space-x-3">
                     <div
-                      className="text-xs flex"
+                      className="text-10 flex"
                       onClick={() => {
                         router.push('/review/register');
                       }}
@@ -164,7 +167,7 @@ function SearchCategory() {
                       <button>리뷰 작성</button>
                     </div>
                     <div className="border-[0.5px] border-white my-[0.1rem]" />
-                    <div className="text-xs flex">
+                    <div className="text-10 flex">
                       <Image
                         className="mr-1"
                         src="/icon/like-filled-white.svg"
@@ -183,7 +186,7 @@ function SearchCategory() {
       </div>
       <div className="mb-5">
         <article className="grid place-items-center space-y-2 py-5">
-          <p className="text-xxs text-mainDarkGray">
+          <p className="text-10 text-mainDarkGray">
             이 술에 대한 평가를 남겨보세요.
           </p>
           {/* 추후 로직 확인 후 수정 필요 */}
@@ -195,7 +198,7 @@ function SearchCategory() {
           {details.map((data) => (
             <div
               key={data.content}
-              className="flex text-xs text-mainDarkGray items-center"
+              className="flex text-13 text-mainDarkGray items-center"
             >
               <div className="min-w-14 font-semibold">{data.title}</div>
               <div className="flex-1 font-light">{data.content}</div>
@@ -206,7 +209,7 @@ function SearchCategory() {
         <section className="mx-5 py-5 border-b border-mainGray/30 space-y-2">
           {data?.friendsInfo && (
             <>
-              <div className="flex items-end space-x-1 text-xs text-mainDarkGray">
+              <div className="flex items-end space-x-1 text-13 text-mainDarkGray">
                 <div>마셔본 친구</div>
                 <div className="font-extralight">
                   {data.friendsInfo.followerCount}
@@ -229,7 +232,7 @@ function SearchCategory() {
                         />
                       </div>
                     </Link>
-                    <p className="text-xs text-mainDarkGray">
+                    <p className="text-10 text-mainDarkGray">
                       {truncStr(user.nickName, 4)}
                     </p>
                     <Star rating={user.rating} size={12} />
@@ -245,8 +248,8 @@ function SearchCategory() {
         <>
           <div className="h-4 bg-sectionWhite" />
           {/* 혜정님 합성 컴포넌트 적용되면 같이 적용하기 */}
-          <section className="mx-5 py-5 space-y-4">
-            <p className="text-xs text-mainGray">
+          <section className="mx-5 py-5 space-y-3">
+            <p className="text-13 text-mainGray font-normal">
               총 {data?.reviews?.totalReviewCount}개
             </p>
             {/* Login 완성되면 isMine 코드 추가하기 */}
@@ -271,7 +274,7 @@ function SearchCategory() {
                 </React.Fragment>
               ))}
           </section>
-          <section className="mx-5 mb-5">
+          <section className="mx-5 mb-24">
             {/* 쿼리 파람 확인해서 추가하기 */}
             <LinkButton
               data={{

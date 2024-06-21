@@ -30,8 +30,8 @@ function LinkButton({
       >
         <div className={`${icon && 'flex justify-between'} text-white h-10`}>
           <div>
-            <p className="text-[16px] font-bold leading-5">{engName}</p>
-            <p className="font-bold text-sm">{korName}</p>
+            <p className="font-bold text-15">{korName}</p>
+            <p className="text-13 font-light">{engName}</p>
           </div>
           {icon && (
             <Image

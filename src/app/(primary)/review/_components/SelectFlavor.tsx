@@ -46,9 +46,9 @@ export default function SelectFlavor() {
               width={26}
               height={26}
             />
-            <p className="text-sm text-mainDarkGray">FLAVOR TAG 선택</p>
+            <p className="text-13 text-mainDarkGray">FLAVOR TAG 선택</p>
           </div>
-          <p className="text-sm text-mainDarkGray">
+          <p className="text-13 text-mainDarkGray">
             내가 느낀 플레이버 태그를 입력 하세요.{' '}
             <span className="text-mainGray font-normal">(최대 15개)</span>
           </p>
@@ -56,18 +56,18 @@ export default function SelectFlavor() {
             <div className="flex items-center border-b border-mainGray/30 py-2 space-x-1">
               <input
                 type="text"
-                className="text-xxs text-mainGray w-full"
+                className="text-10 text-mainGray w-full"
                 placeholder="예) 반건조 된 건자두"
                 maxLength={12}
               />
               <button
-                className={`text-xxs py-[0.13rem] px-2 rounded border  w-16 ${DATA.length !== 10 ? 'border-subCoral text-subCoral' : 'border-[#BFBFBF] text-[#BFBFBF]'}`}
+                className={`text-10 py-[0.13rem] px-2 rounded border  w-16 ${DATA.length !== 10 ? 'border-subCoral text-subCoral' : 'border-[#BFBFBF] text-[#BFBFBF]'}`}
                 disabled={DATA.length === 10}
               >
                 태그 등록
               </button>
             </div>
-            <p className="text-xxs text-mainGray mt-5">
+            <p className="text-10 text-mainGray mt-5">
               선택된 플레이버 태그 (0개)
             </p>
             <div className="mt-2">
@@ -91,7 +91,7 @@ export default function SelectFlavor() {
 
 const CreateLabel = ({ name }: { name: string }) => {
   return (
-    <div className="inline-block text-xs bg-subCoral text-white px-2 py-1 rounded ">
+    <div className="inline-block text-13 bg-subCoral text-white px-2 py-1 rounded ">
       <div className="flex items-center justify-center space-x-1">
         <p>{name}</p>
         <Image

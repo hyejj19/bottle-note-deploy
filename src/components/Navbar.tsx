@@ -41,7 +41,7 @@ function Navbar({ maxWidth }: { maxWidth: string }) {
             >
               <div className="flex flex-col items-center space-y-1">
                 <Image src={menu.icon} alt={menu.name} width={30} height={30} />
-                <span className="text-[10px] text-subCoral">{menu.name}</span>
+                <span className="text-9 text-subCoral">{menu.name}</span>
               </div>
             </Link>
             {index !== navItems.length - 1 && (

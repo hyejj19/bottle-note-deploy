@@ -58,23 +58,22 @@ function Review({ data, isBest = false, isMine = false }: Props) {
                     height={28}
                   />
                 </div>
-                <p className="text-mainGray text-xs">
-                  {truncStr(nickName, 12)}
-                </p>
+                <p className="text-mainGray text-9">{truncStr(nickName, 12)}</p>
               </div>
             </Link>
             {isBest && (
               <Label
                 name="베스트"
                 icon="/icon/thumbup-filled-white.svg"
-                style="bg-mainCoral text-white px-2 py-[0.1rem] text-xxs border-mainCoral rounded"
+                style="bg-mainCoral text-white px-2 py-[0.1rem] text-9 border-mainCoral rounded"
               />
             )}
             {isMine && (
               <Label
                 name="나의 코멘트"
                 icon="/icon/user-outlined-subcoral.svg"
-                style="border-mainCoral text-mainCoral px-2 py-[0.1rem] text-xxs rounded"
+                iconHeight={10}
+                style="border-mainCoral text-mainCoral px-2 py-[0.1rem] text-9 rounded"
               />
             )}
           </div>
@@ -91,15 +90,15 @@ function Review({ data, isBest = false, isMine = false }: Props) {
             height={12}
             alt={sizeType === 'bottle' ? 'Bottle Price' : 'Glass Price'}
           />
-          <p className="text-mainGray text-xs font-semibold">
+          <p className="text-mainGray text-10 font-semibold">
             {sizeType === 'bottle' ? '병 가격 ' : '잔 가격'}
           </p>
-          <p className="text-mainGray text-xs font-light">
+          <p className="text-mainGray text-10 font-light">
             {numberWithCommas(price)}₩
           </p>
         </div>
         <div className="grid grid-cols-5 space-x-2" onClick={() => {}}>
-          <p className="col-span-4 text-mainDarkGray text-xs">
+          <p className="col-span-4 text-mainDarkGray text-10">
             <Link href={`/review/${reviewId}`}>
               {truncStr(reviewContent, 135)}
               {reviewContent.length > 135 && (
@@ -117,7 +116,7 @@ function Review({ data, isBest = false, isMine = false }: Props) {
             />
           </div>
         </div>
-        <div className="flex justify-between text-xs text-mainGray">
+        <div className="flex justify-between text-9 text-mainGray">
           <div className="flex space-x-3">
             <div className="flex items-center space-x-1">
               <Image
@@ -126,8 +125,8 @@ function Review({ data, isBest = false, isMine = false }: Props) {
                     ? '/icon/thumbup-filled-subcoral.svg'
                     : '/icon/thumbup-outlined-gray.svg'
                 }
-                width={12}
-                height={12}
+                width={10}
+                height={10}
                 alt="like"
               />
               <p>{likeCount}</p>
@@ -136,11 +135,11 @@ function Review({ data, isBest = false, isMine = false }: Props) {
               <Image
                 src={
                   isMyReply
-                    ? '/commentFill.svg'
-                    : '/icon/comment-outlined-graysvg'
+                    ? '/icon/comment-filled-subcoral.svg'
+                    : '/icon/comment-outlined-gray.svg'
                 }
-                width={12}
-                height={12}
+                width={10}
+                height={10}
                 alt="comment"
               />
               <p>{replyCount}</p>
@@ -154,7 +153,7 @@ function Review({ data, isBest = false, isMine = false }: Props) {
             )}
           </div>
           <div className="flex">
-            <p>{formatDate(createAt)}</p>
+            <p className="text-9">{formatDate(createAt)}</p>
             <button
               className="cursor-pointer"
               onClick={() => {
