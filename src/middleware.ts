@@ -1,37 +1,68 @@
-import { decode, getToken } from 'next-auth/jwt';
+import { decode, encode } from 'next-auth/jwt';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-
-// TODO: 자자 여기서 해야하는 일에 대해서 알아봅시다...
-// 1. 토큰을 심어서 보낸다.
-// 2. 토큰 갱신이 필요한지 여부를 확인한다.
-// 3. 토큰 갱신이 필요하다면, 응답 쿠키에서 리프레시 토큰을 꺼낸 뒤 재 요청 후 액세스토큰 갱신
-// 4. 이 때 토큰 갱신시... 흠... 이걸 어떻게 처리해준담? ^^?
+import { AuthApi } from './app/api/AuthApi';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith('/api/auth')) {
-    return NextResponse.next();
+  const resetCookie = () => {
+    const response = NextResponse.redirect(new URL('/login', request.url));
+
+    request.cookies.getAll().forEach((cookie) => {
+      if (cookie.name.includes('next-auth'))
+        response.cookies.delete(cookie.name);
+    });
+
+    return response;
+  };
+
+  if (pathname.startsWith('/api/token/renew')) {
+    const cookiesList = request.cookies.getAll();
+    const sessionCookie = process.env.NEXTAUTH_URL?.startsWith('https://')
+      ? '__Secure-next-auth.session-token'
+      : 'next-auth.session-token';
+
+    // 세션 쿠키가 존재하지 않는 경우, 모든 쿠키 삭제 후 로그인 페이지로 이동
+    if (!cookiesList.some((cookie) => cookie.name.includes(sessionCookie))) {
+      resetCookie();
+    }
+
+    const session = request.cookies.get(sessionCookie);
+    const sessionDecoded: any = await decode({
+      token: session?.value,
+      secret: process.env.NEXTAUTH_SECRET ?? '',
+    });
+
+    // 새롭게 발급받은 토큰 정보로 현재 세션 쿠키 업데이트
+    try {
+      const newTokens = await AuthApi.renewAccessToken(
+        sessionDecoded?.refreshToken,
+      );
+
+      const newSessionToken = await encode({
+        secret: process.env.NEXTAUTH_SECRET as string,
+        token: {
+          ...sessionDecoded,
+          ...newTokens,
+        },
+        maxAge: 30 * 24 * 60 * 60,
+      });
+
+      request.cookies.set(sessionCookie, newSessionToken);
+      const response = NextResponse.next({
+        request: {
+          headers: request.headers,
+        },
+      });
+
+      response.cookies.set(sessionCookie, newSessionToken);
+
+      return response;
+    } catch (e) {
+      console.error(e);
+    }
   }
-
-  const sessionJWT = await getToken({
-    req: request,
-    raw: true,
-    cookieName: 'next-auth.session-token',
-  });
-
-  const decoded = await decode({
-    token: sessionJWT,
-    secret: process.env.NEXTAUTH_SECRET as string,
-  });
-
-  const accessToken = decoded?.accessToken;
-
-  // FIXME: 리디렉션 정상 동작 X
-  // if (!accessToken) {
-  //   return NextResponse.redirect(new URL('/login', request.url));
-  // }
 
   return NextResponse.next();
 }

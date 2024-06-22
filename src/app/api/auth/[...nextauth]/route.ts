@@ -34,27 +34,40 @@ const handler = NextAuth({
           socialType: account?.provider as string,
         };
 
-        const token = await AuthApi.login(body);
-        if (account) account.accessToken = token;
+        const { accessToken, refreshToken } = await AuthApi.login(body);
+
+        if (account) {
+          account.accessToken = accessToken;
+          account.refreshToken = refreshToken;
+        }
 
         return true;
-      } catch {
-        return false;
+      } catch (error) {
+        console.error('Error :', error);
+        return true;
       }
     },
 
-    // 요청시에 이 토큰이 자동으로 쿠키에 박히는지 여부를 확인해야겠다.
     async jwt({ token, account }) {
       if (account && account.accessToken) {
         token.accessToken = account.accessToken;
+        token.refreshToken = account.refreshToken;
       }
 
       return token;
     },
 
     async session({ session, token }) {
-      session.user.accessToken = token.accessToken as string;
-      return { ...session, token };
+      const { accessToken, refreshToken } = token;
+      session.user = {
+        ...session.user,
+        ...{
+          accessToken: accessToken as string,
+          refreshToken: refreshToken as string,
+        },
+      };
+
+      return session;
     },
   },
   pages: {
