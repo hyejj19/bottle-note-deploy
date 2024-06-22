@@ -100,12 +100,15 @@ export default function ReviewDetail() {
             {/* {data?.alcohols && ( */}
             <>
               <div className="space-y-1">
-                <Label name={'싱글몰트'} />
-                <h1 className="text-xl font-semibold whitespace-normal break-words">
+                <Label
+                  name={'싱글몰트'}
+                  style={'border-white px-2 py-[0.15rem] rounded-md text-10'}
+                />
+                <h1 className="text-15 font-semibold whitespace-normal break-words">
                   {truncStr('글래스고 1770 싱글몰트 스카치 위스키', 27)}
                   {/* {data.alcohols.korName && truncStr(data.alcohols.korName, 27)} */}
                 </h1>
-                <p className="text-xs whitespace-normal break-words">
+                <p className="text-13 whitespace-normal break-words">
                   {/* {data.alcohols.engName && */}
                   {truncStr(engName.toUpperCase(), 45)}
                   {/* } */}
@@ -115,7 +118,7 @@ export default function ReviewDetail() {
                 <div className="border-[0.5px] border-white" />
                 <div className="flex space-x-3">
                   <div
-                    className="text-xs flex"
+                    className="text-10 flex"
                     onClick={() => {
                       router.push('/review/register');
                     }}
@@ -130,7 +133,7 @@ export default function ReviewDetail() {
                     <button>리뷰 작성</button>
                   </div>
                   <div className="border-[0.5px] border-white my-[0.1rem]" />
-                  <div className="text-xs flex">
+                  <div className="text-10 flex">
                     <Image
                       className="mr-1"
                       src="/icon/like-filled-white.svg"
@@ -148,45 +151,53 @@ export default function ReviewDetail() {
         </section>
       </div>
       <section className="mx-5 py-5 space-y-4 border-b border-mainGray/30 ">
-        <div className="flex items-center justify-between">
-          {/* <Link href={`/user/${userId}`}> */}
-          <div className="flex items-center space-x-1">
-            <div className="w-7 h-7 rounded-full overflow-hidden">
-              <Image
-                className="object-cover"
-                src={userImg}
-                alt="user_img"
-                width={28}
-                height={28}
-              />
+        <article className="space-y-1">
+          <div className="flex items-center justify-between">
+            {/* <Link href={`/user/${userId}`}> */}
+            <div className="flex items-center space-x-1 ">
+              <div className="w-[1.9rem] h-[1.9rem] rounded-full overflow-hidden">
+                <Image
+                  className="object-cover"
+                  src={userImg}
+                  alt="user_img"
+                  width={30}
+                  height={30}
+                />
+              </div>
+              <p className="text-mainGray text-13">
+                {truncStr('nickName', 12)}
+              </p>
             </div>
-            <p className="text-mainGray text-xs">{truncStr('nickName', 12)}</p>
+            {/* </Link> */}
+            <Star
+              rating={3.5}
+              size={25}
+              style={'text-20 text-subCoral font-semibold '}
+            />
           </div>
-          {/* </Link> */}
-          <Star rating={3.5} size={20} />
-        </div>
-        <div className="flex space-x-2">
-          {/* {isBest && ( */}
-          <Label
-            name="베스트"
-            icon="/icon/thumbup-filled-white.svg"
-            style="bg-mainCoral text-white px-2 py-[0.1rem] border-mainCoral text-xxs rounded"
-          />
-          {/* )} */}
-          {/* {isMine && ( */}
-          <Label
-            name="나의 코멘트"
-            icon="/icon/user-outlined-subcoral.svg"
-            style="border-mainCoral text-mainCoral px-2 py-[0.1rem] text-xxs rounded"
-          />
-          {/* )} */}
-          <Toggle
-            defaultState={false}
-            // defaultState={status === 'PUBLIC'}
-            offValue="리뷰 비공개"
-            onValue="리뷰 공개"
-          />
-        </div>
+          <div className="flex space-x-2">
+            {/* {isBest && ( */}
+            <Label
+              name="베스트"
+              icon="/icon/thumbup-filled-white.svg"
+              style="bg-mainCoral text-white px-2 py-[0.1rem] border-mainCoral text-9 rounded"
+            />
+            {/* )} */}
+            {/* {isMine && ( */}
+            <Label
+              name="나의 코멘트"
+              icon="/icon/user-outlined-subcoral.svg"
+              style="border-mainCoral text-mainCoral px-2 py-[0.1rem] text-9 rounded"
+            />
+            {/* )} */}
+            <Toggle
+              defaultState={false}
+              // defaultState={status === 'PUBLIC'}
+              offValue="리뷰 비공개"
+              onValue="리뷰 공개"
+            />
+          </div>
+        </article>
         <div>
           <div className="whitespace-nowrap overflow-x-auto flex space-x-2">
             {/* 이미지 API 완성되면 수정 예정 */}
@@ -201,7 +212,7 @@ export default function ReviewDetail() {
             </div>
           </div>
         </div>
-        <div className="text-xs text-mainDarkGray">
+        <div className="text-10 text-mainDarkGray">
           쉐리캐스크 특유의 쫀득한 텍스쳐와 건포도의 향의 밸런스가 좋습니다.
           쉐리캐스크 숙성의 독특한 특성이 잘 드러나며, 입안에서 느껴지는
           쫀득함과 풍부한 건포도 향이 조화를 이룹니다. 특히 쉐리캐스크의
@@ -216,7 +227,7 @@ export default function ReviewDetail() {
           훌륭하며, 마시는 내내 감탄하게 되는 경험을 선사합니다.
         </div>
         <div className="flex justify-between">
-          <p className="text-mainGray text-xxs">2024.05.01</p>
+          <p className="text-mainGray text-10">2024.05.01</p>
           {/* <p>{formatDate(createAt)}</p> */}
           <button
             className="cursor-pointer"
@@ -242,26 +253,26 @@ export default function ReviewDetail() {
                 ? '/bottle.svg'
                 : '/icon/glass-filled-subcoral.svg'
             }
-            width={12}
-            height={12}
+            width={15}
+            height={15}
             alt={sizeType === 'bottle' ? 'Bottle Price' : 'Glass Price'}
           />
-          <p className="text-mainDarkGray text-xxs font-semibold">
+          <p className="text-mainDarkGray text-10 font-semibold">
             {sizeType === 'bottle' ? '병 가격 ' : '잔 가격'}
           </p>
-          <p className="text-mainDarkGray text-xxs font-light">
+          <p className="text-mainDarkGray text-10 font-light">
             {numberWithCommas(123000)}₩
           </p>
         </div>
         <div className="flex items-start space-x-1">
           <Image
             src={'/icon/placepoint-subcoral.svg'}
-            width={12}
-            height={12}
+            width={15}
+            height={15}
             alt={'address'}
           />
-          <p className="text-mainDarkGray text-xxs font-semibold">장소</p>
-          <p className="text-mainDarkGray text-xxs font-light">
+          <p className="text-mainDarkGray text-10 font-semibold">장소</p>
+          <p className="text-mainDarkGray text-10 font-light">
             {
               <>
                 Address1
@@ -281,8 +292,8 @@ export default function ReviewDetail() {
             height={16}
             alt="like"
           />
-          <div className="text-mainGray font-bold text-xs">좋아요</div>
-          <div className=" text-mainGray text-xxs font-normal">좋아요 32</div>
+          <div className="text-mainGray font-bold text-10">좋아요</div>
+          <div className=" text-mainGray text-10 font-normal">좋아요 32</div>
         </div>
         <span className="border-[0.01rem] w-px border-mainGray opacity-40 h-4" />
         <div className="flex-1 flex text-center justify-center items-center space-x-1">
@@ -292,19 +303,19 @@ export default function ReviewDetail() {
             height={16}
             alt="comment"
           />
-          <p className="relative w-fit text-mainGray font-bold text-xs">
+          <p className="relative w-fit text-mainGray font-bold text-10">
             댓글 작성
           </p>
         </div>
         <span className="border-[0.01rem] w-px border-mainGray opacity-40 h-4" />
         <div className="flex-1 flex text-center justify-center items-center space-x-1">
           <Image
-            src={'/icon/externallink-outlined-whiteGray.svg'}
+            src={'/icon/externallink-outlined-gray.svg'}
             alt="linkIcon"
             width={16}
             height={16}
           />
-          <p className="text-mainGray font-bold text-xs">공유</p>
+          <p className="text-mainGray font-bold text-10">공유</p>
         </div>
       </section>
       {commentList.length !== 0 && (

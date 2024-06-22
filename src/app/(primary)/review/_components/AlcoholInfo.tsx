@@ -63,12 +63,15 @@ function AlcoholInfo({ data }: Props) {
         {/* {data?.alcohols && ( */}
         <div className="space-y-2">
           <div className="space-y-1">
-            <Label name={korCategory} />
-            <h1 className="text-xl font-semibold whitespace-normal break-words">
+            <Label
+              name={korCategory}
+              style={'border-white px-2 py-[0.15rem] rounded-md text-10'}
+            />
+            <h1 className="text-15 font-semibold whitespace-normal break-words">
               {truncStr(korName, 27)}
               {/* {data.alcohols.korName && truncStr(data.alcohols.korName, 27)} */}
             </h1>
-            <p className="text-xs whitespace-normal break-words">
+            <p className="text-13 whitespace-normal break-words">
               {/* {data.alcohols.engName && */}
               {truncStr(engName.toUpperCase(), 45)}
               {/* } */}
@@ -78,7 +81,7 @@ function AlcoholInfo({ data }: Props) {
             {details.map((data: any) => (
               <div
                 key={data.content}
-                className="flex text-xxs text-white items-center"
+                className="flex text-9 text-white items-center"
               >
                 <div className="min-w-14 font-semibold">{data.title}</div>
                 <div className="flex-1 font-light">{data.content}</div>
@@ -88,7 +91,7 @@ function AlcoholInfo({ data }: Props) {
           <div className="space-y-1">
             <div className="border-[0.5px] border-white" />
             <div className="flex space-x-3">
-              <div className="text-xs flex">
+              <div className="text-10 flex">
                 <Image
                   className="mr-1"
                   src="/icon/like-filled-white.svg"

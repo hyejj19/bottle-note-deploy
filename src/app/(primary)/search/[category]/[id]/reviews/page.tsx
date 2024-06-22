@@ -71,13 +71,13 @@ function Reviews() {
       <section className="p-8 space-y-9">
         <div className="flex gap-3 relative">
           <button
-            className={`py-2 ${activeTab === 'tab1' ? 'tab-selected' : 'tab-default'} w-full font-bold text-[0.938rem] text-center leading-[17.2px]`}
+            className={`py-2 ${activeTab === 'tab1' ? 'tab-selected' : 'tab-default'} w-full font-bold text-15 text-center`}
             onClick={() => handleTabClick('tab1')}
           >
             모든 리뷰
           </button>
           <button
-            className={`py-2 ${activeTab === 'tab2' ? 'tab-selected' : 'tab-default'} w-full font-bold text-[0.938rem] text-center leading-[17.2px]`}
+            className={`py-2 ${activeTab === 'tab2' ? 'tab-selected' : 'tab-default'} w-full font-bold text-15 text-center`}
             onClick={() => handleTabClick('tab2')}
           >
             내가 작성한 리뷰
@@ -121,9 +121,9 @@ function Reviews() {
         </div>
       </section>
       <section className="px-5 fixed bottom-2 left-0 right-0">
-        <div className="flex justify-center items-center w-full h-16 bg-subCoral rounded-xl">
+        <div className="flex justify-center items-center w-full h-14 bg-subCoral rounded-xl">
           <Link
-            className="text-white font-bold text-base"
+            className="text-white font-bold text-15"
             href={'/review/register'}
           >
             리뷰 작성

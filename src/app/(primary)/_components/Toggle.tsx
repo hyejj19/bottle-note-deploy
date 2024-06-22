@@ -31,7 +31,7 @@ const Toggle = ({
           }`}
         ></div>
       </div>
-      <p className="text-xxs text-mainGray">{isToggled ? onValue : offValue}</p>
+      <p className="text-9 text-mainGray">{isToggled ? onValue : offValue}</p>
     </div>
   );
 };

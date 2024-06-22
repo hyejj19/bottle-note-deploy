@@ -25,14 +25,14 @@ export default function HorizontalItem({ data }: Props) {
         </div>
         <div className="px-2 pt-[0.625rem] space-y-2 border-t-[1px] border-subCoral">
           <div
-            className="text-[0.9375rem] h-[2.35rem] font-semibold whitespace-normal break-words text-mainDarkGray"
+            className="text-13 h-[2.35rem] font-semibold whitespace-normal break-words text-mainDarkGray"
             style={{ lineHeight: 1.2 }}
           >
             {korName && truncStr(korName, 23)}
           </div>
           <div className="flex items-center justify-between text-subCoral">
             <Star rating={rating} />
-            <p className="text-xs">{engCategory.toUpperCase()}</p>
+            <p className="text-10">{engCategory.toUpperCase()}</p>
           </div>
         </div>
       </div>

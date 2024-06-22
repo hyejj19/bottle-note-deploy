@@ -31,24 +31,24 @@ function Comment({ data }: Props) {
         <div className="flex items-center justify-between">
           {/* <Link href={`/user/${userId}`}> */}
           <div className="flex items-center space-x-1">
-            <div className="w-7 h-7 rounded-full overflow-hidden">
+            <div className="w-[1.4rem] h-[1.4rem] rounded-full overflow-hidden">
               <Image
                 className="object-cover"
                 src={userImg}
                 alt="user_img"
-                width={28}
-                height={28}
+                width={22}
+                height={22}
               />
             </div>
-            <p className="text-mainGray text-xs">{truncStr(nickName, 12)}</p>
+            <p className="text-mainGray text-10">{truncStr(nickName, 12)}</p>
             <Label
               name={'리뷰 작성자'}
-              style="border-mainCoral text-mainCoral px-1.5 py-0.5 rounded text-[9px]"
+              style="border-mainCoral text-mainCoral px-1.5 py-0.5 rounded text-9"
             />
           </div>
           {/* </Link> */}
           <div className="flex justify-between">
-            <p className="text-mainGray text-xxs">{formatDate(createAt)}</p>
+            <p className="text-mainGray text-10">{formatDate(createAt)}</p>
             <button
               className="cursor-pointer"
               onClick={() => {
@@ -64,7 +64,7 @@ function Comment({ data }: Props) {
             </button>
           </div>
         </div>
-        <div className="text-xxs text-mainDarkGray">{comment}</div>
+        <div className="text-10 text-mainDarkGray">{comment}</div>
       </div>
       {isOptionShow && <ReportModal handleClose={handleOptionsShow} />}
     </>
