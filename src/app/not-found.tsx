@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { SubHeader } from '@/app/(primary)/_components/SubHeader';
 import NavLayout from '@/app/(primary)/_components/NavLayout';
 
-export default function notFound() {
+export default function NotFound() {
   const router = useRouter();
   return (
     <NavLayout>
