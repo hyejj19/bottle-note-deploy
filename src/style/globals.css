@@ -2,13 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  input {
+    @apply outline-none;
+  }
+}
+
 @layer components {
   .label-default {
-    @apply bg-white text-subCoral border border-subCoral rounded-md;
+    @apply bg-white text-subCoral border border-subCoral rounded-md py-1 px-3;
   }
 
   .label-selected {
-    @apply bg-subCoral text-white border border-subCoral rounded-md;
+    @apply bg-subCoral text-white border border-subCoral rounded-md py-1 px-3;
+  }
+
+  .label-disabled {
+    @apply bg-bgGray text-white border border-bgGray rounded-md py-1 px-3;
   }
 
   .tab-default {
