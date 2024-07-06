@@ -38,22 +38,26 @@ const Star = ({ size = 30, index, rate, handleRate }: StarProps) => {
   // FIXME: 별점 렌더링시 약간의 위치 움직임 있음
   return (
     <div onClick={handleAction}>
-      <Image src={src} width={size} height={size} alt="star" ref={imageRef} />
+      <Image
+        src={src}
+        width={size}
+        height={size}
+        alt="star"
+        ref={imageRef}
+        style={{ width: '100%', height: 'auto' }}
+      />
     </div>
   );
 };
 
 interface StarRatingProps {
   size?: number;
+  rate: number;
+  handleRate: (rate: number) => void;
 }
 
-const StarRating = ({ size = 30 }: StarRatingProps) => {
-  const [rate, setRate] = useState(0);
+const StarRating = ({ size = 30, rate, handleRate }: StarRatingProps) => {
   const maxRating = 10;
-
-  const handleRating = (selectedRate: number) => {
-    setRate(selectedRate);
-  };
 
   return (
     <div className="relative w-full h-full">
@@ -64,7 +68,7 @@ const StarRating = ({ size = 30 }: StarRatingProps) => {
             size={size}
             index={i + 1}
             rate={rate}
-            handleRate={handleRating}
+            handleRate={handleRate}
           />
         ))}
       </div>
