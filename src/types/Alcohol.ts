@@ -15,27 +15,7 @@ export interface Alcohol extends AlcoholAPI {
 }
 
 export interface AlcoholDetails {
-  alcohols: {
-    // rating한 user count는?
-    alcoholId: number;
-    alcoholUrlImg: string;
-    korName: string;
-    engName: string;
-    korCategory: string;
-    engCategory: string;
-    korRegion: string;
-    engRegion: string;
-    cask: string;
-    avg: string;
-    korDistillery: string;
-    engDistillery: string;
-    rating: number;
-    totalRatingsCount: number;
-    totalRatings: number;
-    myRating: number;
-    isPicked: boolean;
-    tags: string[];
-  };
+  alcohols: AlcoholInfo;
   friendsInfo: {
     followerCount: number;
     friends: {
@@ -50,6 +30,27 @@ export interface AlcoholDetails {
     bestReviewInfos: Review[];
     recentReviewInfos: Review[];
   };
+}
+
+export interface AlcoholInfo {
+  alcoholId: number;
+  alcoholUrlImg: string;
+  korName: string;
+  engName: string;
+  korCategory: string;
+  engCategory: string;
+  korRegion: string;
+  engRegion: string;
+  cask: string;
+  avg: string;
+  korDistillery: string;
+  engDistillery: string;
+  rating: number;
+  totalRatingsCount: number;
+  totalRatings: number;
+  myRating: number;
+  isPicked: boolean;
+  tags: string[];
 }
 
 export interface RegionApi {
