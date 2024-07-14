@@ -220,7 +220,10 @@ export default function ReviewDetail() {
         {data?.reviewImageList && (
           <div className="whitespace-nowrap overflow-x-auto flex space-x-2">
             {data.reviewImageList.map((imgData) => (
-              <div className="relative w-[147px] h-[147px]">
+              <div
+                className="relative w-[147px] h-[147px]"
+                key={imgData.viewUrl}
+              >
                 <Image
                   src={imgData.viewUrl}
                   alt="review_img"

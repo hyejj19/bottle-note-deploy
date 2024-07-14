@@ -76,6 +76,10 @@ function ReviewModify() {
       alcoholId,
       rating: data.rating ?? 0,
     };
+
+    const originImgUrlList = watch('imageUrlList') ?? [];
+    const newImgUrlList = imgUrl ?? [];
+
     // 리뷰 PATCH api
     const reviewParams = {
       status: data.status,
@@ -83,7 +87,9 @@ function ReviewModify() {
       sizeType: data.price ? data.price_type : null,
       price: data.price,
       imageUrlList:
-        [...(watch('imageUrlList') ?? []), ...(imgUrl ?? [])] ?? null,
+        originImgUrlList.length > 0 || newImgUrlList.length > 0
+          ? [...originImgUrlList, ...newImgUrlList]
+          : null,
       tastingTagList: data.flavor_tags,
       locationInfo: {
         zipCode: data.zipCode,
