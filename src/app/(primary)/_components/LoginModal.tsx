@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import BackDrop from '@/components/BackDrop';
+import { DualButton } from '@/components/Button';
 
 interface Props {
   handleClose: () => void;
@@ -29,14 +30,15 @@ function LoginModal({ handleClose }: Props) {
             </p>
             <p className="text-13 text-mainDarkGray">로그인 하시겠습니까?</p>
           </article>
-          <button
+          {/* <button
             className="w-full bg-subCoral rounded-xl py-4 text-white drop-shadow-md"
             onClick={() => {
               router.push('/login');
             }}
           >
             로그인
-          </button>
+          </button> */}
+          <DualButton onClickCancel={() => {}} onClickOkay={() => {}} />
           <button className="text-10 text-mainGray pb-2" onClick={handleClose}>
             다음에 할게요
           </button>

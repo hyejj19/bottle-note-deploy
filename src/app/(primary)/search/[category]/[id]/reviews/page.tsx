@@ -11,6 +11,7 @@ import Link from 'next/link';
 import EmptyView from '@/app/(primary)/_components/EmptyView';
 import { truncStr } from '@/utils/truncStr';
 import ReviewLayout from '../layout';
+import { Button } from '@/components/Button';
 
 const SORT_OPTIONS = ['인기도순', '별점순', '병 가격 순', '잔 가격 순'];
 
@@ -121,14 +122,12 @@ function Reviews() {
         </div>
       </section>
       <section className="px-5 fixed bottom-2 left-0 right-0">
-        <div className="flex justify-center items-center w-full h-14 bg-subCoral rounded-xl">
-          <Link
-            className="text-white font-bold text-15"
-            href={'/review/register'}
-          >
-            리뷰 작성
-          </Link>
-        </div>
+        <Button
+          onClick={() => {
+            router.push('/review/register');
+          }}
+          btnName="리뷰 작성"
+        />
       </section>
     </div>
   );
