@@ -49,17 +49,17 @@ const PickBtn = ({
     >
       {isPicked ? (
         <Image
-          src={`/icon/pick-outlined-${iconColor}.svg`}
-          width={size}
-          height={size}
-          alt="좋아요"
-        />
-      ) : (
-        <Image
           src={`/icon/pick-filled-${iconColor}.svg`}
           width={size}
           height={size}
-          alt="좋아요"
+          alt="Pick"
+        />
+      ) : (
+        <Image
+          src={`/icon/pick-outlined-${iconColor}.svg`}
+          width={size}
+          height={size}
+          alt="unPick"
         />
       )}
       {pickBtnName && <p className="text-10">{pickBtnName}</p>}
