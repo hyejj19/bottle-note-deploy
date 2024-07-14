@@ -10,14 +10,14 @@ const LikeBtn = ({ isLiked }: Props) => {
     <button className="justify-self-end row-start-3">
       {isLiked ? (
         <Image
-          src="/icon/like-outlined-subcoral.svg"
+          src="/icon/pick-outlined-subcoral.svg"
           width={14}
           height={14}
           alt="좋아요"
         />
       ) : (
         <Image
-          src="/icon/like-filled-subcoral.svg"
+          src="/icon/pick-filled-subcoral.svg"
           width={14}
           height={14}
           alt="좋아요"
