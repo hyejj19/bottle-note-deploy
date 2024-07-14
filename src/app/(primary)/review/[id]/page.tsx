@@ -19,6 +19,7 @@ import { formatDate } from '@/utils/formatDate';
 import EmptyView from '@/app/(primary)/_components/EmptyView';
 import Comment from './_components/Comment';
 import NavLayout from '@/app/(primary)/_components/NavLayout';
+import PickBtn from '../../_components/PickBtn';
 
 export default function ReviewDetail() {
   const { data: session } = useSession();
@@ -142,17 +143,12 @@ export default function ReviewDetail() {
                       <button>리뷰 작성</button>
                     </div>
                     <div className="border-[0.5px] border-white my-[0.1rem]" />
-                    <div className="text-10 flex">
-                      <Image
-                        className="mr-1"
-                        src={`/icon/${isPicked ? 'like-filled-white.svg' : 'Like-outlined-white.svg'}`}
-                        alt="like"
-                        width={16}
-                        height={16}
-                      />
-                      {/* post api 연결 필요 */}
-                      <button>찜하기</button>
-                    </div>
+                    <PickBtn
+                      isPicked={isPicked}
+                      setIsPicked={setIsPicked}
+                      pickBtnName="찜하기"
+                      alcoholId={data.alcoholInfo.alcoholId}
+                    />
                   </div>
                 </div>
               </>

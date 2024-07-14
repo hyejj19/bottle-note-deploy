@@ -1,4 +1,9 @@
-import { AlcoholAPI, RegionApi, AlcoholDetails } from '@/types/Alcohol';
+import {
+  AlcoholAPI,
+  RegionApi,
+  AlcoholDetails,
+  PickPutApi,
+} from '@/types/Alcohol';
 import { ApiResponse } from '@/types/common';
 import { fetchWithAuth } from '@/utils/fetchWithAuth';
 
@@ -53,7 +58,7 @@ export const AlcoholsApi = {
     return result.data;
   },
 
-  async putLike(alcoholId: string | number, isPicked: boolean) {
+  async putPick(alcoholId: string | number, isPicked: boolean) {
     const response = await fetchWithAuth(`/bottle-api/picks`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -62,6 +67,7 @@ export const AlcoholsApi = {
       }),
     });
 
-    return await response.data;
+    const result: ApiResponse<PickPutApi> = await response.data;
+    return await result;
   },
 };

@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import Label from '@/app/(primary)/_components/Label';
 import { truncStr } from '@/utils/truncStr';
 import { AlcoholInfo as AlcoholDetails } from '@/types/Alcohol';
-import { AlcoholsApi } from '@/app/api/AlcholsApi';
+import PickBtn from '../../_components/PickBtn';
 
 interface Props {
   data: AlcoholDetails;
@@ -12,9 +12,9 @@ interface Props {
 
 function AlcoholInfo({ data }: Props) {
   const { data: session } = useSession();
-  const { korName, engName, korCategory, isPicked } = data;
+  const { korName, engName, korCategory, isPicked: originalIsPicked } = data;
   const [details, setDetails] = useState<any>([]);
-  const [isLiked, setIsLiked] = useState<boolean>(isPicked);
+  const [isPicked, setIsPicked] = useState<boolean>(originalIsPicked ?? false);
 
   useEffect(() => {
     if (data) {
@@ -82,33 +82,12 @@ function AlcoholInfo({ data }: Props) {
             </div>
             <div className="space-y-1">
               <div className="border-[0.5px] border-white" />
-              <div className="flex space-x-3">
-                <div
-                  className="text-10 flex"
-                  onClick={async () => {
-                    if (session) {
-                      // API 에러에 대한 대응 추가 필요
-                      await AlcoholsApi.putLike(data.alcoholId, !isLiked);
-                      setIsLiked(!isLiked);
-                    } else {
-                      // login 필요
-                    }
-                  }}
-                >
-                  <Image
-                    className="mr-1"
-                    src={
-                      isLiked
-                        ? '/icon/like-filled-white.svg'
-                        : '/icon/Like-outlined-white.svg'
-                    }
-                    alt="like"
-                    width={16}
-                    height={16}
-                  />
-                  <button>찜하기</button>
-                </div>
-              </div>
+              <PickBtn
+                isPicked={isPicked}
+                setIsPicked={setIsPicked}
+                pickBtnName="찜하기"
+                alcoholId={data.alcoholId}
+              />
             </div>
           </div>
         )}

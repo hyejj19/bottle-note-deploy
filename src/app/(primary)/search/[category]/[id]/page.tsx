@@ -17,6 +17,8 @@ import NavLayout from '@/app/(primary)/_components/NavLayout';
 import StarRating from '@/components/StarRaiting';
 import EmptyView from '@/app/(primary)/_components/EmptyView';
 import LoginModal from '@/app/(primary)/_components/LoginModal';
+import PickBtn from '@/app/(primary)/_components/PickBtn';
+import { AlcoholsApi } from '@/app/api/AlcholsApi';
 
 type Details = {
   title: string;
@@ -31,53 +33,33 @@ function SearchCategory() {
   const [data, setData] = useState<AlcoholDetails | null>(null);
   const [details, setDetails] = useState<Details[]>([]);
   const [isLoginModalShow, setIsLoginModalShow] = useState<boolean>(false);
+  const [isPicked, setIsPicked] = useState<boolean>(false);
 
   const handleLoginModalShow = () => {
     setIsLoginModalShow((prev) => !prev);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/alcohols/${alcoholId}`, //parameter 수정하기
-        );
-        if (response.ok) {
-          const result = await response.json();
-          if (result.data.totalCount !== 0) {
-            const alcoholData = result.data.alcohols;
-            setData(result.data);
-            setDetails([
-              {
-                title: '카테고리',
-                content: alcoholData.engCategory,
-              },
-              {
-                title: '국가/지역',
-                content: alcoholData.engRegion,
-              },
-              {
-                title: '캐스크',
-                content: alcoholData.cask,
-              },
-              {
-                title: '도수',
-                content: alcoholData.avg,
-              },
-              {
-                title: '증류소',
-                content: alcoholData.engDistillery,
-              },
-            ]);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  const fetchAlcoholDetails = async (id: string) => {
+    const result = await AlcoholsApi.getAlcoholDetails(id);
+    if (result) {
+      const { alcohols } = result;
+      setData(result);
+      setIsPicked(alcohols.isPicked);
+      setDetails([
+        { title: '카테고리', content: alcohols.engCategory },
+        { title: '국가/지역', content: alcohols.engRegion },
+        { title: '캐스크', content: alcohols.cask },
+        { title: '도수', content: alcohols.avg },
+        { title: '증류소', content: alcohols.engDistillery },
+      ]);
+    }
+  };
 
-    fetchData();
-  }, []);
+  useEffect(() => {
+    if (alcoholId) {
+      fetchAlcoholDetails(alcoholId.toString());
+    }
+  }, [alcoholId]);
 
   return (
     <>
@@ -185,16 +167,13 @@ function SearchCategory() {
                         리뷰 작성
                       </button>
                       <div className="border-[0.5px] border-white my-[0.1rem]" />
-                      <div className="text-10 flex">
-                        <Image
-                          className="mr-1"
-                          src="/icon/like-filled-white.svg"
-                          alt="like"
-                          width={16}
-                          height={16}
-                        />
-                        <button>찜하기</button>
-                      </div>
+                      <PickBtn
+                        isPicked={isPicked}
+                        setIsPicked={setIsPicked}
+                        pickBtnName="찜하기"
+                        alcoholId={Number(alcoholId)}
+                        size={16}
+                      />
                     </div>
                   </div>
                 </>

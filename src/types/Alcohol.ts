@@ -59,3 +59,8 @@ export interface RegionApi {
   engName: string;
   description: string;
 }
+
+export interface PickPutApi {
+  message: string;
+  status: 'PICK' | 'UNPICK';
+}
