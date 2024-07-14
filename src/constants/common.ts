@@ -11,3 +11,8 @@ export const CATEGORY_MENUS = {
   Rye: { kor: '라이', eng: 'Rye', link: 'rye' },
   Other: { kor: '기타', eng: 'Other', link: 'other' },
 };
+
+export const S3_URL_PATH = {
+  review: 'review',
+  userProfile: 'user/profile',
+};
