@@ -1,27 +1,59 @@
+'use client';
+
+import { SearchHistoryService } from '@/lib/SearchHistoryService';
 import Image from 'next/image';
 import DeleteIcon from 'public/icon/close-subcoral.svg';
+import { useState } from 'react';
 
-// TODO: 로컬스토리지와 연계하여 데이터 보여줄 것
-export default function RecentSearch() {
+interface Props {
+  handleSearch: (keyword: string) => void;
+}
+
+export default function RecentSearch({ handleSearch }: Props) {
+  const SearchHistory = new SearchHistoryService();
+  const [list, setList] = useState(SearchHistory.get());
+
+  const handleDeleteAll = () => {
+    SearchHistory.removeAll();
+    setList(SearchHistory.get());
+  };
+
+  const handleDeleteOne = (keyword: string) => {
+    SearchHistory.removeOne(keyword);
+    setList(SearchHistory.get());
+  };
+
   return (
     <section className=" bg-white w-full h-full z-100">
       <h2 className="text-sm font-bold text-subCoral">최근 검색어</h2>
-      <section className="border-t border-b border-subCoral divide-y divide-subCoral text-xs my-3">
-        {['글렌드로냑 12Y', '조니워커', '짐빔', '브레드 앤 버터'].map(
-          (text) => (
-            <article
-              className="flex justify-between items-center py-3 text-subCoral"
-              key={text}
-            >
-              <span>{text}</span>
-              <button>
-                <Image src={DeleteIcon} alt="delete" />
-              </button>
-            </article>
-          ),
+      <article className="text-xs my-3 border-t border-subCoral">
+        {list.map((text, idx) => (
+          <article
+            className="flex justify-between items-center py-3 text-subCoral border-b border-subCoral"
+            key={`${text}_${idx}`}
+          >
+            <span onMouseDown={() => handleSearch(text)}>{text}</span>
+            <button onMouseDown={() => handleDeleteOne(text)}>
+              <Image src={DeleteIcon} alt="delete" />
+            </button>
+          </article>
+        ))}
+      </article>
+
+      <article className="flex flex-col items-start gap-2">
+        {list.length === 0 && (
+          <span className="text-xs text-mainGray">최근 검색어가 없습니다.</span>
         )}
-      </section>
-      <button className="text-xxs text-mainGray">전체기록삭제</button>
+      </article>
+
+      {list.length > 0 && (
+        <button
+          className="text-xxs text-mainGray"
+          onMouseDown={handleDeleteAll}
+        >
+          전체기록삭제
+        </button>
+      )}
     </section>
   );
 }

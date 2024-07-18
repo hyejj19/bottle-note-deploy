@@ -1,3 +1,5 @@
+import { CATEGORY_MENUS, REGIONS } from '@/constants/common';
+
 export interface ApiResponse<T> {
   success: boolean;
   code: number;
@@ -12,12 +14,15 @@ export interface ApiResponse<T> {
   };
 }
 
+// TODO: 두 개의 sort type 으로 분리할 것 (리뷰, 위스키 조회 ...)
 export const enum SORT_TYPE {
   POPULAR = 'POPULAR',
   RATING = 'RATING',
   PICK = 'PICK',
   REVIEW = 'REVIEW',
   RANDOM = 'RANDOM',
+  BOTTLE_ASC = 'BOTTLE_ASC',
+  GLASS_ASC = 'GLASS_ASC',
 }
 
 export const enum SORT_ORDER {
@@ -34,3 +39,7 @@ export interface ListQueryParams {
   cursor?: number;
   pageSize?: number;
 }
+
+export type Category =
+  (typeof CATEGORY_MENUS)[keyof typeof CATEGORY_MENUS]['categoryGroup'];
+export type RegionId = (typeof REGIONS)[number]['regionId'];
