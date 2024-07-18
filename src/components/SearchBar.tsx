@@ -1,21 +1,44 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import EnterIcon from 'public/icon/search-subcoral.svg';
+import { useSearchParams } from 'next/navigation';
 
 interface Props {
   type?: 'Link' | 'Search';
   handleSearch: (value: string) => void;
+  handleFocus?: (status: boolean) => void;
 }
 
-export default function SearchBar({ type = 'Search', handleSearch }: Props) {
-  const [searchText, setSearchText] = useState<string>('');
+export default function SearchBar({
+  type = 'Search',
+  handleSearch,
+  handleFocus,
+}: Props) {
+  const currSearchKeyword = useSearchParams().get('query');
+  const [searchText, setSearchText] = useState<string>(currSearchKeyword ?? '');
 
-  const handleOnClick = () => {
-    handleSearch(searchText);
+  const handleSubmit = () => {
+    if (searchText) {
+      handleSearch(searchText);
+    }
+
+    if (handleFocus) handleFocus(false);
   };
+
+  const handleOnFocus = () => {
+    if (handleFocus) handleFocus(true);
+  };
+
+  const handleOnBlur = () => {
+    if (handleFocus) handleFocus(false);
+  };
+
+  useEffect(() => {
+    setSearchText(currSearchKeyword ?? '');
+  }, [currSearchKeyword]);
 
   return (
     <div className="relative">
@@ -47,13 +70,15 @@ export default function SearchBar({ type = 'Search', handleSearch }: Props) {
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                handleOnClick();
+                handleSubmit();
               }
             }}
+            onFocus={handleOnFocus}
+            onBlur={handleOnBlur}
           />
           <button
             className="px-2 w-10 absolute top-0 right-1 h-full"
-            onClick={handleOnClick}
+            onMouseDown={handleSubmit}
           >
             <Image src={EnterIcon} alt="search button" />
           </button>

@@ -1,48 +1,147 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import CategorySelector from '@/components/CategorySelector';
 import CategoryTitle from '@/components/CategoryTitle';
 import List from '@/components/List/List';
-import { Alcohol } from '@/types/Alcohol';
+import { usePopular } from '@/hooks/usePopular';
+import { Category, RegionId, SORT_ORDER, SORT_TYPE } from '@/types/common';
+import { useFilter } from '@/hooks/useFilter';
+import { usePaginatedQuery } from '@/queries/usePaginatedQuery';
+import { AlcoholAPI } from '@/types/Alcohol';
 import { AlcoholsApi } from '@/app/api/AlcholsApi';
-import NavLayout from '../_components/NavLayout';
+import { REGIONS } from '@/constants/common';
+import SearchContainer from './_components/SearchContainer';
+
+interface InitialState {
+  keyword: string;
+  category: Category;
+  regionId: RegionId;
+  sortType: SORT_TYPE;
+  sortOrder: SORT_ORDER;
+}
 
 export default function Search() {
   const router = useRouter();
-  const [populars, setPopulars] = useState<Alcohol[]>([]);
-  const [currentCategory, setCurrentCategory] = useState('All');
-  const handleCategory = (value: string) => {
-    if (value !== currentCategory) router.push(`/search/${value}`);
-    setCurrentCategory(value);
+  const { populars } = usePopular();
+
+  const currCategory = useSearchParams().get('category');
+  const currSearchKeyword = useSearchParams().get('query');
+
+  const initialState: InitialState = {
+    keyword: '',
+    category: '',
+    regionId: '',
+    sortType: SORT_TYPE.POPULAR,
+    sortOrder: SORT_ORDER.DESC,
   };
 
-  useEffect(() => {
-    (async () => {
-      const result = await AlcoholsApi.getPopular();
+  const { state: filterState, handleFilter } = useFilter(initialState);
 
-      setPopulars(result);
-    })();
-  }, []);
+  const {
+    data: alcoholList,
+    isLoading: isFirstLoading,
+    isFetching,
+    targetRef,
+  } = usePaginatedQuery<{
+    alcohols: AlcoholAPI[];
+    totalCount: number;
+  }>({
+    queryKey: ['rating', filterState],
+    queryFn: ({ pageParam }) => {
+      return AlcoholsApi.getList({
+        ...filterState,
+        ...{
+          cursor: pageParam,
+          pageSize: 10,
+        },
+      });
+    },
+  });
+
+  const handleSearchCallback = (searchedKeyword: string) => {
+    handleFilter('keyword', searchedKeyword);
+    router.replace(
+      `/search?category=${currCategory ?? ''}&query=${searchedKeyword ?? ''}`,
+    );
+  };
+
+  const handleCategoryCallback = (selectedCategory: Category) => {
+    handleFilter('category', selectedCategory);
+    router.replace(
+      `/search?category=${selectedCategory}&query=${currSearchKeyword ?? ''}`,
+    );
+  };
+
+  const SORT_OPTIONS = [
+    { name: '인기도순', type: SORT_TYPE.POPULAR },
+    { name: '별점순', type: SORT_TYPE.RATING },
+    { name: '찜하기순', type: SORT_TYPE.PICK },
+    { name: '댓글순', type: SORT_TYPE.REVIEW },
+  ];
 
   return (
-    <NavLayout>
-      <main className="flex flex-col gap-7">
-        <CategorySelector
-          selectedCategory={currentCategory}
-          handleCategory={handleCategory}
-        />
+    <main className="mb-24 w-full h-full">
+      <SearchContainer handleSearchCallback={handleSearchCallback} />
 
-        <section>
-          <CategoryTitle subTitle="위클리 HOT 5" />
-          <List>
-            {populars.map((item: any) => (
-              <List.Item key={item.alcoholId} data={item} />
-            ))}
-          </List>
-        </section>
-      </main>
-    </NavLayout>
+      <section className="flex flex-col gap-7 p-5">
+        <CategorySelector handleCategoryCallback={handleCategoryCallback} />
+
+        {!currCategory && !currSearchKeyword ? (
+          <section>
+            <CategoryTitle subTitle="위클리 HOT 5" />
+
+            <List>
+              {populars.map((item: AlcoholAPI) => (
+                <List.Item
+                  key={item.alcoholId}
+                  data={{
+                    ...item,
+                  }}
+                />
+              ))}
+            </List>
+          </section>
+        ) : (
+          <>
+            <List
+              isListFirstLoading={isFirstLoading}
+              isScrollLoading={isFetching}
+            >
+              <List.Total
+                total={alcoholList ? alcoholList[0].data.totalCount : 0}
+              />
+              <List.SortOrderToggle
+                type={filterState.sortOrder}
+                handleSortOrder={(value) => handleFilter('sortOrder', value)}
+              />
+              <List.OptionSelect
+                options={SORT_OPTIONS}
+                handleOptionCallback={(value) =>
+                  handleFilter('sortType', value)
+                }
+              />
+              <List.OptionSelect
+                options={REGIONS.map((region) => ({
+                  type: String(region.regionId),
+                  name: region.korName,
+                }))}
+                handleOptionCallback={(value) =>
+                  handleFilter('regionId', value)
+                }
+              />
+
+              {alcoholList &&
+                [...alcoholList.map((list) => list.data.alcohols)]
+                  .flat()
+                  .map((item: AlcoholAPI, idx) => (
+                    <List.Item key={`${item.alcoholId}_${idx}`} data={item} />
+                  ))}
+            </List>
+            <div ref={targetRef} />
+          </>
+        )}
+      </section>
+    </main>
   );
 }

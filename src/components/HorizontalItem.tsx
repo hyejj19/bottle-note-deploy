@@ -3,14 +3,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Star from '@/components/Star';
 import { truncStr } from '@/utils/truncStr';
-import { Alcohol } from '@/types/Alcohol';
+import { AlcoholAPI } from '@/types/Alcohol';
 
 interface Props {
-  data: Alcohol;
+  data: AlcoholAPI & { path: string };
 }
 
 export default function HorizontalItem({ data }: Props) {
   const { korName, rating, engCategory, imageUrl, path } = data;
+
   return (
     <Link href={path}>
       <div className="w-[10rem] h-[15.5rem] bg-bgGray">
