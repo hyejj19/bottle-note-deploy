@@ -15,6 +15,7 @@ import { FormValues } from '@/types/Review';
 import { ReviewApi } from '@/app/api/ReviewApi';
 import { RateApi } from '@/app/api/RateApi';
 import { uploadImages } from '@/utils/S3Upload';
+import { Button } from '@/components/Button';
 
 function ReviewRegister() {
   const router = useRouter();
@@ -181,12 +182,7 @@ function ReviewRegister() {
         </div>
         {alcoholData && <ReviewForm korName={alcoholData.korName} />}
         <article className="px-5 fixed bottom-2 center left-0 right-0">
-          <div
-            className="flex justify-center items-center w-full h-[3.8rem] bg-subCoral rounded-xl text-white font-bold text-base"
-            onClick={handleSubmit(onSave)}
-          >
-            리뷰 등록
-          </div>
+          <Button onClick={handleSubmit(onSave)} btnName="리뷰 등록" />
         </article>
       </FormProvider>
     </>

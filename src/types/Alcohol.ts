@@ -61,8 +61,14 @@ export interface RegionApi {
   description: string;
 }
 
+export interface PickPutApi {
+  message: string;
+  status: 'PICK' | 'UNPICK';
+}
+
 export interface CategoryApi {
   korCategory: string;
   engCategory: string;
   categoryGroup: Category;
+
 }

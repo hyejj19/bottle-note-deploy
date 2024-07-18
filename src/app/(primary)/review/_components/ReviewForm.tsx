@@ -29,7 +29,7 @@ export default ReviewForm;
 
 const Section = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="section">
+    <div>
       {children &&
         React.Children.map(children, (child, index) => (
           <>

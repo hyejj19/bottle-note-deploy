@@ -36,16 +36,18 @@ export interface FormValues {
   detailAddress?: string | null;
 }
 
+export interface AlcoholInfo {
+  alcoholId: number;
+  korName: string;
+  engName: string;
+  korCategoryName: string;
+  engCategoryName: string;
+  imageUrl: string;
+  isPicked: boolean;
+}
+
 export interface ReviewDetailsApi {
-  alcoholInfo: {
-    alcoholId: number;
-    korName: string;
-    engName: string;
-    korCategoryName: string;
-    engCategoryName: string;
-    imageUrl: string;
-    isPicked: boolean;
-  };
+  alcoholInfo: AlcoholInfo;
   reviewResponse: {
     reviewId: number;
     reviewContent: string;
@@ -66,6 +68,7 @@ export interface ReviewDetailsApi {
     isMyReview: boolean;
     isLikedByMe: boolean;
     hasReplyByMe: boolean;
+    isBestReview: boolean;
     reviewTastingTag: string[];
   };
   reviewImageList: [
@@ -74,17 +77,23 @@ export interface ReviewDetailsApi {
       viewUrl: string;
     },
   ];
-  reviewReplyList: [
-    {
-      userId: number;
-      imageUrl: string;
-      nickName: string;
-      reviewReplyId: number;
-      reviewReplyContent: string;
-      createAt: string;
-    },
-  ];
+  // 최근 변경된 사항으로 댓글 구현 시 수정 예정
+  // reviewReplyList: [
+  //   {
+  //     userId: number;
+  //     imageUrl: string;
+  //     nickName: string;
+  //     reviewReplyId: number;
+  //     reviewReplyContent: string;
+  //     createAt: string;
+  //   },
+  // ];
 }
+
+export type ReviewDetailsWithoutAlcoholInfo = Omit<
+  ReviewDetailsApi,
+  'alcoholInfo'
+>;
 
 export interface ReviewPostApi {
   callback: string;
