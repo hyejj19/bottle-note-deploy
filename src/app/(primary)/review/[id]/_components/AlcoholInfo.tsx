@@ -38,7 +38,7 @@ function AlcoholInfo({ data }: Props) {
       <article className="w-2/3 py-3 text-white space-y-2 overflow-x-hidden">
         <div className="space-y-1">
           <Label
-            name={data.korCategoryName}
+            name={data.korCategory}
             style={'border-white px-2 py-[0.15rem] rounded-md text-10'}
           />
           <h1 className="text-15 font-semibold whitespace-normal break-words">

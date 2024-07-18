@@ -30,8 +30,25 @@ export const ReviewApi = {
       throw new Error('Failed to fetch data');
     }
 
-    const { data }: ApiResponse<ReviewDetailsApi> = await response.json();
-    return data;
+    const result: ApiResponse<{
+      alcoholInfo: any;
+      reviewResponse: any;
+      reviewImageList: any[];
+    }> = await response.json();
+
+    const formattedResult: ApiResponse<ReviewDetailsApi> = {
+      ...result,
+      data: {
+        ...result.data,
+        alcoholInfo: {
+          ...result.data.alcoholInfo,
+          engCategory: result.data.alcoholInfo.engCategoryName,
+          korCategory: result.data.alcoholInfo.korCategoryName,
+        },
+      },
+    };
+
+    return formattedResult.data;
   },
 
   async registerReview(params: ReviewQueryParams) {
