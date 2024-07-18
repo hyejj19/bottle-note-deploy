@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import PickBtn from '@/app/(primary)/_components/PickBtn';
@@ -14,11 +14,8 @@ interface Props {
 
 function AlcoholInfo({ data }: Props) {
   const router = useRouter();
-  const [isPicked, setIsPicked] = useState<boolean>(false);
-
-  useEffect(() => {
-    setIsPicked(data.isPicked);
-  }, [data]);
+  const { isPicked: originalIsPicked } = data;
+  const [isPicked, setIsPicked] = useState<boolean>(originalIsPicked);
 
   return (
     <section className="relative z-10 flex px-5 pb-6 space-x-5">
@@ -71,7 +68,8 @@ function AlcoholInfo({ data }: Props) {
             <div className="border-[0.5px] border-white my-[0.1rem]" />
             <PickBtn
               isPicked={isPicked}
-              setIsPicked={setIsPicked}
+              handleUpdatePicked={() => setIsPicked(!isPicked)}
+              handleRollback={() => setIsPicked(originalIsPicked)}
               pickBtnName="찜하기"
               alcoholId={data.alcoholId}
             />

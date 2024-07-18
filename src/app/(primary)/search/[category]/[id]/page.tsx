@@ -169,7 +169,10 @@ function SearchCategory() {
                       <div className="border-[0.5px] border-white my-[0.1rem]" />
                       <PickBtn
                         isPicked={isPicked}
-                        setIsPicked={setIsPicked}
+                        handleUpdatePicked={() => setIsPicked(!isPicked)}
+                        handleRollback={() =>
+                          setIsPicked(data?.alcohols?.isPicked)
+                        }
                         pickBtnName="찜하기"
                         alcoholId={Number(alcoholId)}
                         size={16}

@@ -6,7 +6,8 @@ import { AlcoholsApi } from '@/app/api/AlcholsApi';
 
 interface Props {
   isPicked: boolean;
-  setIsPicked: React.Dispatch<React.SetStateAction<boolean>>;
+  handleUpdatePicked: () => void;
+  handleRollback: () => void;
   pickBtnName?: string;
   iconColor?: 'white' | 'subcoral';
   size?: number;
@@ -15,7 +16,8 @@ interface Props {
 
 const PickBtn = ({
   isPicked,
-  setIsPicked,
+  handleUpdatePicked,
+  handleRollback,
   alcoholId,
   pickBtnName,
   iconColor = 'white',
@@ -27,14 +29,13 @@ const PickBtn = ({
       alert('로그인이 필요한 서비스입니다.');
       return;
     } else {
-      const originalIsPicked = isPicked;
-      setIsPicked(!isPicked);
+      handleUpdatePicked();
       try {
         await AlcoholsApi.putPick(alcoholId, !isPicked);
       } catch (error) {
         alert('업데이트에 실패했습니다. 다시 시도해주세요.');
         console.error('Error updating pick status:', error);
-        setIsPicked(originalIsPicked);
+        handleRollback();
       }
     }
   };
