@@ -53,7 +53,7 @@ export function Button({
   type = 'button',
   onClick,
   btnStyles = 'bg-subCoral',
-  btnTextStyles = 'text-white font-bold text-base',
+  btnTextStyles = 'text-white font-bold text-15',
   disabled = false,
 }: ButtonProps) {
   return (

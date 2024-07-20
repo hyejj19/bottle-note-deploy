@@ -1,8 +1,13 @@
-export function shareOrCopy(url: string, title?: string, text?: string) {
+export function shareOrCopy(
+  url: string,
+  handleModal?: () => void,
+  title?: string,
+  text?: string,
+) {
   if (isMobileEnvironment()) {
     shareOnMobile(url, title, text);
   } else {
-    copyUrlToClipboard(url);
+    copyUrlToClipboard(url, handleModal);
   }
 
   function isMobileEnvironment() {
@@ -13,7 +18,6 @@ export function shareOrCopy(url: string, title?: string, text?: string) {
   }
 
   async function shareOnMobile(url: string, title?: string, text?: string) {
-    alert(window.navigator.share);
     if (navigator.share) {
       await navigator
         .share({
@@ -28,10 +32,12 @@ export function shareOrCopy(url: string, title?: string, text?: string) {
     }
   }
 
-  async function copyUrlToClipboard(url: string) {
+  async function copyUrlToClipboard(url: string, handleModal?: () => void) {
     await navigator.clipboard
       .writeText(url)
-      .then(() => alert('URL 복사 성공'))
+      .then(() => {
+        handleModal && handleModal();
+      })
       .catch((error) => console.log('URL 복사 실패', error));
   }
 }

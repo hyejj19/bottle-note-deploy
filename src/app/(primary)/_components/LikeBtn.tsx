@@ -8,6 +8,7 @@ interface Props {
   likeBtnName?: string;
   handleUpdateLiked: () => void;
   handleRollback: () => void;
+  handleNotLogin: () => void;
   likeIconColor?: 'white' | 'subcoral';
   unLikeIconColor?: 'gray' | 'subcoral';
   size?: number;
@@ -18,6 +19,7 @@ const LikeBtn = ({
   likeBtnName,
   handleUpdateLiked,
   handleRollback,
+  handleNotLogin,
   unLikeIconColor = 'gray',
   likeIconColor = 'subcoral',
   size = 14,
@@ -25,8 +27,7 @@ const LikeBtn = ({
   const { data: session } = useSession();
   const handleClick = async () => {
     if (!session) {
-      alert('로그인이 필요한 서비스입니다.');
-      return;
+      handleNotLogin();
     } else {
       handleUpdateLiked();
       try {

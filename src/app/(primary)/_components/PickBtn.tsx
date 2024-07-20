@@ -8,6 +8,7 @@ interface Props {
   isPicked: boolean;
   handleUpdatePicked: () => void;
   handleRollback: () => void;
+  handleNotLogin: () => void;
   pickBtnName?: string;
   iconColor?: 'white' | 'subcoral';
   size?: number;
@@ -18,16 +19,17 @@ const PickBtn = ({
   isPicked,
   handleUpdatePicked,
   handleRollback,
+  handleNotLogin,
   alcoholId,
   pickBtnName,
   iconColor = 'white',
   size = 14,
 }: Props) => {
   const { data: session } = useSession();
+
   const handleClick = async () => {
     if (!session) {
-      alert('로그인이 필요한 서비스입니다.');
-      return;
+      handleNotLogin();
     } else {
       handleUpdatePicked();
       try {

@@ -19,6 +19,7 @@ import EmptyView from '@/app/(primary)/_components/EmptyView';
 import LoginModal from '@/app/(primary)/_components/LoginModal';
 import PickBtn from '@/app/(primary)/_components/PickBtn';
 import { AlcoholsApi } from '@/app/api/AlcholsApi';
+import useModalStore from '@/store/modalStore';
 
 type Details = {
   title: string;
@@ -30,14 +31,10 @@ function SearchCategory() {
   const params = useParams();
   const { data: session } = useSession();
   const alcoholId = params?.id;
+  const { showModal, handleModal } = useModalStore();
   const [data, setData] = useState<AlcoholDetails | null>(null);
   const [details, setDetails] = useState<Details[]>([]);
-  const [isLoginModalShow, setIsLoginModalShow] = useState<boolean>(false);
   const [isPicked, setIsPicked] = useState<boolean>(false);
-
-  const handleLoginModalShow = () => {
-    setIsLoginModalShow((prev) => !prev);
-  };
 
   const fetchAlcoholDetails = async (id: string) => {
     const result = await AlcoholsApi.getAlcoholDetails(id);
@@ -153,7 +150,7 @@ function SearchCategory() {
                               `/review/register?alcoholId=${alcoholId}`,
                             );
                           } else {
-                            setIsLoginModalShow(true);
+                            handleModal();
                           }
                         }}
                       >
@@ -173,6 +170,7 @@ function SearchCategory() {
                         handleRollback={() =>
                           setIsPicked(data?.alcohols?.isPicked)
                         }
+                        handleNotLogin={handleModal}
                         pickBtnName="찜하기"
                         alcoholId={Number(alcoholId)}
                         size={16}
@@ -298,7 +296,7 @@ function SearchCategory() {
           </>
         )}
       </NavLayout>
-      {isLoginModalShow && <LoginModal handleClose={handleLoginModalShow} />}
+      {showModal && <LoginModal handleClose={handleModal} />}
     </>
   );
 }
