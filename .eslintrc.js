@@ -159,6 +159,10 @@ module.exports = {
             group: 'internal',
           },
           {
+            pattern: 'store/**',
+            group: 'internal',
+          },
+          {
             pattern: 'constants/**',
             group: 'internal',
             position: 'after',
