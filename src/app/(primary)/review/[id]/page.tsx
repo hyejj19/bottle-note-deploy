@@ -23,7 +23,7 @@ import LoginModal from '@/app/(primary)/_components/LoginModal';
 export default function ReviewDetail() {
   const router = useRouter();
   const { id: reviewId } = useParams();
-  const { showModal, handleModal } = useModalStore();
+  const { isShowModal, handleModal } = useModalStore();
   const [alcoholInfo, setAlcoholInfo] = useState<AlcoholInfoType | null>(null);
   const [reviewDetails, setReviewDetails] =
     useState<ReviewDetailsWithoutAlcoholInfo | null>(null);
@@ -139,13 +139,13 @@ export default function ReviewDetail() {
             {/* </>
           )} */}
           </NavLayout>
-          {showModal && modalType === 'copy' && (
-            <Modal>
-              <p className="modal-mainText">해당 페이지 링크를 복사했습니다.</p>
-              <p className="modal-subText">친구에게 공유하러 가볼까요?</p>
-            </Modal>
+          {isShowModal && modalType === 'copy' && (
+            <Modal
+              mainText="해당 페이지 링크를 복사했습니다."
+              subText="친구에게 공유하러 가볼까요?"
+            />
           )}
-          {showModal && modalType === 'login' && (
+          {isShowModal && modalType === 'login' && (
             <LoginModal handleClose={handleModal} />
           )}
         </>

@@ -7,7 +7,7 @@ interface Props {
   isLiked: boolean;
   likeBtnName?: string;
   handleUpdateLiked: () => void;
-  handleRollback: () => void;
+  handleError: () => void;
   handleNotLogin: () => void;
   likeIconColor?: 'white' | 'subcoral';
   unLikeIconColor?: 'gray' | 'subcoral';
@@ -18,7 +18,7 @@ const LikeBtn = ({
   isLiked,
   likeBtnName,
   handleUpdateLiked,
-  handleRollback,
+  handleError,
   handleNotLogin,
   unLikeIconColor = 'gray',
   likeIconColor = 'subcoral',
@@ -35,7 +35,7 @@ const LikeBtn = ({
       } catch (error) {
         alert('업데이트에 실패했습니다. 다시 시도해주세요.');
         console.error('Error updating like status:', error);
-        handleRollback();
+        handleError();
       }
     }
   };

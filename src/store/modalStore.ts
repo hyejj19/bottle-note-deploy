@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 
 interface ModalStore {
-  showModal: boolean;
+  isShowModal: boolean;
   handleModal: () => void;
 }
 
 const useModalStore = create<ModalStore>((set) => ({
-  showModal: false,
-  handleModal: () => set((state) => ({ showModal: !state.showModal })),
+  isShowModal: false,
+  handleModal: () => set((state) => ({ isShowModal: !state.isShowModal })),
 }));
 
 export default useModalStore;

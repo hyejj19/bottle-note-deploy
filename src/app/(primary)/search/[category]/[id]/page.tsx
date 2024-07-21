@@ -31,7 +31,7 @@ function SearchCategory() {
   const params = useParams();
   const { data: session } = useSession();
   const alcoholId = params?.id;
-  const { showModal, handleModal } = useModalStore();
+  const { isShowModal, handleModal } = useModalStore();
   const [data, setData] = useState<AlcoholDetails | null>(null);
   const [details, setDetails] = useState<Details[]>([]);
   const [isPicked, setIsPicked] = useState<boolean>(false);
@@ -167,7 +167,7 @@ function SearchCategory() {
                       <PickBtn
                         isPicked={isPicked}
                         handleUpdatePicked={() => setIsPicked(!isPicked)}
-                        handleRollback={() =>
+                        handleError={() =>
                           setIsPicked(data?.alcohols?.isPicked)
                         }
                         handleNotLogin={handleModal}
@@ -296,7 +296,7 @@ function SearchCategory() {
           </>
         )}
       </NavLayout>
-      {showModal && <LoginModal handleClose={handleModal} />}
+      {isShowModal && <LoginModal handleClose={handleModal} />}
     </>
   );
 }
