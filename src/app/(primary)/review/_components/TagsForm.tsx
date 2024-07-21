@@ -6,18 +6,30 @@ import Label from '../../_components/Label';
 import { SubHeader } from '@/app/(primary)/_components/SubHeader';
 import { truncStr } from '@/utils/truncStr';
 import { useFormContext } from 'react-hook-form';
-import Modal from '@/components/Modal';
+import PageModal from '@/components/PageModal';
 import SelectFlavor from './SelectFlavor';
+import useModalStore from '@/store/modalStore';
+import Modal from '@/components/Modal';
 
 interface Props {
   korName: string;
 }
 
 export default function TagsForm({ korName }: Props) {
+  const { showModal, handleModal } = useModalStore();
   const [tagModal, setTagModal] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [modalContent, setModalContent] = useState<string | string[]>('');
+  const [modalType, setModalType] = useState<'back' | 'notice' | null>(null);
 
   const { setValue, watch } = useFormContext();
+
+  const updateAlert = (content: string | string[]) => {
+    setModalContent(content);
+    setModalType('notice');
+    handleModal();
+  };
 
   useEffect(() => {
     setTags(watch('flavor_tags'));
@@ -45,7 +57,6 @@ export default function TagsForm({ korName }: Props) {
             <p className="text-mainGray font-normal text-10">
               {tags.length !== 0 && '수정'}
             </p>
-            {/* <Link href="/review/register/flavorTag"> */}
             <Image
               src="/icon/arrow-right-subcoral.svg"
               alt="rightIcon"
@@ -55,7 +66,6 @@ export default function TagsForm({ korName }: Props) {
                 setTagModal(true);
               }}
             />
-            {/* </Link> */}
           </div>
         </div>
         <div className="flex flex-wrap gap-1">
@@ -72,12 +82,17 @@ export default function TagsForm({ korName }: Props) {
         </div>
       </article>
       {tagModal && (
-        <Modal setModalOpen={setTagModal}>
+        <PageModal>
           <SubHeader bgColor="bg-bgGray">
             <SubHeader.Left
               onClick={() => {
-                setTagModal(false);
-                setValue('flavor_tags', tags);
+                if (isAdding) {
+                  setModalType('back');
+                  handleModal();
+                } else {
+                  setTagModal(false);
+                  setValue('flavor_tags', tags);
+                }
               }}
             >
               <Image
@@ -91,7 +106,38 @@ export default function TagsForm({ korName }: Props) {
               {korName && truncStr(korName, 14)}
             </SubHeader.Center>
           </SubHeader>
-          <SelectFlavor tags={tags} setTags={setTags} />
+          <SelectFlavor
+            tags={tags}
+            setTags={setTags}
+            setIsAdding={setIsAdding}
+            updateAlert={updateAlert}
+          />
+        </PageModal>
+      )}
+      {showModal && modalType === 'back' && (
+        <Modal
+          type="confirm"
+          confirmBtnName="아니요"
+          cancelBtnName="예"
+          handleCancel={() => {
+            handleModal();
+            setTagModal(false);
+            setValue('flavor_tags', tags);
+          }}
+        >
+          <article>
+            <p className="modal-mainText">입력중인 테이스팅 태그가 있습니다.</p>
+            <p className="modal-mainText">정말 나가시겠습니까?</p>
+
+            <p className="modal-subText">태그가 완성되지않으면 없어져요!</p>
+          </article>
+        </Modal>
+      )}
+      {showModal && modalContent !== '' && modalType === 'notice' && (
+        <Modal>
+          <article>
+            <p className="modal-mainText">{modalContent}</p>
+          </article>
         </Modal>
       )}
     </>

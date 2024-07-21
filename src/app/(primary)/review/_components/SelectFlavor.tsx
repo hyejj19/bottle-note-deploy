@@ -1,36 +1,41 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 
 interface Props {
   tags: string[];
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  setIsAdding: React.Dispatch<React.SetStateAction<boolean>>;
+  updateAlert: (content: string | string[]) => void;
 }
 
 function validateText(text: string) {
-  const regex = /[\d]|[^a-zA-Z가-힣]/;
-
-  if (regex.test(text)) {
-    return false;
-  }
-  return true;
+  const regex = /^[a-zA-Z가-힣]+$/;
+  return regex.test(text);
 }
 
-export default function SelectFlavor({ tags, setTags }: Props) {
+export default function SelectFlavor({
+  tags,
+  setTags,
+  setIsAdding,
+  updateAlert,
+}: Props) {
   const [value, setValue] = useState<string>('');
 
   const handleAddTag = () => {
     if (value.length === 0) {
-      alert('추가하고 싶은 태그를 작성해주세요:)');
+      updateAlert('추가하고 싶은 태그를 작성해주세요:)');
     } else if (tags.includes(value)) {
-      alert('이미 동일한 태그가 있습니다.');
+      updateAlert('이미 동일한 태그가 있습니다.');
     } else if (!validateText(value)) {
-      alert('태그에 숫자와 특수문자는 추가할 수 없습니다.');
+      updateAlert('태그에 숫자와 특수문자는 추가할 수 없습니다.');
     } else {
       const newTags = [...tags, value];
       setTags(newTags);
       setValue('');
+      setIsAdding(false);
+      return;
     }
   };
 
@@ -62,9 +67,10 @@ export default function SelectFlavor({ tags, setTags }: Props) {
             placeholder="예) 반건조 된 건자두"
             value={value}
             maxLength={12}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setValue(e.target.value)
-            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setIsAdding(true);
+              setValue(e.target.value);
+            }}
           />
           <button
             className={`text-10 py-[0.13rem] px-2 rounded border  w-16 ${tags.length !== 10 ? 'border-subCoral text-subCoral' : 'border-[#BFBFBF] text-[#BFBFBF]'}`}

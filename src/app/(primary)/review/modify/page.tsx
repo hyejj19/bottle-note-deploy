@@ -16,14 +16,19 @@ import { ReviewApi } from '@/app/api/ReviewApi';
 import { uploadImages } from '@/utils/S3Upload';
 import { RateApi } from '@/app/api/RateApi';
 import { Button } from '@/components/Button';
+import useModalStore from '@/store/modalStore';
+import Modal from '@/components/Modal';
 
 function ReviewModify() {
   const router = useRouter();
+  const { showModal, handleModal } = useModalStore();
   const searchParams = useSearchParams();
   const reviewId = searchParams.get('reviewId');
   const [alcoholId, setAlcoholId] = useState<string>('');
   const [alcoholData, setAlcoholData] = useState<AlcoholDetails>();
   const [initialRating, setInitialRating] = useState<number>(0);
+  const [modalType, setModalType] = useState<'save' | 'cancel' | null>(null);
+  const [modalContent, setModalContent] = useState<string | string[]>('');
 
   const schema = yup.object({
     review: yup.string().required('리뷰 내용을 작성해주세요.'),
@@ -45,8 +50,6 @@ function ReviewModify() {
     reset,
     formState: { isDirty, errors }, // 적용 필요
   } = formMethods;
-
-  // console.log('errors', errors);
 
   const onSave = (data: FormValues) => {
     if (data.images !== null) {
@@ -99,22 +102,24 @@ function ReviewModify() {
       },
     };
 
-    let ratingResult;
-    let reviewResult;
-    // 별점만 수정한 경우에 대한 조건 추가 필요
+    let ratingResult = null;
+    let reviewResult = null;
     if (initialRating !== data.rating) {
       ratingResult = await RateApi.postRating(ratingParams);
     }
     if (reviewId) {
       reviewResult = await ReviewApi.modifyReview(reviewId, reviewParams);
     }
-    if (initialRating !== data.rating && ratingResult && reviewResult) {
-      router.push(`/review/${reviewResult.reviewId}`);
-    } else if (reviewResult) {
-      // 대응에 대한 논의 필요
-      // alert('별점은 등록되지 않았습니다.');
-      router.push(`/review/${reviewResult.reviewId}`);
-    } else if (initialRating !== data.rating && ratingResult) {
+
+    if (
+      (initialRating !== data.rating && ratingResult && reviewResult) ||
+      (initialRating === data.rating && reviewResult) ||
+      (initialRating !== data.rating && reviewResult && !ratingResult)
+    ) {
+      setModalContent('성공적으로 수정했습니다 👍');
+      setModalType('save');
+      handleModal();
+    } else if (initialRating !== data.rating && ratingResult && !reviewResult) {
       // alert('리뷰는 등록되지 않았습니다.');
       router.back();
     }
@@ -156,10 +161,11 @@ function ReviewModify() {
     }
   }, [alcoholId]);
 
-  // 추후 Modal로 수정 예정
   useEffect(() => {
     if (errors.review?.message) {
-      alert(errors.review?.message);
+      setModalContent(errors.review?.message);
+      handleModal();
+      setModalType('save');
     }
   }, [errors]);
 
@@ -177,7 +183,16 @@ function ReviewModify() {
           <SubHeader bgColor="bg-mainCoral/10">
             <SubHeader.Left
               onClick={() => {
-                router.back();
+                if (isDirty) {
+                  setModalType('cancel');
+                  setModalContent([
+                    '수정 중인 내용이 사라집니다.',
+                    '정말 뒤로 가시겠습니까?',
+                  ]);
+                  handleModal();
+                } else {
+                  router.back();
+                }
               }}
             >
               <Image
@@ -198,6 +213,30 @@ function ReviewModify() {
           <Button onClick={handleSubmit(onSave)} btnName="리뷰 수정" />
         </article>
       </FormProvider>
+      {showModal && modalType && ['cancel', 'save'].includes(modalType) && (
+        <Modal
+          type={modalType === 'save' ? 'alert' : 'confirm'}
+          confirmBtnName={modalType === 'cancel' ? '아니요' : ''}
+          cancelBtnName={modalType === 'cancel' ? '예' : ''}
+          handleCancel={() => {
+            handleModal();
+            if (modalType === 'cancel' && isDirty) {
+              router.back();
+            }
+          }}
+          handleConfirm={() => {
+            handleModal();
+            if (modalType === 'save') {
+              !errors.review && router.push(`/review/${reviewId}`);
+            }
+            setModalType(null);
+          }}
+        >
+          <article>
+            <p className="modal-mainText">{modalContent}</p>
+          </article>
+        </Modal>
+      )}
     </>
   );
 }

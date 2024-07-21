@@ -84,7 +84,8 @@ function AlcoholInfo({ data }: Props) {
               <div className="border-[0.5px] border-white" />
               <PickBtn
                 isPicked={isPicked}
-                setIsPicked={setIsPicked}
+                handleUpdatePicked={() => setIsPicked(!isPicked)}
+                handleRollback={() => setIsPicked(originalIsPicked)}
                 pickBtnName="찜하기"
                 alcoholId={data.alcoholId}
               />

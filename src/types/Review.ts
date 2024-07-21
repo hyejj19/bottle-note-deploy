@@ -40,8 +40,8 @@ export interface AlcoholInfo {
   alcoholId: number;
   korName: string;
   engName: string;
-  korCategoryName: string;
-  engCategoryName: string;
+  korCategory: string;
+  engCategory: string;
   imageUrl: string;
   isPicked: boolean;
 }
@@ -71,12 +71,10 @@ export interface ReviewDetailsApi {
     isBestReview: boolean;
     reviewTastingTag: string[];
   };
-  reviewImageList: [
-    {
-      order: number;
-      viewUrl: string;
-    },
-  ];
+  reviewImageList: {
+    order: number;
+    viewUrl: string;
+  }[];
   // 최근 변경된 사항으로 댓글 구현 시 수정 예정
   // reviewReplyList: [
   //   {

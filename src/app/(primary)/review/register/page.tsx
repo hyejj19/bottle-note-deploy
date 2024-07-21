@@ -16,13 +16,20 @@ import { ReviewApi } from '@/app/api/ReviewApi';
 import { RateApi } from '@/app/api/RateApi';
 import { uploadImages } from '@/utils/S3Upload';
 import { Button } from '@/components/Button';
+import useModalStore from '@/store/modalStore';
+import Modal from '@/components/Modal';
 
 function ReviewRegister() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { showModal, handleModal } = useModalStore();
   const alcoholId = searchParams.get('alcoholId') || '';
   const [alcoholData, setAlcoholData] = useState<AlcoholDetails>();
   const [initialRating, setInitialRating] = useState<number>(0);
+  const [modalType, setModalType] = useState<'save' | 'cancel' | null>(null);
+  const [modalContent, setModalContent] = useState<string>('');
+  const [modalSubContent, setModalSubContent] = useState<string>('');
+  const [reviewId, setReviewId] = useState<number | null>(null);
 
   const schema = yup.object({
     review: yup.string().required('리뷰 내용을 작성해주세요.'),
@@ -40,12 +47,9 @@ function ReviewRegister() {
 
   const {
     handleSubmit,
-    setValue,
     reset,
-    formState: { isDirty, errors }, // 적용 필요
+    formState: { isDirty, errors },
   } = formMethods;
-
-  // console.log('errors', errors);
 
   const onSave = (data: FormValues) => {
     // console.log('data1', data);
@@ -94,19 +98,28 @@ function ReviewRegister() {
       },
     };
 
-    let ratingResult;
+    let ratingResult = null;
     if (initialRating !== data.rating) {
       ratingResult = await RateApi.postRating(ratingParams);
     }
     const reviewResult = await ReviewApi.registerReview(reviewParams);
 
     // error에 대해 추후 보완 예정
-    if (initialRating !== data.rating && ratingResult && reviewResult) {
-      router.push(`/review/${reviewResult.id}`);
-    } else if (reviewResult) {
-      // alert('별점은 등록되지 않았습니다.');
-      router.push(`/review/${reviewResult.id}`);
-    } else if (initialRating !== data.rating && ratingResult) {
+    if (
+      (initialRating !== data.rating && ratingResult && reviewResult) ||
+      (initialRating === data.rating && reviewResult) ||
+      (initialRating !== data.rating && reviewResult && !ratingResult)
+    ) {
+      setReviewId(reviewResult.id);
+      const text =
+        initialRating !== data.rating && !ratingResult
+          ? '❗️별점 등록에는 실패했습니다. 다시 시도해주세요.'
+          : '여정에 한발 더 가까워지셨어요!';
+      setModalContent('작성을 완료했습니다 👍');
+      setModalSubContent(text);
+      setModalType('save');
+      handleModal();
+    } else if (initialRating !== data.rating && ratingResult && !reviewResult) {
       // alert('리뷰는 등록되지 않았습니다.');
       router.back();
     }
@@ -143,10 +156,11 @@ function ReviewRegister() {
     }
   }, [alcoholId]);
 
-  // 추후 Modal로 수정 예정
   useEffect(() => {
     if (errors.review?.message) {
-      alert(errors.review?.message);
+      setModalContent(errors.review?.message);
+      handleModal();
+      setModalType('save');
     }
   }, [errors]);
 
@@ -164,7 +178,15 @@ function ReviewRegister() {
           <SubHeader bgColor="bg-mainCoral/10">
             <SubHeader.Left
               onClick={() => {
-                router.back();
+                if (isDirty) {
+                  setModalType('cancel');
+                  setModalContent(
+                    '작성 중인 내용이 사라집니다.\n정말 뒤로 가시겠습니까?',
+                  );
+                  handleModal();
+                } else {
+                  router.back();
+                }
               }}
             >
               <Image
@@ -185,6 +207,28 @@ function ReviewRegister() {
           <Button onClick={handleSubmit(onSave)} btnName="리뷰 등록" />
         </article>
       </FormProvider>
+      {showModal && modalType && ['cancel', 'save'].includes(modalType) && (
+        <Modal
+          type={modalType === 'cancel' ? 'confirm' : 'alert'}
+          confirmBtnName={modalType === 'cancel' ? '아니요' : ''}
+          cancelBtnName={modalType === 'cancel' ? '예' : ''}
+          handleCancel={() => {
+            handleModal();
+            if (modalType === 'cancel' && isDirty) {
+              router.back();
+            }
+          }}
+          handleConfirm={() => {
+            handleModal();
+            setModalType(null);
+            if (modalType === 'save' && reviewId) {
+              router.push(`/review/${reviewId}`);
+            }
+          }}
+          mainText={modalContent}
+          subText={modalSubContent}
+        />
+      )}
     </>
   );
 }

@@ -18,9 +18,11 @@ import { ReviewDetailsWithoutAlcoholInfo } from '@/types/Review';
 
 interface Props {
   data: ReviewDetailsWithoutAlcoholInfo;
+  handleShare: () => void;
+  handleLogin: () => void;
 }
 
-function ReviewDetails({ data }: Props) {
+function ReviewDetails({ data, handleShare, handleLogin }: Props) {
   const router = useRouter();
   const { data: session } = useSession();
   const [isShowStatus, setIsShowStatus] = useState<boolean>(true);
@@ -202,23 +204,45 @@ function ReviewDetails({ data }: Props) {
         </section>
         <section className="mx-5 py-5 flex items-center space-x-4">
           <div className="flex-1 flex text-center justify-center items-center space-x-1">
-            <Image
-              src={
-                data.reviewResponse?.isLikedByMe
-                  ? '/icon/thumbup-filled-subcoral.svg'
-                  : '/icon/thumbup-outlined-gray.svg'
-              }
-              width={16}
-              height={16}
-              alt="like"
-            />
-            <div className="text-mainGray font-bold text-10">좋아요</div>
+            <button
+              className="flex justify-center items-center space-x-1"
+              onClick={() => {
+                if (!session) {
+                  handleLogin();
+                  return;
+                } else {
+                  // api 적용 필요
+                }
+              }}
+            >
+              <Image
+                src={
+                  data.reviewResponse?.isLikedByMe
+                    ? '/icon/thumbup-filled-subcoral.svg'
+                    : '/icon/thumbup-outlined-gray.svg'
+                }
+                width={16}
+                height={16}
+                alt="like"
+              />
+              <div className="text-mainGray font-bold text-10">좋아요</div>
+            </button>
             <div className=" text-mainGray text-10 font-normal">
               좋아요 {data.reviewResponse?.likeCount}
             </div>
           </div>
           <span className="border-[0.01rem] w-px border-mainGray opacity-40 h-4" />
-          <div className="flex-1 flex text-center justify-center items-center space-x-1">
+          <div
+            className="flex-1 flex text-center justify-center items-center space-x-1"
+            onClick={() => {
+              if (!session) {
+                handleLogin();
+                return;
+              } else {
+                // api 적용 필요
+              }
+            }}
+          >
             <Image
               src={
                 data.reviewResponse?.hasReplyByMe
@@ -239,6 +263,7 @@ function ReviewDetails({ data }: Props) {
             onClick={() => {
               shareOrCopy(
                 `${process.env.NEXT_PUBLIC_BOTTLE_NOTE_URL}/review/${data.reviewResponse?.reviewId}`,
+                handleShare,
               );
             }}
           >

@@ -5,9 +5,10 @@ import { useSession } from 'next-auth/react';
 
 interface Props {
   isLiked: boolean;
-  setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
   likeBtnName?: string;
-  setLikedCount?: React.Dispatch<React.SetStateAction<number>>;
+  handleUpdateLiked: () => void;
+  handleRollback: () => void;
+  handleNotLogin: () => void;
   likeIconColor?: 'white' | 'subcoral';
   unLikeIconColor?: 'gray' | 'subcoral';
   size?: number;
@@ -15,9 +16,10 @@ interface Props {
 
 const LikeBtn = ({
   isLiked,
-  setIsLiked,
   likeBtnName,
-  setLikedCount,
+  handleUpdateLiked,
+  handleRollback,
+  handleNotLogin,
   unLikeIconColor = 'gray',
   likeIconColor = 'subcoral',
   size = 14,
@@ -25,25 +27,15 @@ const LikeBtn = ({
   const { data: session } = useSession();
   const handleClick = async () => {
     if (!session) {
-      alert('로그인이 필요한 서비스입니다.');
-      return;
+      handleNotLogin();
     } else {
-      const originalIsLiked = isLiked;
-      setIsLiked(!isLiked);
-      setLikedCount &&
-        setLikedCount((prevCount) => {
-          return prevCount + 1;
-        });
+      handleUpdateLiked();
       try {
         // api 호출
       } catch (error) {
         alert('업데이트에 실패했습니다. 다시 시도해주세요.');
         console.error('Error updating like status:', error);
-        setIsLiked(originalIsLiked);
-        setLikedCount &&
-          setLikedCount((prevCount) => {
-            return prevCount - 1;
-          });
+        handleRollback();
       }
     }
   };
