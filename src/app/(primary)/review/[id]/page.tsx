@@ -140,10 +140,10 @@ export default function ReviewDetail() {
           )} */}
           </NavLayout>
           {showModal && modalType === 'copy' && (
-            <Modal
-              mainText={'해당 페이지 링크를 복사했습니다.'}
-              subText={'친구에게 공유하러 가볼까요?'}
-            />
+            <Modal>
+              <p className="modal-mainText">해당 페이지 링크를 복사했습니다.</p>
+              <p className="modal-subText">친구에게 공유하러 가볼까요?</p>
+            </Modal>
           )}
           {showModal && modalType === 'login' && (
             <LoginModal handleClose={handleModal} />

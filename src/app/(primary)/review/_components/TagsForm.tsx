@@ -21,13 +21,13 @@ export default function TagsForm({ korName }: Props) {
   const [tags, setTags] = useState<string[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const [modalContent, setModalContent] = useState<string | string[]>('');
-  const [modalType, setModalType] = useState<'alert' | 'confirm' | null>(null);
+  const [modalType, setModalType] = useState<'back' | 'notice' | null>(null);
 
   const { setValue, watch } = useFormContext();
 
   const updateAlert = (content: string | string[]) => {
     setModalContent(content);
-    setModalType('alert');
+    setModalType('notice');
     handleModal();
   };
 
@@ -87,7 +87,7 @@ export default function TagsForm({ korName }: Props) {
             <SubHeader.Left
               onClick={() => {
                 if (isAdding) {
-                  setModalType('confirm');
+                  setModalType('back');
                   handleModal();
                 } else {
                   setTagModal(false);
@@ -114,14 +114,9 @@ export default function TagsForm({ korName }: Props) {
           />
         </PageModal>
       )}
-      {showModal && modalType === 'confirm' && (
+      {showModal && modalType === 'back' && (
         <Modal
           type="confirm"
-          mainText={[
-            '입력중인 테이스팅 태그가 있습니다.',
-            '정말 나가시겠습니까?',
-          ]}
-          subText="태그가 완성되지않으면 없어져요!"
           confirmBtnName="아니요"
           cancelBtnName="예"
           handleCancel={() => {
@@ -129,10 +124,21 @@ export default function TagsForm({ korName }: Props) {
             setTagModal(false);
             setValue('flavor_tags', tags);
           }}
-        />
+        >
+          <article>
+            <p className="modal-mainText">입력중인 테이스팅 태그가 있습니다.</p>
+            <p className="modal-mainText">정말 나가시겠습니까?</p>
+
+            <p className="modal-subText">태그가 완성되지않으면 없어져요!</p>
+          </article>
+        </Modal>
       )}
-      {showModal && modalContent !== '' && modalType === 'alert' && (
-        <Modal mainText={modalContent} />
+      {showModal && modalContent !== '' && modalType === 'notice' && (
+        <Modal>
+          <article>
+            <p className="modal-mainText">{modalContent}</p>
+          </article>
+        </Modal>
       )}
     </>
   );

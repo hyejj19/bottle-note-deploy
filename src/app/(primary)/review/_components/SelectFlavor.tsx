@@ -29,7 +29,7 @@ export default function SelectFlavor({
     } else if (tags.includes(value)) {
       updateAlert('이미 동일한 태그가 있습니다.');
     } else if (!validateText(value)) {
-      updateAlert(['태그에 숫자와 특수문자는', '추가할 수 없습니다.']);
+      updateAlert('태그에 숫자와 특수문자는 추가할 수 없습니다.');
     } else {
       const newTags = [...tags, value];
       setTags(newTags);

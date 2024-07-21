@@ -25,10 +25,8 @@ function LoginModal({ handleClose }: Props) {
             />
           </article>
           <article>
-            <p className="text-15 text-subCoral font-medium">
-              로그인이 필요한 서비스입니다.
-            </p>
-            <p className="text-13 text-mainDarkGray">로그인 하시겠습니까?</p>
+            <p className="modal-mainText">로그인이 필요한 서비스입니다.</p>
+            <p className="modal-subText">로그인 하시겠습니까?</p>
           </article>
           <Button
             btnName="로그인"
