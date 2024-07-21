@@ -5,12 +5,14 @@ import { Button, DualButton } from '@/components/Button';
 
 interface Props {
   type?: 'alert' | 'confirm';
-  children: React.ReactNode;
+  children?: React.ReactNode;
   alertBtnName?: string;
   handleCancel?: () => void;
   handleConfirm?: () => void;
   confirmBtnName?: string;
   cancelBtnName?: string;
+  mainText?: string;
+  subText?: string;
 }
 
 function Modal({
@@ -21,6 +23,8 @@ function Modal({
   alertBtnName = '확인',
   confirmBtnName,
   cancelBtnName,
+  mainText,
+  subText,
 }: Props) {
   const { showModal, handleModal } = useModalStore();
 
@@ -47,6 +51,8 @@ function Modal({
             />
           </article>
           {children}
+          <p className="modal-mainText">{mainText}</p>
+          <p className="modal-subText">{subText}</p>
           {type === 'alert' ? (
             <Button btnName={alertBtnName} onClick={handleOkayClick} />
           ) : (

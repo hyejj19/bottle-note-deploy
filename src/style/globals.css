@@ -34,11 +34,11 @@
   }
 
   .modal-mainText {
-    @apply text-15 text-subCoral font-medium;
+    @apply text-15 text-subCoral font-medium whitespace-pre-wrap;
   }
 
   .modal-subText {
-    @apply text-13 text-mainDarkGray;
+    @apply text-13 text-mainDarkGray whitespace-pre-wrap;
   }
 }
 

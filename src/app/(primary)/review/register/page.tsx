@@ -27,7 +27,7 @@ function ReviewRegister() {
   const [alcoholData, setAlcoholData] = useState<AlcoholDetails>();
   const [initialRating, setInitialRating] = useState<number>(0);
   const [modalType, setModalType] = useState<'save' | 'cancel' | null>(null);
-  const [modalContent, setModalContent] = useState<string | string[]>('');
+  const [modalContent, setModalContent] = useState<string>('');
   const [modalSubContent, setModalSubContent] = useState<string>('');
   const [reviewId, setReviewId] = useState<number | null>(null);
 
@@ -180,10 +180,9 @@ function ReviewRegister() {
               onClick={() => {
                 if (isDirty) {
                   setModalType('cancel');
-                  setModalContent([
-                    '작성 중인 내용이 사라집니다.',
-                    '정말 뒤로 가시겠습니까?',
-                  ]);
+                  setModalContent(
+                    '작성 중인 내용이 사라집니다.\n정말 뒤로 가시겠습니까?',
+                  );
                   handleModal();
                 } else {
                   router.back();
@@ -226,12 +225,9 @@ function ReviewRegister() {
               router.push(`/review/${reviewId}`);
             }
           }}
-        >
-          <article>
-            <p className="modal-mainText">{modalContent}</p>
-            <p className="modal-subText">{modalSubContent ?? ''}</p>
-          </article>
-        </Modal>
+          mainText={modalContent}
+          subText={modalSubContent}
+        />
       )}
     </>
   );
