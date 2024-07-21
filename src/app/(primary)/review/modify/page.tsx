@@ -213,10 +213,9 @@ function ReviewModify() {
           <Button onClick={handleSubmit(onSave)} btnName="리뷰 수정" />
         </article>
       </FormProvider>
-      {showModal && (
+      {showModal && modalType && ['cancel', 'save'].includes(modalType) && (
         <Modal
           type={modalType === 'save' ? 'alert' : 'confirm'}
-          mainText={modalContent}
           confirmBtnName={modalType === 'cancel' ? '아니요' : ''}
           cancelBtnName={modalType === 'cancel' ? '예' : ''}
           handleCancel={() => {
@@ -232,7 +231,11 @@ function ReviewModify() {
             }
             setModalType(null);
           }}
-        />
+        >
+          <article>
+            <p className="modal-mainText">{modalContent}</p>
+          </article>
+        </Modal>
       )}
     </>
   );

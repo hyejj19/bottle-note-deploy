@@ -208,11 +208,9 @@ function ReviewRegister() {
           <Button onClick={handleSubmit(onSave)} btnName="리뷰 등록" />
         </article>
       </FormProvider>
-      {showModal && (
+      {showModal && modalType && ['cancel', 'save'].includes(modalType) && (
         <Modal
           type={modalType === 'cancel' ? 'confirm' : 'alert'}
-          mainText={modalContent}
-          subText={modalSubContent ?? ''}
           confirmBtnName={modalType === 'cancel' ? '아니요' : ''}
           cancelBtnName={modalType === 'cancel' ? '예' : ''}
           handleCancel={() => {
@@ -228,7 +226,12 @@ function ReviewRegister() {
               router.push(`/review/${reviewId}`);
             }
           }}
-        />
+        >
+          <article>
+            <p className="modal-mainText">{modalContent}</p>
+            <p className="modal-subText">{modalSubContent ?? ''}</p>
+          </article>
+        </Modal>
       )}
     </>
   );
