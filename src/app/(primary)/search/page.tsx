@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import CategorySelector from '@/components/CategorySelector';
 import CategoryTitle from '@/components/CategoryTitle';
 import List from '@/components/List/List';
-import { usePopular } from '@/hooks/usePopular';
+import { usePopularList } from '@/hooks/usePopularList';
 import { Category, RegionId, SORT_ORDER, SORT_TYPE } from '@/types/common';
 import { useFilter } from '@/hooks/useFilter';
 import { usePaginatedQuery } from '@/queries/usePaginatedQuery';
@@ -23,7 +23,7 @@ interface InitialState {
 
 export default function Search() {
   const router = useRouter();
-  const { populars } = usePopular();
+  const { popularList } = usePopularList();
 
   const currCategory = useSearchParams().get('category');
   const currSearchKeyword = useSearchParams().get('query');
@@ -87,12 +87,12 @@ export default function Search() {
       <section className="flex flex-col gap-7 p-5">
         <CategorySelector handleCategoryCallback={handleCategoryCallback} />
 
-        {!currCategory && !currSearchKeyword ? (
+        {currCategory === null && currSearchKeyword === null ? (
           <section>
             <CategoryTitle subTitle="위클리 HOT 5" />
 
             <List>
-              {populars.map((item: AlcoholAPI) => (
+              {popularList.map((item: AlcoholAPI) => (
                 <List.Item
                   key={item.alcoholId}
                   data={{
@@ -111,7 +111,7 @@ export default function Search() {
               <List.Total
                 total={alcoholList ? alcoholList[0].data.totalCount : 0}
               />
-              <List.SortOrderToggle
+              <List.SortOrderSwitch
                 type={filterState.sortOrder}
                 handleSortOrder={(value) => handleFilter('sortOrder', value)}
               />
@@ -129,6 +129,7 @@ export default function Search() {
                 handleOptionCallback={(value) =>
                   handleFilter('regionId', value)
                 }
+                title="국가"
               />
 
               {alcoholList &&
