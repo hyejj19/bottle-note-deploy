@@ -21,8 +21,8 @@ export const enum SORT_TYPE {
   PICK = 'PICK',
   REVIEW = 'REVIEW',
   RANDOM = 'RANDOM',
-  BOTTLE_ASC = 'BOTTLE_ASC',
-  GLASS_ASC = 'GLASS_ASC',
+  BOTTLE_PRICE = 'BOTTLE_PRICE',
+  GLASS_PRICE = 'GLASS_PRICE',
 }
 
 export const enum SORT_ORDER {
@@ -33,6 +33,7 @@ export const enum SORT_ORDER {
 export interface ListQueryParams {
   keyword?: string;
   category?: string;
+  alcoholId?: string;
   regionId?: number | '';
   sortType?: SORT_TYPE;
   sortOrder?: SORT_ORDER;
