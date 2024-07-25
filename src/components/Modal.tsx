@@ -26,7 +26,7 @@ function Modal({
   mainText,
   subText,
 }: Props) {
-  const { showModal, handleModal } = useModalStore();
+  const { isShowModal, handleModal } = useModalStore();
 
   const handleOkayClick = () => {
     if (handleConfirm) handleConfirm();
@@ -39,7 +39,7 @@ function Modal({
   };
 
   return (
-    <BackDrop isShow={showModal}>
+    <BackDrop isShow={isShowModal}>
       <div className="w-full h-full flex flex-col justify-center items-center px-4 gap-3">
         <section className="relative w-full min-h-52 pt-16 pb-4 bg-white rounded-xl text-center flex flex-col items-center space-y-4 px-4">
           <article className="absolute top-[-10px]">

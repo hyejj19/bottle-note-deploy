@@ -7,7 +7,7 @@ interface Props {
   tags: string[];
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
   setIsAdding: React.Dispatch<React.SetStateAction<boolean>>;
-  updateAlert: (content: string | string[]) => void;
+  updateAlert: (content: string) => void;
 }
 
 function validateText(text: string) {

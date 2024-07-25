@@ -22,7 +22,7 @@ import Modal from '@/components/Modal';
 function ReviewRegister() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { showModal, handleModal } = useModalStore();
+  const { isShowModal, handleModal } = useModalStore();
   const alcoholId = searchParams.get('alcoholId') || '';
   const [alcoholData, setAlcoholData] = useState<AlcoholDetails>();
   const [initialRating, setInitialRating] = useState<number>(0);
@@ -207,7 +207,7 @@ function ReviewRegister() {
           <Button onClick={handleSubmit(onSave)} btnName="리뷰 등록" />
         </article>
       </FormProvider>
-      {showModal && modalType && ['cancel', 'save'].includes(modalType) && (
+      {isShowModal && modalType && ['cancel', 'save'].includes(modalType) && (
         <Modal
           type={modalType === 'cancel' ? 'confirm' : 'alert'}
           confirmBtnName={modalType === 'cancel' ? '아니요' : ''}

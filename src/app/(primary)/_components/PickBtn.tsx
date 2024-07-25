@@ -7,7 +7,7 @@ import { AlcoholsApi } from '@/app/api/AlcholsApi';
 interface Props {
   isPicked: boolean;
   handleUpdatePicked: () => void;
-  handleRollback: () => void;
+  handleError: () => void;
   handleNotLogin: () => void;
   pickBtnName?: string;
   iconColor?: 'white' | 'subcoral';
@@ -18,7 +18,7 @@ interface Props {
 const PickBtn = ({
   isPicked,
   handleUpdatePicked,
-  handleRollback,
+  handleError,
   handleNotLogin,
   alcoholId,
   pickBtnName,
@@ -37,7 +37,7 @@ const PickBtn = ({
       } catch (error) {
         alert('업데이트에 실패했습니다. 다시 시도해주세요.');
         console.error('Error updating pick status:', error);
-        handleRollback();
+        handleError();
       }
     }
   };

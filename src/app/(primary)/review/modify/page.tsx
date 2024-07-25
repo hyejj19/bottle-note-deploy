@@ -21,14 +21,14 @@ import Modal from '@/components/Modal';
 
 function ReviewModify() {
   const router = useRouter();
-  const { showModal, handleModal } = useModalStore();
+  const { isShowModal, handleModal } = useModalStore();
   const searchParams = useSearchParams();
   const reviewId = searchParams.get('reviewId');
   const [alcoholId, setAlcoholId] = useState<string>('');
   const [alcoholData, setAlcoholData] = useState<AlcoholDetails>();
   const [initialRating, setInitialRating] = useState<number>(0);
   const [modalType, setModalType] = useState<'save' | 'cancel' | null>(null);
-  const [modalContent, setModalContent] = useState<string | string[]>('');
+  const [modalContent, setModalContent] = useState<string>('');
 
   const schema = yup.object({
     review: yup.string().required('리뷰 내용을 작성해주세요.'),
@@ -185,10 +185,9 @@ function ReviewModify() {
               onClick={() => {
                 if (isDirty) {
                   setModalType('cancel');
-                  setModalContent([
-                    '수정 중인 내용이 사라집니다.',
-                    '정말 뒤로 가시겠습니까?',
-                  ]);
+                  setModalContent(
+                    '수정 중인 내용이 사라집니다.\n정말 뒤로 가시겠습니까?',
+                  );
                   handleModal();
                 } else {
                   router.back();
@@ -213,7 +212,7 @@ function ReviewModify() {
           <Button onClick={handleSubmit(onSave)} btnName="리뷰 수정" />
         </article>
       </FormProvider>
-      {showModal && modalType && ['cancel', 'save'].includes(modalType) && (
+      {isShowModal && modalType && ['cancel', 'save'].includes(modalType) && (
         <Modal
           type={modalType === 'save' ? 'alert' : 'confirm'}
           confirmBtnName={modalType === 'cancel' ? '아니요' : ''}
@@ -231,11 +230,8 @@ function ReviewModify() {
             }
             setModalType(null);
           }}
-        >
-          <article>
-            <p className="modal-mainText">{modalContent}</p>
-          </article>
-        </Modal>
+          mainText={modalContent}
+        />
       )}
     </>
   );
