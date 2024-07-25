@@ -34,10 +34,6 @@ export const ReviewApi = {
     const response = await fetchWithAuth(
       `/bottle-api/reviews/${alcoholId}?sortType=${sortType}&sortOrder=${sortOrder}&cursor=${cursor}&pageSize=${pageSize}`,
     );
-    console.log(
-      'sortOrder',
-      `/bottle-api/reviews/${alcoholId}?sortType=${sortType}&sortOrder=${sortOrder}&cursor=${cursor}&pageSize=${pageSize}`,
-    );
     if (response.errors.length !== 0) {
       throw new Error('Failed to fetch data');
     }
