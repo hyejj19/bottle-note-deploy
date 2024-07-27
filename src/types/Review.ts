@@ -125,3 +125,12 @@ export interface ReviewPatchApi {
   reviewId: number;
   responseAt: string;
 }
+
+export interface ReviewLikePutApi {
+  message: string;
+  likedId: number;
+  reviewId: number;
+  userId: number;
+  userNickName: string;
+  status: 'LIKE' | 'DISLIKE';
+}
