@@ -4,16 +4,13 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { SubHeader } from '@/app/(primary)/_components/SubHeader';
-import ListManager from '@/components/List/ListManager';
 import { Review as ReviewType } from '@/types/Review';
 import Review from '@/app/(primary)/search/[category]/[id]/_components/Review';
-import Link from 'next/link';
-import EmptyView from '@/app/(primary)/_components/EmptyView';
 import { truncStr } from '@/utils/truncStr';
-import ReviewLayout from '../layout';
 import { Button } from '@/components/Button';
 import List from '@/components/List/List';
 import { SORT_TYPE } from '@/types/common';
+import ReviewLayout from '../layout';
 
 const SORT_OPTIONS = [
   { name: '인기도순', type: SORT_TYPE.POPULAR },

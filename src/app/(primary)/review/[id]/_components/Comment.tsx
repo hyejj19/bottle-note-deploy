@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { truncStr } from '@/utils/truncStr';
 import { formatDate } from '@/utils/formatDate';
-import userImg from 'public/user_img.png';
 import Label from '@/app/(primary)/_components/Label';
 import OptionModal from '@/app/(primary)/_components/OptionModal';
+import userImg from 'public/user_img.png';
 
 interface Props {
   data: {
@@ -20,7 +20,7 @@ interface Props {
 }
 
 function Comment({ data }: Props) {
-  const { userId, nickName, reviewReplyContent, createAt } = data;
+  const { nickName, reviewReplyContent, createAt } = data;
   const [isOptionShow, setIsOptionShow] = useState(false);
   const handleOptionsShow = () => {
     setIsOptionShow((prev) => !prev);
@@ -42,7 +42,7 @@ function Comment({ data }: Props) {
             </div>
             <p className="text-mainGray text-10">{truncStr(nickName, 12)}</p>
             <Label
-              name={'리뷰 작성자'}
+              name="리뷰 작성자"
               style="border-mainCoral text-mainCoral px-1.5 py-0.5 rounded text-9"
             />
           </div>
@@ -56,7 +56,7 @@ function Comment({ data }: Props) {
               }}
             >
               <Image
-                src={'/icon/ellipsis-darkgray.svg'}
+                src="/icon/ellipsis-darkgray.svg"
                 width={10}
                 height={10}
                 alt="report"

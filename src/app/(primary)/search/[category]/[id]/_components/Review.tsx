@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import userImg from 'public/user_img.png';
 import { Review as ReviewType } from '@/types/Review';
 import Label from '@/app/(primary)/_components/Label';
 import { truncStr } from '@/utils/truncStr';
@@ -12,6 +11,7 @@ import { numberWithCommas } from '@/utils/formatNum';
 import { formatDate } from '@/utils/formatDate';
 import Toggle from '@/app/(primary)/_components/Toggle';
 import OptionModal from '@/app/(primary)/_components/OptionModal';
+import userImg from 'public/user_img.png';
 
 interface Props {
   isBest?: boolean;
@@ -163,7 +163,7 @@ function Review({ data, isBest = false, isMine = false }: Props) {
               }}
             >
               <Image
-                src={'/icon/ellipsis-darkgray.svg'}
+                src="/icon/ellipsis-darkgray.svg"
                 width={10}
                 height={10}
                 alt="report"
