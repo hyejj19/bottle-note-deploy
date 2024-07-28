@@ -6,6 +6,7 @@ import {
   ReviewPostApi,
   ReviewQueryParams,
   ReviewPatchApi,
+  ReviewLikePutApi,
   ReviewListApi,
 } from '@/types/Review';
 import { S3_URL_PATH } from '@/constants/common';
@@ -132,5 +133,18 @@ export const ReviewApi = {
     const result: ApiResponse<ReviewPatchApi> = await response;
     console.log('deleteReview', result);
     return result.data;
+  },
+
+  async putLike(reviewId: string | number, isLiked: boolean) {
+    const response = await fetchWithAuth(`/bottle-api/likes`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        reviewId,
+        isLiked: isLiked ? 'LIKE' : 'DISLIKE',
+      }),
+    });
+
+    const result: ApiResponse<ReviewLikePutApi> = await response.data;
+    return await result;
   },
 };
