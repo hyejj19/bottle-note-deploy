@@ -7,21 +7,16 @@ import { formatDate } from '@/utils/formatDate';
 import userImg from 'public/user_img.png';
 import Label from '@/app/(primary)/_components/Label';
 import OptionModal from '@/app/(primary)/_components/OptionModal';
+import { RootReply } from '@/types/Comment';
 
 interface Props {
-  data: {
-    userId: number;
-    imageUrl: string;
-    nickName: string;
-    reviewReplyId: number;
-    reviewReplyContent: string;
-    createAt: string;
-  };
+  data: RootReply;
+  children?: React.ReactNode;
 }
 
-function Comment({ data }: Props) {
-  const { userId, nickName, reviewReplyContent, createAt } = data;
+function Comment({ data, children }: Props) {
   const [isOptionShow, setIsOptionShow] = useState(false);
+  const [isSubReplyShow, setIsSubReplyShow] = useState(false);
   const handleOptionsShow = () => {
     setIsOptionShow((prev) => !prev);
   };
@@ -40,7 +35,9 @@ function Comment({ data }: Props) {
                 height={22}
               />
             </div>
-            <p className="text-mainGray text-10">{truncStr(nickName, 12)}</p>
+            <p className="text-mainGray text-10">
+              {truncStr(data?.nickName, 12)}
+            </p>
             <Label
               name={'리뷰 작성자'}
               style="border-mainCoral text-mainCoral px-1.5 py-0.5 rounded text-9"
@@ -48,7 +45,9 @@ function Comment({ data }: Props) {
           </div>
           {/* </Link> */}
           <div className="flex justify-between">
-            <p className="text-mainGray text-10">{formatDate(createAt)}</p>
+            <p className="text-mainGray text-10">
+              {formatDate(data?.createAt)}
+            </p>
             <button
               className="cursor-pointer"
               onClick={() => {
@@ -64,7 +63,30 @@ function Comment({ data }: Props) {
             </button>
           </div>
         </div>
-        <div className="text-10 text-mainDarkGray">{reviewReplyContent}</div>
+        <div className="text-10 text-mainDarkGray whitespace-pre-wrap break-words">
+          {data?.reviewReplyContent}
+        </div>
+        {data?.subReplyCount !== 0 && (
+          <div
+            className="flex items-center space-x-[2px]"
+            onClick={() => setIsSubReplyShow((prev) => !prev)}
+          >
+            <div className="text-10 text-subCoral">
+              답글 {data?.subReplyCount}개
+            </div>
+            <Image
+              src={
+                isSubReplyShow
+                  ? '/icon/arrow-up-subcoral.svg'
+                  : '/icon/arrow-down-subcoral.svg'
+              }
+              alt="arrowUpIcon"
+              width={10}
+              height={8}
+            />
+          </div>
+        )}
+        {data?.subReplyCount !== 0 && isSubReplyShow && <>{children}</>}
       </div>
       {isOptionShow && (
         <OptionModal
