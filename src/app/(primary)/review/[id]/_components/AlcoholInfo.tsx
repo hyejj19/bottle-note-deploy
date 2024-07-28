@@ -55,11 +55,12 @@ function AlcoholInfo({ data, handleLogin }: Props) {
               <div
                 className="text-10 flex"
                 onClick={() => {
-                  if (session && data.alcoholId) {
-                    router.push(`/review/register?alcoholId=${data.alcoholId}`);
-                  } else {
+                  if (!session || !data.alcoholId) {
                     handleLogin();
+                    return;
                   }
+
+                  router.push(`/review/register?alcoholId=${data.alcoholId}`);
                 }}
               >
                 <Image

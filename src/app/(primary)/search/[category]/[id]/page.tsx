@@ -145,13 +145,13 @@ function SearchCategory() {
                       <button
                         className="text-10 flex"
                         onClick={() => {
-                          if (session && alcoholId) {
-                            router.push(
-                              `/review/register?alcoholId=${alcoholId}`,
-                            );
-                          } else {
+                          if (!session || !alcoholId) {
                             handleModal();
+                            return;
                           }
+                          router.push(
+                            `/review/register?alcoholId=${alcoholId}`,
+                          );
                         }}
                       >
                         <Image
@@ -257,8 +257,7 @@ function SearchCategory() {
                     <div className="border-b border-mainGray/30" />
                     <Review
                       data={data.reviews.bestReviewInfos[0]}
-                      isBest={true}
-                      isMine={true}
+                      handleLogin={handleModal}
                     />
                   </>
                 )}
@@ -266,7 +265,7 @@ function SearchCategory() {
                 data.reviews.recentReviewInfos.length > 0 &&
                 data.reviews.recentReviewInfos.map((review, index) => (
                   <React.Fragment key={review.userId + index}>
-                    <Review data={review} />
+                    <Review data={review} handleLogin={handleModal} />
                   </React.Fragment>
                 ))}
             </section>
