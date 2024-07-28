@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import userImg from 'public/user_img.png';
 import { Review as ReviewType } from '@/types/Review';
 import Label from '@/app/(primary)/_components/Label';
@@ -12,63 +14,67 @@ import { numberWithCommas } from '@/utils/formatNum';
 import { formatDate } from '@/utils/formatDate';
 import Toggle from '@/app/(primary)/_components/Toggle';
 import OptionModal from '@/app/(primary)/_components/OptionModal';
+import { ReviewApi } from '@/app/api/ReviewApi';
+import LikeBtn from '@/app/(primary)/_components/LikeBtn';
 
 interface Props {
-  isBest?: boolean;
-  isMine?: boolean;
   data: ReviewType;
+  handleLogin: () => void;
 }
 
-function Review({ data, isBest = false, isMine = false }: Props) {
-  const {
-    reviewId,
-    userId,
-    imageUrl,
-    nickName,
-    rating,
-    sizeType,
-    price,
-    reviewContent,
-    reviewImageUrl,
-    isMyLike,
-    likeCount,
-    isMyReply,
-    replyCount,
-    createAt,
-    status,
-  } = data;
-
+function Review({ data, handleLogin }: Props) {
+  const router = useRouter();
+  const { data: session } = useSession();
+  const { isLikedByMe } = data;
   const [isOptionShow, setIsOptionShow] = useState(false);
+  const [isLiked, setIsLiked] = useState(isLikedByMe);
+
   const handleOptionsShow = () => {
     setIsOptionShow((prev) => !prev);
   };
+
+  const deleteReview = async () => {
+    if (!data.reviewId) return;
+    try {
+      const result = await ReviewApi.deleteReview(data.reviewId.toString());
+      if (result) {
+        alert('성공적으로 삭제되었습니다.');
+        router.back();
+      }
+    } catch (error) {
+      console.error('Failed to delete review:', error);
+    }
+  };
+
   return (
     <>
-      <div className="space-y-2 border-b border-mainGray/30 pb-3">
+      <div className="space-y-2 border-b border-mainGray/30 pb-3 pt-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-1">
-            <Link href={`/user/${userId}`}>
+            <Link href={`/user/${data.userId}`}>
               <div className="flex items-center space-x-1">
                 <div className="w-7 h-7 rounded-full overflow-hidden">
                   <Image
                     className="object-cover"
-                    src={imageUrl || userImg}
+                    src={data.userProfileImage || userImg}
                     alt="user_img"
                     width={28}
                     height={28}
                   />
                 </div>
-                <p className="text-mainGray text-9">{truncStr(nickName, 12)}</p>
+                <p className="text-mainGray text-9">
+                  {truncStr(data.nickName, 12)}
+                </p>
               </div>
             </Link>
-            {isBest && (
+            {/* {isBest && (
               <Label
                 name="베스트"
                 icon="/icon/thumbup-filled-white.svg"
                 style="bg-mainCoral text-white px-2 py-[0.1rem] text-9 border-mainCoral rounded"
               />
-            )}
-            {isMine && (
+            )} */}
+            {data.isMyReview && (
               <Label
                 name="나의 코멘트"
                 icon="/icon/user-outlined-subcoral.svg"
@@ -77,32 +83,31 @@ function Review({ data, isBest = false, isMine = false }: Props) {
               />
             )}
           </div>
-          <Star rating={rating} size={20} />
+          <Star rating={data.rating} size={20} />
         </div>
         <div className="flex items-center space-x-1">
           <Image
             src={
-              sizeType === 'bottle'
+              data.sizeType === 'BOTTLE'
                 ? '/bottle.svg'
                 : '/icon/glass-filled-subcoral.svg'
             }
             width={12}
             height={12}
-            alt={sizeType === 'bottle' ? 'Bottle Price' : 'Glass Price'}
+            alt={data.sizeType === 'BOTTLE' ? 'Bottle Price' : 'Glass Price'}
           />
           <p className="text-mainGray text-10 font-semibold">
-            {sizeType === 'bottle' ? '병 가격 ' : '잔 가격'}
+            {data.sizeType === 'BOTTLE' ? '병 가격 ' : '잔 가격'}
           </p>
           <p className="text-mainGray text-10 font-light">
-            {numberWithCommas(price)}₩
+            {data.price ? `${numberWithCommas(data.price)} ₩` : '-'}
           </p>
         </div>
-        <div className="grid grid-cols-5 space-x-2" onClick={() => {}}>
+        <div className="grid grid-cols-5 space-x-2">
           <p className="col-span-4 text-mainDarkGray text-10">
-            {/* 클릭 범위 고민 필요 */}
-            <Link href={`/review/${reviewId}`}>
-              {truncStr(reviewContent, 135)}
-              {reviewContent.length > 135 && (
+            <Link href={`/review/${data.reviewId}`}>
+              {truncStr(data.reviewContent, 135)}
+              {data.reviewContent.length > 135 && (
                 <span className="text-mainGray">더보기</span>
               )}
             </Link>
@@ -110,7 +115,7 @@ function Review({ data, isBest = false, isMine = false }: Props) {
           <div className="flex justify-end items-center">
             <Image
               className="w-[3.8rem] h-[3.8rem]"
-              src={reviewImageUrl || userImg}
+              src={data.reviewImageUrl || userImg}
               alt="content_img"
               width={60}
               height={60}
@@ -119,23 +124,23 @@ function Review({ data, isBest = false, isMine = false }: Props) {
         </div>
         <div className="flex justify-between text-9 text-mainGray">
           <div className="flex space-x-3">
+            {/* API 연결 필요 */}
             <div className="flex items-center space-x-1">
-              <Image
-                src={
-                  isMyLike
-                    ? '/icon/thumbup-filled-subcoral.svg'
-                    : '/icon/thumbup-outlined-gray.svg'
-                }
-                width={10}
-                height={10}
-                alt="like"
+              <LikeBtn
+                isLiked={isLiked}
+                handleUpdateLiked={() => setIsLiked((prev) => !prev)}
+                handleError={() => {
+                  setIsLiked(isLikedByMe);
+                }}
+                handleNotLogin={handleLogin}
+                size={10}
               />
-              <p>{likeCount}</p>
+              <p>{data.likeCount}</p>
             </div>
             <div className="flex items-center space-x-1">
               <Image
                 src={
-                  isMyReply
+                  data.hasReplyByMe
                     ? '/icon/comment-filled-subcoral.svg'
                     : '/icon/comment-outlined-gray.svg'
                 }
@@ -143,11 +148,11 @@ function Review({ data, isBest = false, isMine = false }: Props) {
                 height={10}
                 alt="comment"
               />
-              <p>{replyCount}</p>
+              <p>{data.replyCount}</p>
             </div>
-            {userId && ( // 로그인 구현 후 user 확인 후 표시하는 코드 추가
+            {data.userId && ( // API 완성되면 컴포넌트 만들고 연동하기
               <Toggle
-                defaultState={status === 'PUBLIC'}
+                defaultState={data.status === 'PUBLIC'}
                 offValue="리뷰 비공개"
                 onValue="리뷰 공개"
                 onChange={() => {}}
@@ -155,7 +160,7 @@ function Review({ data, isBest = false, isMine = false }: Props) {
             )}
           </div>
           <div className="flex">
-            <p className="text-9">{formatDate(createAt)}</p>
+            <p className="text-9">{formatDate(data.createAt)}</p>
             <button
               className="cursor-pointer"
               onClick={() => {
@@ -174,10 +179,27 @@ function Review({ data, isBest = false, isMine = false }: Props) {
       </div>
       {isOptionShow && (
         <OptionModal
-          options={[
-            { name: '리뷰 신고', path: '' },
-            { name: '유저 신고', path: '' },
-          ]}
+          options={
+            session?.user?.userId === data.userId
+              ? [
+                  {
+                    name: '수정하기',
+                    path: `/review/modify?reviewId=${data.reviewId}`,
+                  },
+                  {
+                    name: '삭제하기',
+                    action: () => {
+                      const result = confirm('정말 삭제하시겠습니까?');
+                      if (result) deleteReview();
+                    },
+                  },
+                ]
+              : [
+                  { name: '리뷰 신고', path: '' },
+                  { name: '유저 신고', path: '' },
+                ]
+          }
+          type={session?.user?.userId === data.userId ? '리뷰' : '신고하기'}
           handleClose={handleOptionsShow}
         />
       )}

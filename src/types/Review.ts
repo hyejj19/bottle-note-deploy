@@ -1,17 +1,17 @@
 export interface Review {
   userId: number;
-  imageUrl: null | string; // 다음주 server 확인 예정
+  userProfileImage: null | string;
   nickName: string;
   reviewId: number;
   reviewContent: string;
   rating: number;
   sizeType: string; // "BOTTLE", "GLASS"
   price: number;
-  viewCount: number;
   likeCount: number;
-  isMyLike: boolean;
+  isLikedByMe: boolean;
   replyCount: number;
-  isMyReply: boolean;
+  isMyReview: boolean;
+  hasReplyByMe: boolean;
   status: 'PUBLIC' | 'PRIVATE';
   reviewImageUrl: null | string;
   createAt: string;
@@ -34,6 +34,11 @@ export interface FormValues {
   zipCode?: string | null;
   address?: string | null;
   detailAddress?: string | null;
+}
+
+export interface ReviewListApi {
+  reviewList: Review[];
+  totalCount: number;
 }
 
 export interface AlcoholInfo {

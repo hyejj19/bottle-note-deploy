@@ -1,142 +1,227 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
+import { ReviewApi } from '@/app/api/ReviewApi';
 import { SubHeader } from '@/app/(primary)/_components/SubHeader';
-import ListManager from '@/components/List/ListManager';
 import { Review as ReviewType } from '@/types/Review';
 import Review from '@/app/(primary)/search/[category]/[id]/_components/Review';
-import Link from 'next/link';
-import EmptyView from '@/app/(primary)/_components/EmptyView';
 import { truncStr } from '@/utils/truncStr';
-import ReviewLayout from '../layout';
 import { Button } from '@/components/Button';
 import List from '@/components/List/List';
-import { SORT_TYPE } from '@/types/common';
+import { SORT_TYPE, SORT_ORDER } from '@/types/common';
+import { usePaginatedQuery } from '@/queries/usePaginatedQuery';
+import { useFilter } from '@/hooks/useFilter';
+import useModalStore from '@/store/modalStore';
+import LoginModal from '@/app/(primary)/_components/LoginModal';
 
 const SORT_OPTIONS = [
   { name: '인기도순', type: SORT_TYPE.POPULAR },
   { name: '별점순', type: SORT_TYPE.RATING },
-  { name: '병 가격 순', type: SORT_TYPE.BOTTLE_ASC },
-  { name: '잔 가격 순', type: SORT_TYPE.GLASS_ASC },
+  { name: '병 가격 순', type: SORT_TYPE.BOTTLE_PRICE },
+  { name: '잔 가격 순', type: SORT_TYPE.GLASS_PRICE },
 ];
+
+interface InitialState {
+  sortType: SORT_TYPE.POPULAR;
+  sortOrder: SORT_ORDER.DESC;
+}
 
 function Reviews() {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
+  const { data: session } = useSession();
   const alcoholId = params?.id;
   const alcoholKorName = searchParams.get('name');
-  const [data, setData] = useState<ReviewType[] | null>(null);
+  const { isShowModal, handleModal } = useModalStore();
   const [activeTab, setActiveTab] = useState('tab1');
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
 
-  // API naming 수정되면 적용하기
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/alcohols/${alcoholId}`,
-          // `${process.env.NEXT_PUBLIC_SERVER_URL}/reviews/${alcoholId}`,
-        );
-        if (response.ok) {
-          const result = await response.json();
-          if (result.data.totalCount !== 0) {
-            setData(result.data.reviews?.recentReviewInfos);
-            // setData(result.data.reviewList);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  const initialState: InitialState = {
+    sortType: SORT_TYPE.POPULAR,
+    sortOrder: SORT_ORDER.DESC,
+  };
 
-    fetchData();
-  }, []);
+  const { state: filterState, handleFilter } = useFilter(initialState);
+
+  const {
+    data: reviewList,
+    isLoading: isFirstLoading,
+    isFetching,
+    targetRef,
+  } = usePaginatedQuery<{
+    reviewList: ReviewType[];
+    totalCount: number;
+  }>({
+    queryKey: ['review', filterState.sortOrder],
+    queryFn: ({ pageParam }) => {
+      return ReviewApi.getReviewList({
+        alcoholId: alcoholId as string,
+        ...filterState,
+        cursor: pageParam,
+        pageSize: 10,
+      });
+    },
+  });
+
+  const { state: filterMyState, handleFilter: handleMyFilter } =
+    useFilter(initialState);
+
+  const {
+    data: myReviewList,
+    isLoading: isMyReviewFirstLoading,
+    isFetching: isMyReviewFetching,
+    targetRef: myReviewTargetRef,
+  } = usePaginatedQuery<{
+    reviewList: ReviewType[];
+    totalCount: number;
+  }>({
+    queryKey: ['myReview', filterMyState],
+    queryFn: ({ pageParam }) => {
+      return ReviewApi.getMyReviewList({
+        alcoholId: alcoholId as string,
+        ...filterMyState,
+        cursor: pageParam,
+        pageSize: 10,
+      });
+    },
+  });
+
   return (
-    <div className="pb-5 relative">
-      <SubHeader bgColor="bg-bgGray">
-        <SubHeader.Left
-          onClick={() => {
-            router.back();
-          }}
-        >
-          <Image
-            src="/icon/arrow-left-subcoral.svg"
-            alt="arrowIcon"
-            width={23}
-            height={23}
-          />
-        </SubHeader.Left>
-        <SubHeader.Center textColor="text-subCoral">
-          {alcoholKorName && truncStr(alcoholKorName, 12)}
-        </SubHeader.Center>
-      </SubHeader>
-      <section className="p-8 space-y-9">
-        <div className="flex gap-3 relative">
-          <button
-            className={`py-2 ${activeTab === 'tab1' ? 'tab-selected' : 'tab-default'} w-full font-bold text-15 text-center`}
-            onClick={() => handleTabClick('tab1')}
+    <>
+      <div className="pb-8 relative">
+        <SubHeader bgColor="bg-bgGray">
+          <SubHeader.Left
+            onClick={() => {
+              router.back();
+            }}
           >
-            모든 리뷰
-          </button>
-          <button
-            className={`py-2 ${activeTab === 'tab2' ? 'tab-selected' : 'tab-default'} w-full font-bold text-15 text-center`}
-            onClick={() => handleTabClick('tab2')}
-          >
-            내가 작성한 리뷰
-          </button>
-        </div>
-        <div>
-          {activeTab === 'tab1' && (
-            <>
-              <List emptyViewText="작성한 리뷰가 없어요!">
-                <List.Total total={data?.length ?? 0} />
-                <List.OptionSelect options={SORT_OPTIONS} />
-                <List.Section className="py-3 space-y-4">
-                  {data &&
-                    data.length !== 0 &&
-                    data.map((review, index) => (
-                      <Review data={review} key={review.userId + index} />
-                    ))}
-                </List.Section>
-              </List>
-            </>
-          )}
+            <Image
+              src="/icon/arrow-left-subcoral.svg"
+              alt="arrowIcon"
+              width={23}
+              height={23}
+            />
+          </SubHeader.Left>
+          <SubHeader.Center textColor="text-subCoral">
+            {alcoholKorName && truncStr(alcoholKorName, 12)}
+          </SubHeader.Center>
+        </SubHeader>
+        <section className="p-8 space-y-9">
+          <div className="flex gap-3 relative">
+            <button
+              className={`py-2 ${activeTab === 'tab1' ? 'tab-selected' : 'tab-default'} w-full font-bold text-15 text-center`}
+              onClick={() => handleTabClick('tab1')}
+            >
+              모든 리뷰
+            </button>
+            <button
+              className={`py-2 ${activeTab === 'tab2' ? 'tab-selected' : 'tab-default'} w-full font-bold text-15 text-center`}
+              onClick={() => handleTabClick('tab2')}
+            >
+              내가 작성한 리뷰
+            </button>
+          </div>
+          <div>
+            {activeTab === 'tab1' && (
+              <>
+                <List
+                  isListFirstLoading={isFirstLoading}
+                  isScrollLoading={isFetching}
+                >
+                  <List.Total
+                    total={reviewList ? reviewList[0].data.totalCount : 0}
+                  />
+                  <List.SortOrderSwitch
+                    type={filterState.sortOrder}
+                    handleSortOrder={(value) =>
+                      handleFilter('sortOrder', value)
+                    }
+                  />
+                  <List.OptionSelect
+                    options={SORT_OPTIONS}
+                    handleOptionCallback={(value) =>
+                      handleFilter('sortType', value)
+                    }
+                  />
+                  <List.Section>
+                    {reviewList &&
+                      [...reviewList.map((list) => list.data.reviewList)]
+                        .flat()
+                        .map((item: ReviewType, idx) => (
+                          <Review
+                            data={item}
+                            key={item?.reviewId + idx}
+                            handleLogin={handleModal}
+                          />
+                        ))}
+                  </List.Section>
+                </List>
+                <div ref={targetRef} />
+              </>
+            )}
 
-          {activeTab === 'tab2' && (
-            <>
-              <List emptyViewText="작성한 리뷰가 없어요!">
-                <List.Total total={data?.length ?? 0} />
-                <List.OptionSelect options={SORT_OPTIONS} />
-                <List.Section className="py-3 space-y-4">
-                  {data &&
-                    data.length !== 0 &&
-                    data.map((review, index) => (
-                      <Review data={review} key={review.userId + index} />
-                    ))}
-                </List.Section>
-              </List>
-            </>
-          )}
-        </div>
-      </section>
-      <section className="px-5 fixed bottom-2 left-0 right-0">
-        <Button
-          onClick={() => {
-            router.push('/review/register');
-          }}
-          btnName="리뷰 작성"
-        />
-      </section>
-    </div>
+            {activeTab === 'tab2' && (
+              <>
+                <List
+                  isListFirstLoading={isMyReviewFirstLoading}
+                  isScrollLoading={isMyReviewFetching}
+                >
+                  <List.Total
+                    total={myReviewList ? myReviewList[0].data.totalCount : 0}
+                  />
+                  <List.SortOrderSwitch
+                    type={filterMyState.sortOrder}
+                    handleSortOrder={(value) =>
+                      handleMyFilter('sortOrder', value)
+                    }
+                  />
+                  <List.OptionSelect
+                    options={SORT_OPTIONS}
+                    handleOptionCallback={(value) =>
+                      handleMyFilter('sortType', value)
+                    }
+                  />
+                  <List.Section>
+                    {myReviewList &&
+                      [...myReviewList.map((list) => list.data.reviewList)]
+                        .flat()
+                        .map((item: ReviewType, idx) => (
+                          <Review
+                            data={item}
+                            key={item?.reviewId + idx}
+                            handleLogin={handleModal}
+                          />
+                        ))}
+                  </List.Section>
+                </List>
+                <div ref={myReviewTargetRef} />
+              </>
+            )}
+          </div>
+        </section>
+        <section className="px-5 fixed bottom-2 left-0 right-0">
+          <Button
+            onClick={() => {
+              if (!session || !alcoholId) {
+                handleModal();
+                return;
+              }
+              router.push(`/review/register?alcoholId=${alcoholId}`);
+            }}
+            btnName="리뷰 작성"
+          />
+        </section>
+      </div>
+      {isShowModal && <LoginModal handleClose={handleModal} />}
+    </>
   );
 }
 
 export default Reviews;
-
-Reviews.getLayout = (page: any) => <ReviewLayout>{page}</ReviewLayout>;

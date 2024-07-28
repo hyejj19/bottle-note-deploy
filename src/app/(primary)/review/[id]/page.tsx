@@ -19,6 +19,62 @@ import type {
 import useModalStore from '@/store/modalStore';
 import Modal from '@/components/Modal';
 import LoginModal from '@/app/(primary)/_components/LoginModal';
+import CommentInput from './_components/CommentInput';
+import { RootReply } from '@/types/Comment';
+
+// comment 더미 데이터
+const COMMENT_DATA: RootReply[] = [
+  {
+    userId: 0,
+    imageUrl: 'https://picsum.photos/500',
+    nickName: 'EKyCfReuzu',
+    reviewReplyId: 0,
+    reviewReplyContent:
+      'GKyheCgkkBTCjGVCLPxNzRxcAHTFlBfJDrbeHqYBrqfJrqClTSiCQKkxxOKNAZCxntAIHYgSowapgmstaMDUMgRUCgKYwEOCduCESPkdRFWCiuxapKVNbSuEhJBXINzyNJulwgtRXKHZiUVSocVlxV',
+    subReplyCount: 4,
+    createAt: '2024-07-11T00:00:00',
+  },
+  {
+    userId: 1,
+    imageUrl: 'https://picsum.photos/500',
+    nickName: 'exIEwrCesh',
+    reviewReplyId: 1,
+    reviewReplyContent:
+      'doiJwoiUPRSeyWvSgGZwqWPyHiMGjrHKLmdLgMIhcUEbDXOKzOKtoMllfykmNRxSynPwkRTjcJCWLRHBQouMChQISXXfzydlmDYuSLDamdyBJGEOsimvIqOScyDsFpiRDhjhUDxZDXBWpOoDPFyALI',
+    subReplyCount: 3,
+    createAt: '2024-07-11T00:00:00',
+  },
+  {
+    userId: 2,
+    imageUrl: 'https://picsum.photos/500',
+    nickName: 'wNisiHsnak',
+    reviewReplyId: 2,
+    reviewReplyContent:
+      'jwmmSnAdvuwDGZLtWIqFryulMOioroOZnjiqMATUCsDeGswyjsEKYCBvqdbyhZOiMZklpDXJgLVHrITNsbgQaPpOlxAOKeIDMZbmzXnUzdwxLyKrnhpEBhRxeRaZzFiezSifTRvyPSoSCgtOnOclKf',
+    subReplyCount: 2,
+    createAt: '2024-07-11T00:00:00',
+  },
+  {
+    userId: 3,
+    imageUrl: 'https://picsum.photos/500',
+    nickName: 'tDzVQRiVvY',
+    reviewReplyId: 3,
+    reviewReplyContent:
+      'fAadQHQKjunqpdONROSqIVzEqvfonJRseBklUkQOJLtHRWgVOUdfCnkBjYFbNOrPQpvADPtBRGQwpAolkdbfTCRJbewQiohhGVNxhZjWBBmcYMSxIiosuRTpDSepBXzQWohJPgVsoICUGSLvRROJOf',
+    subReplyCount: 4,
+    createAt: '2024-07-11T00:00:00',
+  },
+  {
+    userId: 4,
+    imageUrl: 'https://picsum.photos/500',
+    nickName: 'MPFndOCmyJ',
+    reviewReplyId: 4,
+    reviewReplyContent:
+      'msSklSfIcnhLzPFMygIYXjsDwfUCIBnamJuPvIcoAQVatJWBKqYPVGFKktqJrdNfkTkQvqSDuRXIoEfCvjfzrViSeShacqeZMVdxNhclfkHwqTdOdrqJsoxlpJahCCxuEYVZTHjzckZbvCtYcOohKh',
+    subReplyCount: 4,
+    createAt: '2024-07-11T00:00:00',
+  },
+];
 
 export default function ReviewDetail() {
   const router = useRouter();
@@ -116,28 +172,42 @@ export default function ReviewDetail() {
               handleLogin={handleLogin}
             />
             {/* 댓글 api 변경으로 댓글 구현 시 수정 예정 */}
-            {/* {data?.reviewReplyList ? (
-            <>
-              <div className="h-4 bg-sectionWhite" />
-              <section className="mx-5 py-5 space-y-4">
-                {data?.reviewReplyList?.map((comment, index) => (
-                  <React.Fragment key={comment.userId + index}>
-                    <Comment data={comment} />
-                    {index !== data?.reviewReplyList?.length - 1 && (
-                      <div className="border-b border-mainGray/30" />
-                    )}
-                  </React.Fragment>
-                ))}
-              </section>
-            </>
-          ) : (
-            <> */}
-            <div className="h-4 bg-sectionWhite" />
-            <section className="py-5">
-              <EmptyView text="아직 댓글이 없어요!" />
-            </section>
-            {/* </>
-          )} */}
+            {COMMENT_DATA ? (
+              <>
+                <div className="h-4 bg-sectionWhite" />
+                <section className="mx-5 py-5 space-y-4 pb-40">
+                  {COMMENT_DATA.map((comment, index) => (
+                    <React.Fragment key={comment.userId + index}>
+                      <Comment data={comment}>
+                        {comment.subReplyCount > 0 &&
+                          COMMENT_DATA.map((subComment, subIndex) => (
+                            <>
+                              <div className="border-b border-mainCoral/30" />
+                              <div
+                                className="ml-5"
+                                key={comment.userId + subIndex + index}
+                              >
+                                <Comment data={subComment} />
+                              </div>
+                            </>
+                          ))}
+                      </Comment>
+                      {index !== COMMENT_DATA.length - 1 && (
+                        <div className="border-b border-mainGray/30" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </section>
+              </>
+            ) : (
+              <>
+                <div className="h-4 bg-sectionWhite" />
+                <section className="py-5">
+                  <EmptyView text="아직 댓글이 없어요!" />
+                </section>
+              </>
+            )}
+            <CommentInput />
           </NavLayout>
           {isShowModal && modalType === 'copy' && (
             <Modal

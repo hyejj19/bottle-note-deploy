@@ -1,4 +1,4 @@
-import { ApiResponse } from '@/types/common';
+import { ApiResponse, ListQueryParams } from '@/types/common';
 import { fetchWithAuth } from '@/utils/fetchWithAuth';
 import { PreSignedApi } from '@/types/Image';
 import {
@@ -7,6 +7,7 @@ import {
   ReviewQueryParams,
   ReviewPatchApi,
   ReviewLikePutApi,
+  ReviewListApi,
 } from '@/types/Review';
 import { S3_URL_PATH } from '@/constants/common';
 
@@ -22,6 +23,45 @@ export const ReviewApi = {
 
     const result: ApiResponse<PreSignedApi> = await response;
     return result.data;
+  },
+
+  async getReviewList({
+    alcoholId,
+    sortType,
+    sortOrder,
+    cursor,
+    pageSize,
+  }: ListQueryParams) {
+    const response = await fetchWithAuth(
+      `/bottle-api/reviews/${alcoholId}?sortType=${sortType}&sortOrder=${sortOrder}&cursor=${cursor}&pageSize=${pageSize}`,
+    );
+    if (response.errors.length !== 0) {
+      throw new Error('Failed to fetch data');
+    }
+
+    const result: ApiResponse<ReviewListApi> = await response;
+
+    return result;
+  },
+
+  async getMyReviewList({
+    alcoholId,
+    sortType,
+    sortOrder,
+    cursor,
+    pageSize,
+  }: ListQueryParams) {
+    const response = await fetchWithAuth(
+      `/bottle-api/reviews/me/${alcoholId}?sortType=${sortType}&sortOrder=${sortOrder}&cursor=${cursor}&pageSize=${pageSize}`,
+    );
+
+    if (response.errors.length !== 0) {
+      throw new Error('Failed to fetch data');
+    }
+
+    const result: ApiResponse<ReviewListApi> = await response;
+
+    return result;
   },
 
   async getReviewDetails(reviewId: string | string[]) {
