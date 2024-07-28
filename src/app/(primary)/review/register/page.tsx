@@ -1,0 +1,236 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useForm, FormProvider } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { SubHeader } from '@/app/(primary)/_components/SubHeader';
+import AlcoholInfo from '@/app/(primary)/review/_components/AlcoholInfo';
+import { AlcoholsApi } from '@/app/api/AlcholsApi';
+import { AlcoholInfo as AlcoholDetails } from '@/types/Alcohol';
+import { FormValues } from '@/types/Review';
+import { ReviewApi } from '@/app/api/ReviewApi';
+import { RateApi } from '@/app/api/RateApi';
+import { uploadImages } from '@/utils/S3Upload';
+import { Button } from '@/components/Button';
+import useModalStore from '@/store/modalStore';
+import Modal from '@/components/Modal';
+import ReviewForm from '../_components/ReviewForm';
+
+function ReviewRegister() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { isShowModal, handleModal } = useModalStore();
+  const alcoholId = searchParams.get('alcoholId') || '';
+  const [alcoholData, setAlcoholData] = useState<AlcoholDetails>();
+  const [initialRating, setInitialRating] = useState<number>(0);
+  const [modalType, setModalType] = useState<'save' | 'cancel' | null>(null);
+  const [modalContent, setModalContent] = useState<string>('');
+  const [modalSubContent, setModalSubContent] = useState<string>('');
+  const [reviewId, setReviewId] = useState<number | null>(null);
+
+  const schema = yup.object({
+    review: yup.string().required('리뷰 내용을 작성해주세요.'),
+    status: yup.string().required(),
+    price_type: yup
+      .mixed<'GLASS' | 'BOTTLE'>()
+      .oneOf(['GLASS', 'BOTTLE'])
+      .required(),
+  });
+
+  const formMethods = useForm<FormValues>({
+    mode: 'onChange',
+    resolver: yupResolver(schema),
+  });
+
+  const {
+    handleSubmit,
+    reset,
+    formState: { isDirty, errors },
+  } = formMethods;
+
+  const onSubmit = async (
+    data: FormValues,
+    imgUrl?: { order: number; viewUrl: string }[],
+  ) => {
+    // 별점 POST api
+    const ratingParams = {
+      alcoholId,
+      rating: data.rating ?? 0,
+    };
+    // 리뷰 POST api
+    const reviewParams = {
+      alcoholId,
+      status: data.status,
+      content: data.review,
+      sizeType: data.price ? data.price_type : null,
+      price: data.price,
+      imageUrlList: imgUrl ?? null,
+      tastingTagList: data.flavor_tags,
+      locationInfo: {
+        zipCode: data.zipCode,
+        address: data.address,
+        detailAddress: data.detailAddress,
+      },
+    };
+
+    let ratingResult = null;
+    if (initialRating !== data.rating) {
+      ratingResult = await RateApi.postRating(ratingParams);
+    }
+    const reviewResult = await ReviewApi.registerReview(reviewParams);
+
+    // error에 대해 추후 보완 예정
+    if (
+      (initialRating !== data.rating && ratingResult && reviewResult) ||
+      (initialRating === data.rating && reviewResult) ||
+      (initialRating !== data.rating && reviewResult && !ratingResult)
+    ) {
+      setReviewId(reviewResult.id);
+      const text =
+        initialRating !== data.rating && !ratingResult
+          ? '❗️별점 등록에는 실패했습니다. 다시 시도해주세요.'
+          : '여정에 한발 더 가까워지셨어요!';
+      setModalContent('작성을 완료했습니다 👍');
+      setModalSubContent(text);
+      setModalType('save');
+      handleModal();
+    } else if (initialRating !== data.rating && ratingResult && !reviewResult) {
+      // alert('리뷰는 등록되지 않았습니다.');
+      router.back();
+    }
+  };
+
+  const onUploadS3 = async (data: FormValues) => {
+    const images = data?.images?.map((file) => file.image);
+
+    if (images) {
+      try {
+        const PreSignedDBData = await uploadImages('review', images);
+        onSubmit(data, PreSignedDBData);
+      } catch (error) {
+        console.error('S3 업로드 에러:', error);
+      }
+    }
+  };
+
+  const onSave = (data: FormValues) => {
+    // console.log('data1', data);
+    if (data.images?.length !== 0) {
+      onUploadS3(data);
+    } else {
+      onSubmit(data);
+    }
+  };
+
+  useEffect(() => {
+    reset({
+      review: '',
+      status: 'PUBLIC',
+      price_type: 'GLASS',
+      price: null,
+      flavor_tags: [],
+      images: [],
+      imageUrlList: null,
+      zipCode: null,
+      address: null,
+      detailAddress: null,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (alcoholId) {
+      (async () => {
+        const alcoholResult = await AlcoholsApi.getAlcoholDetails(alcoholId);
+        setAlcoholData(alcoholResult.alcohols);
+
+        const ratingResult = await RateApi.getUserRating(alcoholId);
+        setInitialRating(ratingResult.rating);
+        reset((prev) => ({
+          ...prev,
+          rating: ratingResult.rating,
+        }));
+      })();
+    }
+  }, [alcoholId]);
+
+  useEffect(() => {
+    if (errors.review?.message) {
+      setModalContent(errors.review?.message);
+      handleModal();
+      setModalType('save');
+    }
+  }, [errors]);
+
+  return (
+    <>
+      <FormProvider {...formMethods}>
+        <div className="relative">
+          {alcoholData?.alcoholUrlImg && (
+            <div
+              className="absolute w-full h-full  bg-cover bg-center"
+              style={{ backgroundImage: `url(${alcoholData.alcoholUrlImg})` }}
+            />
+          )}
+          <div className="absolute w-full h-full bg-mainCoral bg-opacity-90" />
+          <SubHeader bgColor="bg-mainCoral/10">
+            <SubHeader.Left
+              onClick={() => {
+                if (isDirty) {
+                  setModalType('cancel');
+                  setModalContent(
+                    '작성 중인 내용이 사라집니다.\n정말 뒤로 가시겠습니까?',
+                  );
+                  handleModal();
+                } else {
+                  router.back();
+                }
+              }}
+            >
+              <Image
+                src="/icon/arrow-left-white.svg"
+                alt="arrowIcon"
+                width={23}
+                height={23}
+              />
+            </SubHeader.Left>
+            <SubHeader.Center textColor="text-white">
+              리뷰 작성
+            </SubHeader.Center>
+          </SubHeader>
+          {alcoholData && <AlcoholInfo data={alcoholData} />}
+        </div>
+        {alcoholData && <ReviewForm korName={alcoholData.korName} />}
+        <article className="px-5 fixed bottom-2 center left-0 right-0">
+          <Button onClick={handleSubmit(onSave)} btnName="리뷰 등록" />
+        </article>
+      </FormProvider>
+      {isShowModal && modalType && ['cancel', 'save'].includes(modalType) && (
+        <Modal
+          type={modalType === 'cancel' ? 'confirm' : 'alert'}
+          confirmBtnName={modalType === 'cancel' ? '아니요' : ''}
+          cancelBtnName={modalType === 'cancel' ? '예' : ''}
+          handleCancel={() => {
+            handleModal();
+            if (modalType === 'cancel' && isDirty) {
+              router.back();
+            }
+          }}
+          handleConfirm={() => {
+            handleModal();
+            setModalType(null);
+            if (modalType === 'save' && reviewId) {
+              router.push(`/review/${reviewId}`);
+            }
+          }}
+          mainText={modalContent}
+          subText={modalSubContent}
+        />
+      )}
+    </>
+  );
+}
+
+export default ReviewRegister;
