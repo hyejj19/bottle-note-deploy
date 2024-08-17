@@ -10,9 +10,18 @@ import Reply from './Reply';
 interface Props {
   reviewId: string | string[];
   isRefetch: boolean;
+  setIsRefetch: React.Dispatch<React.SetStateAction<boolean>>;
+  isSubReplyShow: boolean;
+  resetSubReplyToggle: (value?: boolean) => void;
 }
 
-export default function ReplyList({ reviewId, isRefetch }: Props) {
+export default function ReplyList({
+  reviewId,
+  isRefetch,
+  setIsRefetch,
+  isSubReplyShow,
+  resetSubReplyToggle,
+}: Props) {
   const { data: session } = useSession();
   const [subReplyList, setSubReplyList] = useState<SubReplyListApi>();
 
@@ -44,7 +53,9 @@ export default function ReplyList({ reviewId, isRefetch }: Props) {
 
   useEffect(() => {
     if (isRefetch) {
-      refetchRootReply();
+      // 다음 pr에서 대댓글 수정하며 같이 리팩토링 예정
+      refetchRootReply().then(() => setSubReplyList(undefined));
+      setIsRefetch(false);
     }
   }, [isRefetch]);
 
@@ -65,6 +76,10 @@ export default function ReplyList({ reviewId, isRefetch }: Props) {
                       data={comment}
                       getSubReplyList={getSubReplyList}
                       isReviewUser={comment.userId === session?.user.userId}
+                      reviewId={reviewId}
+                      setIsRefetch={setIsRefetch}
+                      isSubReplyShow={isSubReplyShow}
+                      resetSubReplyToggle={resetSubReplyToggle}
                     >
                       {(subReplyList?.totalCount ?? 0) > 0 &&
                         subReplyList?.reviewReplies.map((subComment) => (
@@ -80,6 +95,8 @@ export default function ReplyList({ reviewId, isRefetch }: Props) {
                                 isReviewUser={
                                   subComment.userId === session?.user.userId
                                 }
+                                reviewId={reviewId}
+                                setIsRefetch={setIsRefetch}
                               />
                             </div>
                           </React.Fragment>

@@ -3,12 +3,16 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 import { useFormContext } from 'react-hook-form';
+import { ReplyApi } from '@/app/api/ReplyApi';
 import { truncStr } from '@/utils/truncStr';
 import { formatDate } from '@/utils/formatDate';
 import Label from '@/app/(primary)/_components/Label';
 import OptionModal from '@/app/(primary)/_components/OptionModal';
 import { RootReply, SubReply } from '@/types/Reply';
+import useModalStore from '@/store/modalStore';
+import Modal from '@/components/Modal';
 import userImg from 'public/user_img.png';
 
 interface Props {
@@ -16,18 +20,35 @@ interface Props {
   children?: React.ReactNode;
   getSubReplyList?: (rootReplyId: number) => void;
   isReviewUser: boolean;
+  reviewId: string | string[];
+  setIsRefetch: React.Dispatch<React.SetStateAction<boolean>>;
+  isSubReplyShow?: boolean;
+  resetSubReplyToggle?: (value?: boolean) => void;
 }
 
-function Reply({ data, children, getSubReplyList, isReviewUser }: Props) {
+function Reply({
+  data,
+  children,
+  getSubReplyList,
+  isReviewUser,
+  reviewId,
+  setIsRefetch,
+  isSubReplyShow = false,
+  resetSubReplyToggle,
+}: Props) {
+  const { data: session } = useSession();
   const { setValue } = useFormContext();
+  const { isShowModal, handleModal } = useModalStore();
   const [isOptionShow, setIsOptionShow] = useState(false);
-  const [isSubReplyShow, setIsSubReplyShow] = useState(false);
+
   const handleOptionsShow = () => {
     setIsOptionShow((prev) => !prev);
   };
 
   const handleUpdateSubReply = () => {
-    setIsSubReplyShow((prev) => !prev);
+    if (resetSubReplyToggle) {
+      resetSubReplyToggle();
+    }
     if (getSubReplyList) getSubReplyList(data?.reviewReplyId);
   };
 
@@ -35,6 +56,22 @@ function Reply({ data, children, getSubReplyList, isReviewUser }: Props) {
     if (data?.nickName && data?.reviewReplyId) {
       setValue('replyToReplyUserName', data.nickName);
       setValue('parentReplyId', data.reviewReplyId);
+    }
+  };
+
+  const deleteReply = async () => {
+    if (!data?.reviewReplyId) return;
+    try {
+      const result = await ReplyApi.deleteReply(
+        reviewId.toString(),
+        data.reviewReplyId.toString(),
+      );
+      if (result) {
+        handleModal();
+        setIsRefetch(true);
+      }
+    } catch (error) {
+      console.error('Failed to delete review:', error);
     }
   };
 
@@ -68,6 +105,7 @@ function Reply({ data, children, getSubReplyList, isReviewUser }: Props) {
             <p className="text-mainGray text-10">
               {formatDate(data?.createAt)}
             </p>
+            {/* 삭제된 댓글에 대한 조건 추가 필요 API 수정되면 적용 예정 */}
             <button
               className="cursor-pointer"
               onClick={() => {
@@ -91,6 +129,7 @@ function Reply({ data, children, getSubReplyList, isReviewUser }: Props) {
         </div>
         <div className="space-y-1">
           <div className="flex space-x-2">
+            {/* 삭제된 댓글에 대한 조건 추가 필요 API 수정되면 적용 예정 */}
             <button className="text-10 text-subCoral" onClick={updateReplyUser}>
               답글 달기
             </button>
@@ -120,13 +159,40 @@ function Reply({ data, children, getSubReplyList, isReviewUser }: Props) {
             isSubReplyShow && <div className="space-y-3">{children}</div>}
         </div>
       </div>
+      {/* 댓글, 대댓글 완료 후 일괄 modal 적용하면서 삭제 예정 컴포넌트 입니다. */}
       {isOptionShow && (
         <OptionModal
-          options={[
-            { name: '리뷰 신고', path: '' },
-            { name: '유저 신고', path: '' },
-          ]}
+          options={
+            session?.user?.userId === data?.userId
+              ? [
+                  {
+                    name: '삭제하기',
+                    action: () => {
+                      // eslint-disable-next-line no-restricted-globals
+                      const result = confirm('정말 댓글을 삭제하시겠습니까?');
+                      if (result) deleteReply();
+                    },
+                  },
+                ]
+              : [
+                  { name: '리뷰 신고', path: '' },
+                  { name: '유저 신고', path: '' },
+                ]
+          }
+          type={session?.user?.userId === data?.userId ? '댓글' : '신고하기'}
           handleClose={handleOptionsShow}
+        />
+      )}
+      {isShowModal && (
+        <Modal
+          type="alert"
+          handleConfirm={() => {
+            handleModal();
+            if (resetSubReplyToggle) {
+              resetSubReplyToggle(false);
+            }
+          }}
+          mainText="성공적으로 삭제되었습니다."
         />
       )}
     </>
