@@ -52,10 +52,7 @@ export default function ReviewDetail() {
     resolver: yupResolver(schema),
   });
 
-  const {
-    reset,
-    // formState: { isDirty, errors },
-  } = formMethods;
+  const { reset } = formMethods;
 
   const handleLogin = () => {
     setModalType('login');
@@ -76,9 +73,23 @@ export default function ReviewDetail() {
   };
 
   const handleCreateReply: SubmitHandler<FieldValues> = async (data) => {
+    let saveContent = data.content;
+    let saveParentReplyId = data.parentReplyId;
+
+    const replyToReplyUserName = data.content.match(/@(\S+?)\s/);
+
+    if (
+      replyToReplyUserName &&
+      replyToReplyUserName[1] === data.replyToReplyUserName
+    ) {
+      saveContent = data.content.replace(/@(\S+?)\s/, '');
+    } else {
+      saveParentReplyId = null;
+    }
+
     const replyParams = {
-      content: data.content,
-      parentReplyId: data.parentReplyId,
+      content: saveContent,
+      parentReplyId: saveParentReplyId,
     };
 
     const response = await ReplyApi.registerReply(
