@@ -2,10 +2,16 @@
 import { useState } from 'react';
 import Image from 'next/image';
 // import { filterNumbers } from '@/utils/filterNumbers';
+import { UserApi } from '@/app/api/UserApi';
+import { validate } from '@/utils/validate';
+import Modal from '@/components/Modal';
+import useModalStore from '@/store/modalStore';
+import { ApiResponse } from '@/types/common';
 import CloseIconGray from 'public/icon/close-brightgray.svg';
 
 function EditForm() {
   const [nickName, setNickName] = useState('');
+  const { handleModalState, state } = useModalStore();
   // const [birthDate, setBirthDate] = useState('');
   // const [gender, setGender] = useState<'MALE' | 'FEMALE' | null>(null);
 
@@ -13,9 +19,58 @@ function EditForm() {
     setNickName('');
   };
 
-  const handelRegisterNickName = () => {
-    // TODO: api 연동
-    alert(`변경 api 연동 준비중입니다..ㅎㅎ\n얼른할게요 ㅠㅠ`);
+  const validateNickName = (subject: string) => {
+    const isValidLength = validate.length({ value: subject, min: 2, max: 11 });
+    if (!isValidLength) {
+      return isValidLength;
+    }
+
+    const isValidValue = validate.isKoreanAlphaNumeric(subject);
+
+    if (!isValidValue) {
+      return isValidValue;
+    }
+
+    const hasSpace = validate.hasSpace(subject);
+    if (hasSpace) {
+      return hasSpace;
+    }
+
+    return true;
+  };
+
+  const handelRegisterNickName = async (newNickName: string) => {
+    if (!validateNickName(newNickName)) {
+      return handleModalState({
+        isShowModal: true,
+        mainText: `닉네임은 2 ~ 11자의\n한글, 영문, 숫자만 가능합니다.`,
+      });
+    }
+
+    try {
+      const result = await UserApi.changeNickname(newNickName);
+
+      if (result.code === 200) {
+        return handleModalState({
+          isShowModal: true,
+          mainText: `저장되었습니다.`,
+        });
+      }
+    } catch (e) {
+      const errorRes = e as ApiResponse<any>;
+      if (errorRes.errors[0].code === 'USER_NICKNAME_NOT_VALID') {
+        return handleModalState({
+          isShowModal: true,
+          mainText: `이미 사용중인 닉네임입니다.👀`,
+          subText: `다른 닉네임으로 변경해주세요.`,
+        });
+      }
+
+      return handleModalState({
+        isShowModal: true,
+        mainText: `변경 및 저장에 실패했습니다..`,
+      });
+    }
   };
 
   // const handleGender = (selectedGender: 'MALE' | 'FEMALE') => {
@@ -26,39 +81,40 @@ function EditForm() {
   // };
 
   return (
-    <div className="flex flex-col gap-8">
-      <div>
-        <article className="flex flex-col relative">
-          <label className="text-13 text-mainDarkGray">닉네임</label>
-          <input
-            placeholder="닉네임 입력"
-            className="border-b border-mainGray py-2 text-15 placeholder:text-[#BFBFBF]"
-            value={nickName}
-            onChange={(e) => setNickName(e.target.value)}
-            type="text"
-            maxLength={19}
-          />
-
-          <div className="flex  gap-2 absolute bottom-2 right-0">
-            <Image
-              src={CloseIconGray}
-              alt="닉네임 리셋"
-              onClick={handleResetNickName}
+    <>
+      <div className="flex flex-col gap-8">
+        <div>
+          <article className="flex flex-col relative">
+            <label className="text-13 text-mainDarkGray">닉네임</label>
+            <input
+              placeholder="닉네임 입력"
+              className="border-b border-mainGray py-2 text-15 placeholder:text-[#BFBFBF]"
+              value={nickName}
+              onChange={(e) => setNickName(e.target.value)}
+              type="text"
+              maxLength={19}
             />
-            <button
-              className="label-selected text-10 disabled:label-disabled"
-              onClick={handelRegisterNickName}
-              disabled={!nickName}
-            >
-              변경
-            </button>
-          </div>
-        </article>
-        <div className="text-right clear-start text-mainGray text-10 mt-1">{`${nickName.length}/20`}</div>
-      </div>
 
-      {/* NOTE: 본인인증, 성별 관련하여 변동 가능성 있어 주석처리 */}
-      {/* <div>
+            <div className="flex  gap-2 absolute bottom-2 right-0">
+              <Image
+                src={CloseIconGray}
+                alt="닉네임 리셋"
+                onClick={handleResetNickName}
+              />
+              <button
+                className="label-selected text-10 disabled:label-disabled"
+                onClick={() => handelRegisterNickName(nickName)}
+                disabled={!nickName}
+              >
+                변경
+              </button>
+            </div>
+          </article>
+          <div className="text-right clear-start text-mainGray text-10 mt-1">{`${nickName.length}/20`}</div>
+        </div>
+
+        {/* NOTE: 본인인증, 성별 관련하여 변동 가능성 있어 주석처리 */}
+        {/* <div>
         <article className="flex flex-col relative">
           <label className="text-13 text-mainDarkGray">생년월일</label>
           <div className="flex border-b border-mainGray">
@@ -89,7 +145,7 @@ function EditForm() {
         </article>
       </div> */}
 
-      {/* <div>
+        {/* <div>
         <article className="flex flex-col relative">
           <label className="text-13 text-mainDarkGray">
             성별
@@ -111,7 +167,9 @@ function EditForm() {
           </div>
         </article>
       </div> */}
-    </div>
+      </div>
+      <Modal mainText={state.mainText} subText={state.subText} />
+    </>
   );
 }
 
