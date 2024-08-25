@@ -16,10 +16,10 @@ export async function POST(req: NextRequest) {
 
     if (!res.ok) throw new Error(`Kakao login falied : ${res.status}`);
 
-    const { data } = await res.json();
+    const response = await res.json();
 
     return NextResponse.json({
-      data,
+      data: response,
     });
   } catch (e) {
     return NextResponse.json({
