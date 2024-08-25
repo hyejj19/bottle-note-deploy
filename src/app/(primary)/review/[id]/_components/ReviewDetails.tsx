@@ -12,6 +12,7 @@ import { numberWithCommas } from '@/utils/formatNum';
 import { formatDate } from '@/utils/formatDate';
 import { shareOrCopy } from '@/utils/shareOrCopy';
 import { ReviewApi } from '@/app/api/ReviewApi';
+import LikeBtn from '@/app/(primary)/_components/LikeBtn';
 import OptionModal from '@/app/(primary)/_components/OptionModal';
 import { ReviewDetailsWithoutAlcoholInfo } from '@/types/Review';
 import ProfileDefaultImg from 'public/profile-default.svg';
@@ -20,13 +21,15 @@ interface Props {
   data: ReviewDetailsWithoutAlcoholInfo;
   handleShare: () => void;
   handleLogin: () => void;
+  textareaRef: React.RefObject<HTMLTextAreaElement>;
 }
 
-function ReviewDetails({ data, handleShare, handleLogin }: Props) {
+function ReviewDetails({ data, handleShare, handleLogin, textareaRef }: Props) {
   const router = useRouter();
   const { data: session } = useSession();
   const [isShowStatus, setIsShowStatus] = useState<boolean>(true);
   const [isOptionShow, setIsOptionShow] = useState(false);
+  const [isLiked, setIsLiked] = useState(data?.reviewResponse?.isLikedByMe);
 
   const handleOptionsShow = () => setIsShowStatus((prev) => !prev);
 
@@ -151,79 +154,71 @@ function ReviewDetails({ data, handleShare, handleLogin }: Props) {
         {data.reviewResponse?.reviewTastingTag.length !== 0 && (
           <FlavorTag tagList={data.reviewResponse.reviewTastingTag} />
         )}
-        <section className="mx-5 py-5 space-y-2 border-b border-mainGray/30 ">
-          {data.reviewResponse?.price && data.reviewResponse?.sizeType && (
-            <div className="flex items-center space-x-1">
-              <Image
-                src={
-                  data.reviewResponse.sizeType === 'BOTTLE'
-                    ? '/bottle.svg'
-                    : '/icon/glass-filled-subcoral.svg'
-                }
-                width={15}
-                height={15}
-                alt={
-                  data.reviewResponse.sizeType === 'BOTTLE'
-                    ? 'Bottle Price'
-                    : 'Glass Price'
-                }
-              />
-              <p className="text-mainDarkGray text-10 font-semibold">
-                {data.reviewResponse.sizeType === 'BOTTLE'
-                  ? '병 가격 '
-                  : '잔 가격'}
-              </p>
-              <p className="text-mainDarkGray text-10 font-light">
-                {numberWithCommas(data.reviewResponse.price)}₩
-              </p>
-            </div>
-          )}
-          {/* 주소 형태 변경 예정으로 임시 적용 */}
-          {data.reviewResponse?.address && (
-            <div className="flex items-start space-x-1">
-              <Image
-                src="/icon/placepoint-subcoral.svg"
-                width={15}
-                height={15}
-                alt="address"
-              />
-              <p className="text-mainDarkGray text-10 font-semibold">장소</p>
-              <p className="text-mainDarkGray text-10">
-                <>
-                  {data.reviewResponse?.zipCode}
-                  <br />
-                  {data.reviewResponse?.address}
-                  <br />
-                  {data.reviewResponse?.detailAddress}
-                </>
-              </p>
-            </div>
-          )}
-        </section>
+        {(data.reviewResponse?.address ||
+          (!!data.reviewResponse?.price && data.reviewResponse?.sizeType)) && (
+          <section className="mx-5 py-5 space-y-2 border-b border-mainGray/30 ">
+            {data.reviewResponse?.price && data.reviewResponse?.sizeType && (
+              <div className="flex items-center space-x-1">
+                <Image
+                  src={
+                    data.reviewResponse.sizeType === 'BOTTLE'
+                      ? '/bottle.svg'
+                      : '/icon/glass-filled-subcoral.svg'
+                  }
+                  width={15}
+                  height={15}
+                  alt={
+                    data.reviewResponse.sizeType === 'BOTTLE'
+                      ? 'Bottle Price'
+                      : 'Glass Price'
+                  }
+                />
+                <p className="text-mainDarkGray text-10 font-semibold">
+                  {data.reviewResponse.sizeType === 'BOTTLE'
+                    ? '병 가격 '
+                    : '잔 가격'}
+                </p>
+                <p className="text-mainDarkGray text-10 font-light">
+                  {numberWithCommas(data.reviewResponse.price)}₩
+                </p>
+              </div>
+            )}
+            {/* 주소 형태 변경 예정으로 임시 적용 */}
+            {data.reviewResponse?.address && (
+              <div className="flex items-start space-x-1">
+                <Image
+                  src="/icon/placepoint-subcoral.svg"
+                  width={15}
+                  height={15}
+                  alt="address"
+                />
+                <p className="text-mainDarkGray text-10 font-semibold">장소</p>
+                <p className="text-mainDarkGray text-10">
+                  <>
+                    {data.reviewResponse?.zipCode}
+                    <br />
+                    {data.reviewResponse?.address}
+                    <br />
+                    {data.reviewResponse?.detailAddress}
+                  </>
+                </p>
+              </div>
+            )}
+          </section>
+        )}
         <section className="mx-5 py-5 flex items-center space-x-4">
           <div className="flex-1 flex text-center justify-center items-center space-x-1">
-            <button
-              className="flex justify-center items-center space-x-1"
-              onClick={() => {
-                if (!session) {
-                  handleLogin();
-                } else {
-                  // api 적용 필요
-                }
+            <LikeBtn
+              reviewId={data?.reviewResponse?.reviewId}
+              isLiked={isLiked}
+              handleUpdateLiked={() => setIsLiked((prev) => !prev)}
+              handleError={() => {
+                setIsLiked(data?.reviewResponse?.isLikedByMe);
               }}
-            >
-              <Image
-                src={
-                  data.reviewResponse?.isLikedByMe
-                    ? '/icon/thumbup-filled-subcoral.svg'
-                    : '/icon/thumbup-outlined-gray.svg'
-                }
-                width={16}
-                height={16}
-                alt="like"
-              />
-              <div className="text-mainGray font-bold text-10">좋아요</div>
-            </button>
+              handleNotLogin={handleLogin}
+              likeBtnName="좋아요"
+              size={16}
+            />
             <div className=" text-mainGray text-10 font-normal">
               좋아요 {data.reviewResponse?.likeCount}
             </div>
@@ -232,12 +227,11 @@ function ReviewDetails({ data, handleShare, handleLogin }: Props) {
           <button
             className="flex-1 flex text-center justify-center items-center space-x-1"
             onClick={() => {
-              alert('기능 준비중입니다!');
-              // if (!session) {
-              //   handleLogin();
-              // } else {
-              //   // api 적용 필요
-              // }
+              if (!session) {
+                handleLogin();
+              } else {
+                textareaRef.current?.focus();
+              }
             }}
           >
             <Image
