@@ -30,6 +30,7 @@ export default function LoginTest() {
       redirectUri,
       scope,
     });
+
     console.log('Kakao Logining');
   };
 

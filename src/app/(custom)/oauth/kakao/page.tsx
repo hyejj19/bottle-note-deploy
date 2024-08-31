@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function OauthKakaoCallbackPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const authCode = searchParams.get('code');
 
@@ -13,6 +14,9 @@ export default function OauthKakaoCallbackPage() {
     });
 
     const result = await res.json();
+    if (result?.data?.id) {
+      router.replace('/');
+    }
     console.log('data returned from api: ', result);
   };
 
@@ -22,5 +26,5 @@ export default function OauthKakaoCallbackPage() {
     }
   }, [authCode]);
 
-  return <div>page</div>;
+  return <div>카카오 로그인 진행중입니다...</div>;
 }
