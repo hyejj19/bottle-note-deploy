@@ -26,7 +26,7 @@ function Navbar({ maxWidth }: { maxWidth: string }) {
     },
     {
       name: '마이',
-      link: session?.user ? `/user/${session?.user.userId}` : '/login',
+      link: session?.user ? `/user/${session?.user.userId}` : '/login-test',
       icon: '/icon/user-outlined-subcoral.svg',
     },
   ];
