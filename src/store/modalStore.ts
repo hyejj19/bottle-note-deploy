@@ -12,14 +12,20 @@ interface ModalState {
   handleConfirm: (() => void) | null;
 }
 
-type ParcialModalState = {
+interface LoginModalState {
+  isShowLoginModal: boolean;
+}
+
+export type ParcialModalState = {
   [K in keyof ModalState]?: ModalState[K];
 };
 
 interface ModalStore {
   state: ModalState;
+  loginState: LoginModalState;
   handleModalState: (state: ParcialModalState) => void;
   handleCloseModal: () => void;
+  handleLoginModal: () => void;
 }
 
 const useModalStore = create<ModalStore>((set) => ({
@@ -29,10 +35,13 @@ const useModalStore = create<ModalStore>((set) => ({
     mainText: '',
     subText: '',
     alertBtnName: '확인',
-    confirmBtnName: '취소',
-    cancelBtnName: '확인',
+    confirmBtnName: '확인',
+    cancelBtnName: '취소',
     handleCancel: null,
     handleConfirm: null,
+  },
+  loginState: {
+    isShowLoginModal: false,
   },
   handleModalState: (newState) =>
     set((state) => ({
@@ -44,6 +53,13 @@ const useModalStore = create<ModalStore>((set) => ({
   handleCloseModal: () => {
     set((state) => ({ state: { ...state.state, isShowModal: false } }));
   },
+  handleLoginModal: () =>
+    set((state) => ({
+      loginState: {
+        ...state.loginState,
+        isShowLoginModal: !state.loginState.isShowLoginModal,
+      },
+    })),
 }));
 
 export default useModalStore;
