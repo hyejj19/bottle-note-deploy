@@ -36,7 +36,7 @@ function Reviews() {
   const { data: session } = useSession();
   const alcoholId = params?.id;
   const alcoholKorName = searchParams.get('name');
-  const { isShowModal, handleModal } = useModalStore();
+  const { handleCloseModal } = useModalStore();
   const [activeTab, setActiveTab] = useState('tab1');
 
   const handleTabClick = (tab: string) => {
@@ -159,7 +159,7 @@ function Reviews() {
                             data={item}
                             // eslint-disable-next-line react/no-array-index-key
                             key={item.reviewId + idx}
-                            handleLogin={handleModal}
+                            handleLogin={handleCloseModal}
                           />
                         ))}
                   </List.Section>
@@ -198,7 +198,7 @@ function Reviews() {
                             data={item}
                             // eslint-disable-next-line react/no-array-index-key
                             key={item.reviewId + idx}
-                            handleLogin={handleModal}
+                            handleLogin={handleCloseModal}
                           />
                         ))}
                   </List.Section>
@@ -212,7 +212,7 @@ function Reviews() {
           <Button
             onClick={() => {
               if (!session || !alcoholId) {
-                handleModal();
+                handleCloseModal();
                 return;
               }
               router.push(`/review/register?alcoholId=${alcoholId}`);
@@ -221,7 +221,7 @@ function Reviews() {
           />
         </section>
       </div>
-      {isShowModal && <LoginModal handleClose={handleModal} />}
+      <LoginModal handleClose={handleCloseModal} />
     </>
   );
 }

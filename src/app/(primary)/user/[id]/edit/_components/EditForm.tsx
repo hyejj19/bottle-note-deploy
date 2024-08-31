@@ -11,7 +11,7 @@ import CloseIconGray from 'public/icon/close-brightgray.svg';
 
 function EditForm() {
   const [nickName, setNickName] = useState('');
-  const { handleModalState, state } = useModalStore();
+  const { handleModalState } = useModalStore();
   // const [birthDate, setBirthDate] = useState('');
   // const [gender, setGender] = useState<'MALE' | 'FEMALE' | null>(null);
 
@@ -168,7 +168,7 @@ function EditForm() {
         </article>
       </div> */}
       </div>
-      <Modal mainText={state.mainText} subText={state.subText} />
+      <Modal />
     </>
   );
 }

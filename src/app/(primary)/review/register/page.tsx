@@ -22,14 +22,14 @@ import ReviewForm from '../_components/ReviewForm';
 function ReviewRegister() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isShowModal, handleModal } = useModalStore();
+  const { handleCloseModal } = useModalStore();
   const alcoholId = searchParams.get('alcoholId') || '';
   const [alcoholData, setAlcoholData] = useState<AlcoholDetails>();
   const [initialRating, setInitialRating] = useState<number>(0);
   const [modalType, setModalType] = useState<'save' | 'cancel' | null>(null);
-  const [modalContent, setModalContent] = useState<string>('');
-  const [modalSubContent, setModalSubContent] = useState<string>('');
-  const [reviewId, setReviewId] = useState<number | null>(null);
+  // const [modalContent, setModalContent] = useState<string>('');
+  // const [modalSubContent, setModalSubContent] = useState<string>('');
+  // const [reviewId, setReviewId] = useState<number | null>(null);
 
   const schema = yup.object({
     review: yup.string().required('리뷰 내용을 작성해주세요.'),
@@ -88,15 +88,15 @@ function ReviewRegister() {
       (initialRating === data.rating && reviewResult) ||
       (initialRating !== data.rating && reviewResult && !ratingResult)
     ) {
-      setReviewId(reviewResult.id);
-      const text =
-        initialRating !== data.rating && !ratingResult
-          ? '❗️별점 등록에는 실패했습니다. 다시 시도해주세요.'
-          : '여정에 한발 더 가까워지셨어요!';
-      setModalContent('작성을 완료했습니다 👍');
-      setModalSubContent(text);
+      // setReviewId(reviewResult.id);
+      // const text =
+      //   initialRating !== data.rating && !ratingResult
+      //     ? '❗️별점 등록에는 실패했습니다. 다시 시도해주세요.'
+      //     : '여정에 한발 더 가까워지셨어요!';
+      // setModalContent('작성을 완료했습니다 👍');
+      // setModalSubContent(text);
       setModalType('save');
-      handleModal();
+      handleCloseModal();
     } else if (initialRating !== data.rating && ratingResult && !reviewResult) {
       // alert('리뷰는 등록되지 않았습니다.');
       router.back();
@@ -158,8 +158,8 @@ function ReviewRegister() {
 
   useEffect(() => {
     if (errors.review?.message) {
-      setModalContent(errors.review?.message);
-      handleModal();
+      // setModalContent(errors.review?.message);
+      handleCloseModal();
       setModalType('save');
     }
   }, [errors]);
@@ -180,10 +180,10 @@ function ReviewRegister() {
               onClick={() => {
                 if (isDirty) {
                   setModalType('cancel');
-                  setModalContent(
-                    '작성 중인 내용이 사라집니다.\n정말 뒤로 가시겠습니까?',
-                  );
-                  handleModal();
+                  // setModalContent(
+                  //   '작성 중인 내용이 사라집니다.\n정말 뒤로 가시겠습니까?',
+                  // );
+                  handleCloseModal();
                 } else {
                   router.back();
                 }
@@ -207,28 +207,7 @@ function ReviewRegister() {
           <Button onClick={handleSubmit(onSave)} btnName="리뷰 등록" />
         </article>
       </FormProvider>
-      {isShowModal && modalType && ['cancel', 'save'].includes(modalType) && (
-        <Modal
-          type={modalType === 'cancel' ? 'confirm' : 'alert'}
-          confirmBtnName={modalType === 'cancel' ? '아니요' : ''}
-          cancelBtnName={modalType === 'cancel' ? '예' : ''}
-          handleCancel={() => {
-            handleModal();
-            if (modalType === 'cancel' && isDirty) {
-              router.back();
-            }
-          }}
-          handleConfirm={() => {
-            handleModal();
-            setModalType(null);
-            if (modalType === 'save' && reviewId) {
-              router.push(`/review/${reviewId}`);
-            }
-          }}
-          mainText={modalContent}
-          subText={modalSubContent}
-        />
-      )}
+      {modalType && ['cancel', 'save'].includes(modalType) && <Modal />}
     </>
   );
 }

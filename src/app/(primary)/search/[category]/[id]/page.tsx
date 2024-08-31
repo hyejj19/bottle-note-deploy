@@ -33,7 +33,7 @@ function SearchCategory() {
   const params = useParams();
   const { data: session } = useSession();
   const { category, id: alcoholId } = params;
-  const { isShowModal, handleModal, handleLoginModal } = useModalStore();
+  const { handleCloseModal, handleLoginModal } = useModalStore();
   const [data, setData] = useState<AlcoholDetails | null>(null);
   const [details, setDetails] = useState<Details[]>([]);
   const [isPicked, setIsPicked] = useState<boolean>(false);
@@ -107,7 +107,7 @@ function SearchCategory() {
               onClick={() => {
                 shareOrCopy(
                   `${process.env.NEXT_PUBLIC_BOTTLE_NOTE_URL}/category/${category}/${alcoholId}`,
-                  handleModal,
+                  handleCloseModal,
                   `${data?.alcohols.korName} 정보`,
                   `${data?.alcohols.korName} 정보 상세보기`,
                 );
@@ -325,12 +325,7 @@ function SearchCategory() {
           </>
         )}
       </NavLayout>
-      {isShowModal && (
-        <Modal
-          mainText="해당 페이지 링크를 복사했습니다."
-          subText="친구에게 공유하러 가볼까요?"
-        />
-      )}
+      <Modal />
     </>
   );
 }

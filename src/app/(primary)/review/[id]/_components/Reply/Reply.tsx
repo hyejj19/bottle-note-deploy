@@ -38,7 +38,7 @@ function Reply({
 }: Props) {
   const { data: session } = useSession();
   const { setValue } = useFormContext();
-  const { isShowModal, handleModal } = useModalStore();
+  const { handleCloseModal } = useModalStore();
   const [isOptionShow, setIsOptionShow] = useState(false);
 
   const handleOptionsShow = () => {
@@ -67,7 +67,7 @@ function Reply({
         data.reviewReplyId.toString(),
       );
       if (result) {
-        handleModal();
+        handleCloseModal();
         setIsRefetch(true);
       }
     } catch (error) {
@@ -188,18 +188,7 @@ function Reply({
           handleClose={handleOptionsShow}
         />
       )}
-      {isShowModal && (
-        <Modal
-          type="alert"
-          handleConfirm={() => {
-            handleModal();
-            if (resetSubReplyToggle) {
-              resetSubReplyToggle(false);
-            }
-          }}
-          mainText="성공적으로 삭제되었습니다."
-        />
-      )}
+      <Modal />
     </>
   );
 }
