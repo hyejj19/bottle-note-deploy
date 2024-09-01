@@ -24,7 +24,6 @@ import type {
 } from '@/types/Review';
 import useModalStore from '@/store/modalStore';
 import Modal from '@/components/Modal';
-import LoginModal from '@/app/(primary)/_components/LoginModal';
 import ReplyInput from './_components/Reply/ReplyInput';
 import ReviewDetails from './_components/ReviewDetails';
 import AlcoholInfo from './_components/AlcoholInfoDisplay';
@@ -33,12 +32,11 @@ import ReplyList from './_components/Reply/ReplyList';
 export default function ReviewDetail() {
   const router = useRouter();
   const { id: reviewId } = useParams();
-  const { isShowModal, handleModal } = useModalStore();
+  const { state, handleModalState, handleLoginModal } = useModalStore();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [alcoholInfo, setAlcoholInfo] = useState<AlcoholInfoType | null>(null);
   const [reviewDetails, setReviewDetails] =
     useState<ReviewDetailsWithoutAlcoholInfo | null>(null);
-  const [modalType, setModalType] = useState<'copy' | 'login' | null>(null);
   const [isRefetch, setIsRefetch] = useState<boolean>(false);
   // 대댓글 수정하며 같이 리팩토링 예정
   const [isSubReplyShow, setIsSubReplyShow] = useState(false);
@@ -56,13 +54,7 @@ export default function ReviewDetail() {
   const { reset } = formMethods;
 
   const handleLogin = () => {
-    setModalType('login');
-    handleModal();
-  };
-
-  const handleShare = () => {
-    setModalType('copy');
-    handleModal();
+    handleLoginModal();
   };
 
   const resetSubReplyToggle = (value?: boolean) => {
@@ -133,92 +125,82 @@ export default function ReviewDetail() {
   }, [reviewId]);
 
   return (
-    <>
-      <FormProvider {...formMethods}>
-        {alcoholInfo && reviewDetails ? (
-          <>
-            <NavLayout>
-              <div className="relative pb-5">
-                {alcoholInfo.imageUrl && (
-                  <div
-                    className="absolute w-full h-full  bg-cover bg-center"
-                    style={{
-                      backgroundImage: `url(${alcoholInfo.imageUrl})`,
-                    }}
+    <FormProvider {...formMethods}>
+      {alcoholInfo && reviewDetails ? (
+        <>
+          <NavLayout>
+            <div className="relative pb-5">
+              {alcoholInfo.imageUrl && (
+                <div
+                  className="absolute w-full h-full  bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${alcoholInfo.imageUrl})`,
+                  }}
+                />
+              )}
+              <div className="absolute w-full h-full bg-mainCoral bg-opacity-90" />
+              <SubHeader bgColor="bg-mainCoral/10">
+                <SubHeader.Left
+                  onClick={() => {
+                    router.back();
+                  }}
+                >
+                  <Image
+                    src="/icon/arrow-left-white.svg"
+                    alt="arrowIcon"
+                    width={23}
+                    height={23}
                   />
-                )}
-                <div className="absolute w-full h-full bg-mainCoral bg-opacity-90" />
-                <SubHeader bgColor="bg-mainCoral/10">
-                  <SubHeader.Left
-                    onClick={() => {
-                      router.back();
-                    }}
-                  >
-                    <Image
-                      src="/icon/arrow-left-white.svg"
-                      alt="arrowIcon"
-                      width={23}
-                      height={23}
-                    />
-                  </SubHeader.Left>
-                  <SubHeader.Center textColor="text-white">
-                    리뷰 상세보기
-                  </SubHeader.Center>
-                  <SubHeader.Right
-                    onClick={() => {
-                      setModalType('copy');
-                      shareOrCopy(
-                        `${process.env.NEXT_PUBLIC_BOTTLE_NOTE_URL}/review/${reviewId}`,
-                        handleModal,
-                        `${alcoholInfo.korName} 리뷰`,
-                        `${alcoholInfo.korName} 리뷰 상세보기`,
-                      );
-                    }}
-                  >
-                    <Image
-                      src="/icon/externallink-outlined-white.svg"
-                      alt="linkIcon"
-                      width={23}
-                      height={23}
-                    />
-                  </SubHeader.Right>
-                </SubHeader>
-                {alcoholInfo && (
-                  <AlcoholInfo data={alcoholInfo} handleLogin={handleLogin} />
-                )}
-              </div>
-              <ReviewDetails
-                data={reviewDetails}
-                handleShare={handleShare}
-                handleLogin={handleLogin}
-                textareaRef={textareaRef}
-              />
-              <ReplyList
-                reviewId={reviewId}
-                isRefetch={isRefetch}
-                setIsRefetch={setIsRefetch}
-                isSubReplyShow={isSubReplyShow}
-                resetSubReplyToggle={resetSubReplyToggle}
-              />
-              <ReplyInput
-                textareaRef={textareaRef}
-                handleCreateReply={handleCreateReply}
-              />
-            </NavLayout>
-            {isShowModal && modalType === 'copy' && (
-              <Modal
-                mainText="해당 페이지 링크를 복사했습니다."
-                subText="친구에게 공유하러 가볼까요?"
-              />
-            )}
-            {isShowModal && modalType === 'login' && (
-              <LoginModal handleClose={handleModal} />
-            )}
-          </>
-        ) : (
-          <Loading />
-        )}
-      </FormProvider>
-    </>
+                </SubHeader.Left>
+                <SubHeader.Center textColor="text-white">
+                  리뷰 상세보기
+                </SubHeader.Center>
+                <SubHeader.Right
+                  onClick={() => {
+                    shareOrCopy(
+                      `${process.env.NEXT_PUBLIC_BOTTLE_NOTE_URL}/review/${reviewId}`,
+                      handleModalState,
+                      `${alcoholInfo.korName} 리뷰`,
+                      `${alcoholInfo.korName} 리뷰 상세보기`,
+                    );
+                  }}
+                >
+                  <Image
+                    src="/icon/externallink-outlined-white.svg"
+                    alt="linkIcon"
+                    width={23}
+                    height={23}
+                  />
+                </SubHeader.Right>
+              </SubHeader>
+              {alcoholInfo && (
+                <AlcoholInfo data={alcoholInfo} handleLogin={handleLogin} />
+              )}
+            </div>
+            <ReviewDetails
+              data={reviewDetails}
+              handleLogin={handleLogin}
+              textareaRef={textareaRef}
+            />
+            <ReplyList
+              reviewId={reviewId}
+              isRefetch={isRefetch}
+              setIsRefetch={setIsRefetch}
+              isSubReplyShow={isSubReplyShow}
+              resetSubReplyToggle={resetSubReplyToggle}
+            />
+            <ReplyInput
+              // ReviewDetails에서 클릭이벤트를 주면 textareaRef가 focus되지 않는 문제가 있다 해결해줘
+              //
+              textareaRef={textareaRef}
+              handleCreateReply={handleCreateReply}
+            />
+          </NavLayout>
+          {state.isShowModal && <Modal />}
+        </>
+      ) : (
+        <Loading />
+      )}
+    </FormProvider>
   );
 }
