@@ -16,7 +16,7 @@ import ChangeProfile from 'public/change-profile.svg';
 export default function UserEditPage() {
   const router = useRouter();
   const { data: session } = useSession();
-  const { handleModalState, state } = useModalStore();
+  const { handleModalState } = useModalStore();
   const [isOptionShow, setIsOptionShow] = useState(false);
 
   const SELECT_OPTIONS = [
@@ -96,11 +96,7 @@ export default function UserEditPage() {
           handleClose={() => setIsOptionShow(false)}
         />
       )}
-      <Modal
-        mainText={state.mainText}
-        subText={state.subText}
-        handleConfirm={state.handleConfirm}
-      />
+      <Modal />
     </main>
   );
 }
