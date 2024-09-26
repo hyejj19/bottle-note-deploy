@@ -18,7 +18,7 @@ export class SearchHistoryService implements ISearchHistoryService {
   }
 
   get() {
-    const item = this.#storage.getItem(this.#key);
+    const item = this.#storage.getItem(this.#key) as string;
 
     if (item) return JSON.parse(item) as string[];
 
