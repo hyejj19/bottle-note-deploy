@@ -5,8 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { signOut, useSession } from 'next-auth/react';
 import { useBlockScroll } from '@/hooks/useBlockScroll';
-import { useAuth } from '@/utils/useAuth';
+import { AuthService } from '@/lib/AuthService';
 import Logo from 'public/icon/logo-text-subcoral.svg';
 import LogoWhite from 'public/icon/logo-text-white.svg';
 import Menu from 'public/icon/menu-subcoral.svg';
@@ -43,7 +44,8 @@ const Header = ({
 
 const SidebarHeader = () => {
   const route = useRouter();
-  const { logout } = useAuth();
+  const { logout } = AuthService;
+  const { data: session } = useSession();
   const { handleScroll } = useBlockScroll();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -73,8 +75,9 @@ const SidebarHeader = () => {
     }),
   };
 
-  const onLogout = () => {
+  const onLogout = async () => {
     logout();
+    if (session) await signOut({ callbackUrl: '/', redirect: true });
     route.push('/');
   };
 
