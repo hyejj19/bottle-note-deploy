@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useFormContext } from 'react-hook-form';
 import { ReplyApi } from '@/app/api/ReplyApi';
 import { truncStr } from '@/utils/truncStr';
@@ -36,6 +37,7 @@ function Reply({
   isSubReplyShow = false,
   resetSubReplyToggle,
 }: Props) {
+  const router = useRouter();
   const { isLogin, userData } = AuthService;
   const { setValue } = useFormContext();
   const { state, handleModalState, handleLoginModal } = useModalStore();
@@ -96,16 +98,15 @@ function Reply({
           deleteReply();
         },
       });
-    } else if (option.type === 'REPORT') {
+    } else if (option.type === 'REVIEW_REPORT') {
+      // router.push(`/report?type=review`);
+      // API 준비 안됨
       handleModalState({
         isShowModal: true,
         mainText: '준비 중인 기능입니다.',
       });
     } else if (option.type === 'USER_REPORT') {
-      handleModalState({
-        isShowModal: true,
-        mainText: '준비 중인 기능입니다.',
-      });
+      router.push(`/report?type=user&userId=${data.userId}`);
     }
   };
 
@@ -209,7 +210,7 @@ function Reply({
                   { name: '삭제하기', type: 'DELETE' },
                 ]
               : [
-                  { name: '리뷰 신고', type: 'REPORT' },
+                  { name: '리뷰 신고', type: 'REVIEW_REPORT' },
                   { name: '유저 신고', type: 'USER_REPORT' },
                 ]
           }

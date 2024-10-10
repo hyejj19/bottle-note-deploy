@@ -13,9 +13,9 @@ import { formatDate } from '@/utils/formatDate';
 import VisibilityToggle from '@/app/(primary)/_components/VisibilityToggle';
 import LikeBtn from '@/app/(primary)/_components/LikeBtn';
 import OptionDropdown from '@/components/OptionDropdown';
+import Modal from '@/components/Modal';
 import useModalStore from '@/store/modalStore';
 import { deleteReview } from '@/lib/Review';
-import Modal from '@/components/Modal';
 import { AuthService } from '@/lib/AuthService';
 import userImg from 'public/user_img.png';
 
@@ -25,7 +25,7 @@ interface Props {
 
 function Review({ data }: Props) {
   const router = useRouter();
-  const { isLogin, userData } = AuthService;
+  const { userData, isLogin } = AuthService;
   const { isLikedByMe } = data;
   const { state, handleModalState, handleLoginModal } = useModalStore();
   const [isOptionShow, setIsOptionShow] = useState(false);
@@ -59,16 +59,15 @@ function Review({ data }: Props) {
       });
     } else if (option.type === 'MODIFY') {
       router.push(`/review/modify?reviewId=${data.reviewId}`);
-    } else if (option.type === 'REPORT') {
+    } else if (option.type === 'REVIEW_REPORT') {
+      // router.push(`/report?type=review`);
+      // API 준비 안됨
       handleModalState({
         isShowModal: true,
         mainText: '준비 중인 기능입니다.',
       });
     } else if (option.type === 'USER_REPORT') {
-      handleModalState({
-        isShowModal: true,
-        mainText: '준비 중인 기능입니다.',
-      });
+      router.push(`/report?type=user&userId=${data.userId}`);
     }
   };
 
@@ -138,6 +137,7 @@ function Review({ data }: Props) {
               )}
             </Link>
           </p>
+          {/* 없을 때 이미지 안나오게 수정 */}
           <div className="flex justify-end items-center">
             <Image
               className="w-[3.8rem] h-[3.8rem]"
@@ -213,7 +213,7 @@ function Review({ data }: Props) {
                   { name: '삭제하기', type: 'DELETE' },
                 ]
               : [
-                  { name: '리뷰 신고', type: 'REPORT' },
+                  { name: '리뷰 신고', type: 'REVIEW_REPORT' },
                   { name: '유저 신고', type: 'USER_REPORT' },
                 ]
           }
