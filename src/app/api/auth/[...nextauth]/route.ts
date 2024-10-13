@@ -1,7 +1,9 @@
 /* eslint-disable no-param-reassign */
 import GoogleProvider from 'next-auth/providers/google';
 import NaverProvider from 'next-auth/providers/naver';
+import AppleProvider from 'next-auth/providers/apple';
 import NextAuth from 'next-auth';
+import { getAppleToken } from '@/utils/getAppleToken';
 import { AuthApi } from '../../AuthApi';
 
 const jwt = require('jsonwebtoken');
@@ -16,7 +18,22 @@ const handler = NextAuth({
       clientId: `${process.env.NAVER_CLIENT_ID}`,
       clientSecret: `${process.env.NAVER_CLIENT_SECRET}`,
     }),
+    AppleProvider({
+      clientId: process.env.APPLE_ID!,
+      clientSecret: await getAppleToken(),
+    }),
   ],
+  cookies: {
+    pkceCodeVerifier: {
+      name: 'next-auth.pkce.code_verifier',
+      options: {
+        httpOnly: true,
+        sameSite: 'none',
+        path: '/',
+        secure: true,
+      },
+    },
+  },
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
